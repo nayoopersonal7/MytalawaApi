@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { EventAttendee, User } from "../../../src/models";
-import type { MutationAddEventAttendeeArgs } from "../../../src/types/generatedGraphQLTypes";
+import { EventAttendee, User } from "../../../api/models";
+import type { MutationAddEventAttendeeArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   EVENT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
   USER_ALREADY_REGISTERED_FOR_EVENT,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import { createTestUser, type TestUserType } from "../../helpers/userAndOrg";
 import { createTestEvent, type TestEventType } from "../../helpers/events";
@@ -31,7 +31,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> addEventAttendee", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -48,7 +48,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { addEventAttendee: addEventAttendeeResolver } = await import(
-        "../../../src/resolvers/Mutation/addEventAttendee"
+        "../../../api/resolvers/Mutation/addEventAttendee"
       );
 
       await addEventAttendeeResolver?.({}, args, context);
@@ -61,7 +61,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
   });
 
   it(`throws NotFoundError if no event exists with _id === args.data.eventId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -78,7 +78,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
       const context = { userId: randomTestUser!._id };
 
       const { addEventAttendee: addEventAttendeeResolver } = await import(
-        "../../../src/resolvers/Mutation/addEventAttendee"
+        "../../../api/resolvers/Mutation/addEventAttendee"
       );
 
       await addEventAttendeeResolver?.({}, args, context);
@@ -91,7 +91,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
   });
 
   it(`throws Unauthorized error if the current user is not an admin of the  event`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -108,7 +108,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
       const context = { userId: randomTestUser!._id };
 
       const { addEventAttendee: addEventAttendeeResolver } = await import(
-        "../../../src/resolvers/Mutation/addEventAttendee"
+        "../../../api/resolvers/Mutation/addEventAttendee"
       );
 
       await addEventAttendeeResolver?.({}, args, context);
@@ -121,7 +121,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
   });
 
   it(`throws NotFoundError if the request user with _id = args.data.userId does not exist`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
       const context = { userId: testUser!._id };
 
       const { addEventAttendee: addEventAttendeeResolver } = await import(
-        "../../../src/resolvers/Mutation/addEventAttendee"
+        "../../../api/resolvers/Mutation/addEventAttendee"
       );
 
       await addEventAttendeeResolver?.({}, args, context);
@@ -161,7 +161,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
     const context = { userId: testUser!._id };
 
     const { addEventAttendee: addEventAttendeeResolver } = await import(
-      "../../../src/resolvers/Mutation/addEventAttendee"
+      "../../../api/resolvers/Mutation/addEventAttendee"
     );
 
     const payload = await addEventAttendeeResolver?.({}, args, context);
@@ -179,7 +179,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
   });
 
   it(`throws error if the request user with _id = args.data.userId is already registered for the event`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -196,7 +196,7 @@ describe("resolvers -> Mutation -> addEventAttendee", () => {
       const context = { userId: testUser!._id };
 
       const { addEventAttendee: addEventAttendeeResolver } = await import(
-        "../../../src/resolvers/Mutation/addEventAttendee"
+        "../../../api/resolvers/Mutation/addEventAttendee"
       );
 
       await addEventAttendeeResolver?.({}, args, context);

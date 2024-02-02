@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { ActionItemCategory } from "../../../src/models";
+import { ActionItemCategory } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
-import type { QueryActionItemCategoriesByOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
-import { actionItemCategoriesByOrganization as categoriesByOrganizationResolver } from "../../../src/resolvers/Query/actionItemCategoriesByOrganization";
+import type { QueryActionItemCategoriesByOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
+import { actionItemCategoriesByOrganization as categoriesByOrganizationResolver } from "../../../api/resolvers/Query/actionItemCategoriesByOrganization";
 import { createTestCategories } from "../../helpers/actionItemCategory";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";

@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationRemoveUserTagArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationRemoveUserTagArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   TAG_NOT_FOUND,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -20,7 +20,7 @@ import {
 } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import { OrganizationTagUser, TagUser } from "../../../src/models";
+import { OrganizationTagUser, TagUser } from "../../../api/models";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createTwoLevelTagsWithOrg } from "../../helpers/tags";
 
@@ -63,13 +63,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeUserTag", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -84,7 +84,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
       };
 
       const { removeUserTag: removeUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/removeUserTag"
+        "../../../api/resolvers/Mutation/removeUserTag"
       );
 
       await removeUserTagResolver?.({}, args, context);
@@ -97,7 +97,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
   });
 
   it(`throws TAG_NOT_FOUND error if the no tag exists with the _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -112,7 +112,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
       };
 
       const { removeUserTag: removeUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/removeUserTag"
+        "../../../api/resolvers/Mutation/removeUserTag"
       );
 
       await removeUserTagResolver?.({}, args, context);
@@ -123,7 +123,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
   });
 
   it(`throws USER_NOT_AUTHORIZED error if the current user is not authorized to remove the tag`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
       };
 
       const { removeUserTag: removeUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/removeUserTag"
+        "../../../api/resolvers/Mutation/removeUserTag"
       );
 
       await removeUserTagResolver?.({}, args, context);
@@ -151,7 +151,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
   });
 
   it(`deletes the tag (along with all its child tags) from the OrganizationTagUser model and its corresponding entries from TagUser model`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -165,7 +165,7 @@ describe("resolvers -> Mutation -> removeUserTag", () => {
     };
 
     const { removeUserTag: removeUserTagResolver } = await import(
-      "../../../src/resolvers/Mutation/removeUserTag"
+      "../../../api/resolvers/Mutation/removeUserTag"
     );
 
     await removeUserTagResolver?.({}, args, context);

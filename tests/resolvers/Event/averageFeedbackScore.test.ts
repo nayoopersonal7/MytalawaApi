@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { averageFeedbackScore as averageFeedbackScoreResolver } from "../../../src/resolvers/Event/averageFeedbackScore";
+import { averageFeedbackScore as averageFeedbackScoreResolver } from "../../../api/resolvers/Event/averageFeedbackScore";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";

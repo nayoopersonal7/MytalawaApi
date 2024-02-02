@@ -11,15 +11,15 @@ import {
   vi,
 } from "vitest";
 
-import { PLUGIN_NOT_FOUND } from "../../../src/constants";
-import { pubsub } from "../../../src/index";
+import { PLUGIN_NOT_FOUND } from "../../../api/constants";
+import { pubsub } from "../../../api/index";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
 import { connect, disconnect } from "../../helpers/db";
-import type { MutationUpdatePluginStatusArgs } from "../../../src/types/generatedGraphQLTypes";
-import { updatePluginStatus } from "../../../src/resolvers/Mutation/updatePluginStatus";
-import { Plugin } from "../../../src/models";
-import type { InterfacePlugin } from "../../../src/models";
+import type { MutationUpdatePluginStatusArgs } from "../../../api/types/generatedGraphQLTypes";
+import { updatePluginStatus } from "../../../api/resolvers/Mutation/updatePluginStatus";
+import { Plugin } from "../../../api/models";
+import type { InterfacePlugin } from "../../../api/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testOrganization: TestOrganizationType;
@@ -35,18 +35,18 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updatePluginStatus", () => {
   it(`throws NotFoundError if no plugin exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -63,7 +63,7 @@ describe("resolvers -> Mutation -> updatePluginStatus", () => {
       };
 
       const { updatePluginStatus: updatePluginStatusResolver } = await import(
-        "../../../src/resolvers/Mutation/updatePluginStatus"
+        "../../../api/resolvers/Mutation/updatePluginStatus"
       );
 
       await updatePluginStatusResolver?.({}, args, context);

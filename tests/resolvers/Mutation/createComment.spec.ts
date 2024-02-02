@@ -1,12 +1,12 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Post } from "../../../src/models";
-import type { MutationCreateCommentArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Post } from "../../../api/models";
+import type { MutationCreateCommentArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { createComment as createCommentResolver } from "../../../src/resolvers/Mutation/createComment";
-import { POST_NOT_FOUND_ERROR } from "../../../src/constants";
+import { createComment as createCommentResolver } from "../../../api/resolvers/Mutation/createComment";
+import { POST_NOT_FOUND_ERROR } from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestPostType } from "../../helpers/posts";
 import { createTestPost } from "../../helpers/posts";
@@ -21,7 +21,7 @@ beforeAll(async () => {
   const resultsArray = await createTestPost();
   testUser = resultsArray[0];
   testPost = resultsArray[2];
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );

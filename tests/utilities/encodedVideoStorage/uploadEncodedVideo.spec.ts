@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type mongoose from "mongoose";
 import * as fs from "fs";
-import { uploadEncodedVideo } from "../../../src/utilities/encodedVideoStorage/uploadEncodedVideo"; // Import the video upload function
-import { EncodedVideo } from "../../../src/models/EncodedVideo";
+import { uploadEncodedVideo } from "../../../api/utilities/encodedVideoStorage/uploadEncodedVideo"; // Import the video upload function
+import { EncodedVideo } from "../../../api/models/EncodedVideo";
 import { connect, disconnect } from "../../helpers/db";
 import path from "path";
-import { INVALID_FILE_TYPE } from "../../../src/constants";
+import { INVALID_FILE_TYPE } from "../../../api/constants";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testPreviousVideoPath: string; // Update variable name for video
@@ -21,7 +21,7 @@ afterAll(async () => {
 describe("src -> utilities -> encodedVideoStorage -> uploadEncodedVideo", () => {
   // Update the description
   it("should not create new video when the file extension is invalid", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

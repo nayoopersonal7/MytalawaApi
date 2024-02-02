@@ -8,7 +8,7 @@ import type {
   InterfacePost,
   InterfaceActionItemCategory,
   InterfaceActionItem,
-} from "../../../src/models";
+} from "../../../api/models";
 import {
   User,
   Organization,
@@ -17,16 +17,16 @@ import {
   MembershipRequest,
   ActionItemCategory,
   ActionItem,
-} from "../../../src/models";
-import type { MutationRemoveOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
+} from "../../../api/models";
+import type { MutationRemoveOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { removeOrganization as removeOrganizationResolver } from "../../../src/resolvers/Mutation/removeOrganization";
+import { removeOrganization as removeOrganizationResolver } from "../../../api/resolvers/Mutation/removeOrganization";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -38,7 +38,7 @@ import {
 } from "vitest";
 import { createTestUserFunc } from "../../helpers/user";
 import type { TestUserType } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
 /* eslint-disable */
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUsers: TestUserType[];
@@ -176,7 +176,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -191,7 +191,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
       };
 
       const { removeOrganization: removeOrganizationResolver } = await import(
-        "../../../src/resolvers/Mutation/removeOrganization"
+        "../../../api/resolvers/Mutation/removeOrganization"
       );
 
       await removeOrganizationResolver?.({}, args, context);
@@ -204,7 +204,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -219,7 +219,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
       };
 
       const { removeOrganization: removeOrganizationResolver } = await import(
-        "../../../src/resolvers/Mutation/removeOrganization"
+        "../../../api/resolvers/Mutation/removeOrganization"
       );
 
       await removeOrganizationResolver?.({}, args, context);
@@ -233,7 +233,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
 
   it(`throws User is not SUPERADMIN error if current user with _id === context.userId
   is not a SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -266,7 +266,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
       };
 
       const { removeOrganization: removeOrganizationResolverAdminError } =
-        await import("../../../src/resolvers/Mutation/removeOrganization");
+        await import("../../../api/resolvers/Mutation/removeOrganization");
 
       await removeOrganizationResolverAdminError?.({}, args, context);
     } catch (error: any) {
@@ -400,7 +400,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
     };
 
     const deletePreviousImage = await import(
-      "../../../src/utilities/encodedImageStorage/deletePreviousImage"
+      "../../../api/utilities/encodedImageStorage/deletePreviousImage"
     );
     const deleteImageSpy = vi
       .spyOn(deletePreviousImage, "deletePreviousImage")
@@ -415,7 +415,7 @@ describe("resolvers -> Mutation -> removeOrganization", () => {
       .lean();
 
     const { removeOrganization: removeOrganizationResolver } = await import(
-      "../../../src/resolvers/Mutation/removeOrganization"
+      "../../../api/resolvers/Mutation/removeOrganization"
     );
 
     const removeOrganizationPayload = await removeOrganizationResolver?.(

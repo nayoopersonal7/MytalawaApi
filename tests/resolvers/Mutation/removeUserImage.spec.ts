@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   USER_NOT_FOUND_ERROR,
   USER_PROFILE_IMAGE_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -35,12 +35,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeUserImage", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -51,7 +51,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
       };
 
       const { removeUserImage: removeUserImageResolver } = await import(
-        "../../../src/resolvers/Mutation/removeUserImage"
+        "../../../api/resolvers/Mutation/removeUserImage"
       );
 
       await removeUserImageResolver?.({}, {}, context);
@@ -65,7 +65,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
 
   it(`throws NotFoundError if no user.image exists for currentUser
   with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -76,7 +76,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
       };
 
       const { removeUserImage: removeUserImageResolver } = await import(
-        "../../../src/resolvers/Mutation/removeUserImage"
+        "../../../api/resolvers/Mutation/removeUserImage"
       );
 
       await removeUserImageResolver?.({}, {}, context);
@@ -90,7 +90,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
 
   it(`sets image field to null for organization with _id === args.organizationId
   and returns the updated user`, async () => {
-    const utilities = await import("../../../src/utilities");
+    const utilities = await import("../../../api/utilities");
 
     const deleteImageSpy = vi
       .spyOn(utilities, "deleteImage")
@@ -114,7 +114,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
     };
 
     const { removeUserImage: removeUserImageResolver } = await import(
-      "../../../src/resolvers/Mutation/removeUserImage"
+      "../../../api/resolvers/Mutation/removeUserImage"
     );
 
     const removeUserImagePayload = await removeUserImageResolver?.(

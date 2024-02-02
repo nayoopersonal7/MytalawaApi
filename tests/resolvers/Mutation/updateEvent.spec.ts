@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Event } from "../../../src/models";
-import type { MutationUpdateEventArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Event } from "../../../api/models";
+import type { MutationUpdateEventArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   LENGTH_VALIDATION_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -23,7 +23,7 @@ import {
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import type { TestEventType } from "../../helpers/events";
-import { cacheEvents } from "../../../src/services/EventCache/cacheEvents";
+import { cacheEvents } from "../../../api/services/EventCache/cacheEvents";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -64,13 +64,13 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateEvent", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -85,7 +85,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
       };
 
       const { updateEvent: updateEventResolver } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolver?.({}, args, context);
@@ -98,7 +98,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
   });
 
   it(`throws NotFoundError if no event exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -113,7 +113,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
       };
 
       const { updateEvent: updateEventResolver } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolver?.({}, args, context);
@@ -127,7 +127,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is
   not an admin of event with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -142,7 +142,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
       };
 
       const { updateEvent: updateEventResolver } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolver?.({}, args, context);
@@ -209,7 +209,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
     };
 
     const { updateEvent: updateEventResolver } = await import(
-      "../../../src/resolvers/Mutation/updateEvent"
+      "../../../api/resolvers/Mutation/updateEvent"
     );
 
     const updateEventPayload = await updateEventResolver?.({}, args, context);
@@ -224,7 +224,7 @@ describe("resolvers -> Mutation -> updateEvent", () => {
 
 describe("Check for validation conditions", () => {
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -255,7 +255,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { updateEvent: updateEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolverError?.({}, args, context);
@@ -266,7 +266,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws String Length Validation error if description is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -297,7 +297,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { updateEvent: updateEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolverError?.({}, args, context);
@@ -308,7 +308,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws String Length Validation error if location is greater than 50 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -338,7 +338,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { updateEvent: updateEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolverError?.({}, args, context);
@@ -349,7 +349,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws Date Validation error if start date is greater than end date`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -379,7 +379,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { updateEvent: updateEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/updateEvent"
+        "../../../api/resolvers/Mutation/updateEvent"
       );
 
       await updateEventResolverError?.({}, args, context);

@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import type mongoose from "mongoose";
-import { Plugin } from "../../src/models";
+import { Plugin } from "../../api/models";
 import { faker } from "@faker-js/faker";
 import {
   generateRandomPlugins,
   generateUserData,
   generatePostData,
   generateEventData as generateEventDataFn,
-} from "../../src/utilities/createSampleOrganizationUtil";
+} from "../../api/utilities/createSampleOrganizationUtil";
 
 import { connect, disconnect } from "../helpers/db";
 

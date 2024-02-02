@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationUpdateActionItemArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationUpdateActionItemArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   USER_NOT_FOUND_ERROR,
@@ -9,20 +9,20 @@ import {
   USER_NOT_AUTHORIZED_ERROR,
   EVENT_NOT_FOUND_ERROR,
   USER_NOT_MEMBER_FOR_ORGANIZATION,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import {
   createTestUser,
   createTestUserAndOrganization,
 } from "../../helpers/userAndOrg";
-import { updateActionItem as updateActionItemResolver } from "../../../src/resolvers/Mutation/updateActionItem";
+import { updateActionItem as updateActionItemResolver } from "../../../api/resolvers/Mutation/updateActionItem";
 import type {
   TestOrganizationType,
   TestUserType,
 } from "../../helpers/userAndOrg";
 
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
-import { ActionItem, Event, User } from "../../../src/models";
+import { ActionItem, Event, User } from "../../../api/models";
 import type { TestActionItemType } from "../../helpers/actionItem";
 import { createTestActionItem } from "../../helpers/actionItem";
 import type { TestEventType } from "../../helpers/events";
@@ -40,7 +40,7 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );

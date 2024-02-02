@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../src/models";
-import type { MutationRejectMembershipRequestArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../api/models";
+import type { MutationRejectMembershipRequestArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { rejectMembershipRequest as rejectMembershipRequestResolver } from "../../../src/resolvers/Mutation/rejectMembershipRequest";
+import { rejectMembershipRequest as rejectMembershipRequestResolver } from "../../../api/resolvers/Mutation/rejectMembershipRequest";
 import {
   MEMBERSHIP_REQUEST_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -48,12 +48,12 @@ afterAll(async () => {
 describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no membershipRequest exists with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -78,7 +78,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
 
   it(`throws NotFoundError if no organization exists with _id === membershipRequest.organzation
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -103,7 +103,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -114,7 +114,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
 
   it(`throws NotFoundError if no user exists with _id === membershipRequest.user
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -150,7 +150,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -162,7 +162,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organzation with _id === membershipRequest.organzation for membershipRequest 
   with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -212,7 +212,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       const {
         rejectMembershipRequest: rejectMembershipRequestResolverAdminError,
       } = await import(
-        "../../../src/resolvers/Mutation/rejectMembershipRequest"
+        "../../../api/resolvers/Mutation/rejectMembershipRequest"
       );
 
       await rejectMembershipRequestResolverAdminError?.({}, args, context);

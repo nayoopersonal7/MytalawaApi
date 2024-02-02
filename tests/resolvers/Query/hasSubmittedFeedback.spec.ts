@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
-import type { QueryHasSubmittedFeedbackArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryHasSubmittedFeedbackArgs } from "../../../api/types/generatedGraphQLTypes";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import {
@@ -9,10 +9,10 @@ import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_CHECKED_IN,
   USER_NOT_REGISTERED_FOR_EVENT,
-} from "./../../../src/constants";
+} from "./../../../api/constants";
 import { type TestUserType, createTestUser } from "./../../helpers/userAndOrg";
 import { createTestEvent, type TestEventType } from "../../helpers/events";
-import { CheckIn, EventAttendee } from "../../../src/models";
+import { CheckIn, EventAttendee } from "../../../api/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let randomTestUser: TestUserType;
@@ -32,7 +32,7 @@ afterAll(async () => {
 
 describe("resolvers -> Query -> hasSubmittedFeedback", () => {
   it(`throws NotFoundError if no user exists with _id === args.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -47,7 +47,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
@@ -59,7 +59,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
   });
 
   it(`throws NotFoundError if no event exists with _id === args.eventId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -74,7 +74,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
@@ -86,7 +86,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
   });
 
   it(`throws Error if the user is not registered to attend the event`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -101,7 +101,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
@@ -121,7 +121,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
     });
     eventAttendeeId = eventAttendee._id;
 
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -136,7 +136,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
@@ -165,7 +165,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
     const context = {};
 
     const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } = await import(
-      "../../../src/resolvers/Query/hasSubmittedFeedback"
+      "../../../api/resolvers/Query/hasSubmittedFeedback"
     );
 
     const payload = await hasSubmittedFeedbackResolver?.({}, args, context);

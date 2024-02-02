@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type mongoose from "mongoose";
 import * as fs from "fs";
-import { uploadEncodedImage } from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
-import { EncodedImage } from "../../../src/models/EncodedImage";
+import { uploadEncodedImage } from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+import { EncodedImage } from "../../../api/models/EncodedImage";
 import { connect, disconnect } from "../../helpers/db";
 import path from "path";
-import { IMAGE_SIZE_LIMIT_KB, INVALID_FILE_TYPE } from "../../../src/constants";
+import { IMAGE_SIZE_LIMIT_KB, INVALID_FILE_TYPE } from "../../../api/constants";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testPreviousImagePath: string;
@@ -34,7 +34,7 @@ afterAll(async () => {
 
 describe("src -> utilities -> encodedImageStorage -> uploadEncodedImage", () => {
   it("should not create new image when the file extension is invalid", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

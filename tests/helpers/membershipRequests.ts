@@ -1,7 +1,7 @@
 import type { TestUserType, TestOrganizationType } from "./userAndOrg";
 import { createTestUser, createTestUserAndOrganization } from "./userAndOrg";
-import type { InterfaceMembershipRequest } from "../../src/models";
-import { MembershipRequest, Organization, User } from "../../src/models";
+import type { InterfaceMembershipRequest } from "../../api/models";
+import { MembershipRequest, Organization, User } from "../../api/models";
 import type { Document } from "mongoose";
 import { nanoid } from "nanoid";
 

@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { Types } from "mongoose";
 import type mongoose from "mongoose";
-import { addOrganizationCustomField } from "../../../src/resolvers/Mutation/addOrganizationCustomField";
+import { addOrganizationCustomField } from "../../../api/resolvers/Mutation/addOrganizationCustomField";
 import {
   createTestUser,
   createTestUserAndOrganization,
@@ -16,7 +16,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -56,7 +56,7 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
   });
 
   it("should throw error when user attempting to add custom field is not an admin", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -83,7 +83,7 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
   });
 
   it("should throw error when customfield name is missing", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -107,7 +107,7 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
   });
 
   it("should throw error when customfield type is missing", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -131,7 +131,7 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
   });
 
   it("should throw an error if user is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -158,7 +158,7 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     }
   });
   it("should throw an error if organization is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

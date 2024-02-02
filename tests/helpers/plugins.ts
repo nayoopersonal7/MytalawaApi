@@ -1,7 +1,7 @@
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
-import type { InterfacePlugin } from "../../src/models";
-import { Plugin } from "../../src/models";
+import type { InterfacePlugin } from "../../api/models";
+import { Plugin } from "../../api/models";
 import type { Document } from "mongoose";
 import { nanoid } from "nanoid";
 

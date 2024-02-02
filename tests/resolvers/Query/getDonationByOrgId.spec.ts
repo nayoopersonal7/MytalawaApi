@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { Donation } from "../../../src/models";
-import { getDonationByOrgId as getDonationByOrgIdResolver } from "../../../src/resolvers/Query/getDonationByOrgId";
+import { Donation } from "../../../api/models";
+import { getDonationByOrgId as getDonationByOrgIdResolver } from "../../../api/resolvers/Query/getDonationByOrgId";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import type { QueryGetDonationByOrgIdArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryGetDonationByOrgIdArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { createTestDonation } from "../../helpers/donation";

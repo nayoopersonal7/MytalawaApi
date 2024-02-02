@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../src/models";
-import type { MutationAcceptMembershipRequestArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../api/models";
+import type { MutationAcceptMembershipRequestArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -11,7 +11,7 @@ import {
   USER_ALREADY_MEMBER_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -48,11 +48,11 @@ afterAll(async () => {
 describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
   it(`throws NotFoundError if no membershipRequest exists with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -66,7 +66,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       };
 
       const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+        await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
 
       await acceptMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -81,7 +81,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
 
   it(`throws NotFoundError if no organization exists with _id === membershipRequest.organization
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -106,7 +106,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       };
 
       const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+        await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
 
       await acceptMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -119,7 +119,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
 
   it(`throws NotFoundError if no user exists with _id === membershipRequest.user
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -145,7 +145,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       };
 
       const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+        await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
 
       await acceptMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -159,7 +159,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
   it(`throws UnauthorizedError if user with _id === context.userId is not an
   admin of organization with _id === membershipRequest.organization for
   membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -197,7 +197,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       };
 
       const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+        await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
 
       await acceptMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -211,7 +211,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
   it(`throws ConflictError if user with _id === membershipRequest.user is already
   a member of organization with _id === membershipRequest.organization for membershipRequest
   with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -237,7 +237,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       };
 
       const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-        await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+        await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
 
       await acceptMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -268,7 +268,7 @@ describe("resolvers -> Mutation -> acceptMembershipRequest", () => {
       userId: testUser?.id,
     };
     const { acceptMembershipRequest: acceptMembershipRequestResolver } =
-      await import("../../../src/resolvers/Mutation/acceptMembershipRequest");
+      await import("../../../api/resolvers/Mutation/acceptMembershipRequest");
     const acceptMembershipRequestPayload =
       await acceptMembershipRequestResolver?.({}, args, context);
 

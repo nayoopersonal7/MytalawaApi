@@ -1,6 +1,6 @@
 import type winston from "winston";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { TransactionLogTypes } from "../../src/constants";
+import { TransactionLogTypes } from "../../api/constants";
 
 const mockPreFunction = vi.fn();
 const mockPostFunction = vi.fn();
@@ -45,7 +45,7 @@ describe("Database transaction logging", () => {
     process.env.LOG_PATH = "";
 
     const { default: dbLogger, createLoggingMiddleware } = await import(
-      "../../src/libraries/dbLogger"
+      "../../api/libraries/dbLogger"
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createLoggingMiddleware(mockSchema as any, "TestModel");
@@ -57,7 +57,7 @@ describe("Database transaction logging", () => {
     process.env.LOG = "true";
     process.env.LOG_PATH = "./logs/test.log";
 
-    const { default: dbLogger } = await import("../../src/libraries/dbLogger");
+    const { default: dbLogger } = await import("../../api/libraries/dbLogger");
 
     expect(dbLogger).not.toBeNull();
 
@@ -73,9 +73,9 @@ describe("Database transaction logging", () => {
     process.env.LOG_PATH = "./logs/test.log";
 
     const { createLoggingMiddleware } = await import(
-      "../../src/libraries/dbLogger"
+      "../../api/libraries/dbLogger"
     );
-    const { default: dbLogger } = await import("../../src/libraries/dbLogger");
+    const { default: dbLogger } = await import("../../api/libraries/dbLogger");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createLoggingMiddleware(mockSchema as any, "TestModel");

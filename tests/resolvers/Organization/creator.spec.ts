@@ -2,9 +2,9 @@ import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../src/models";
+import { User, Organization } from "../../../api/models";
 
-import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -37,12 +37,12 @@ afterAll(async () => {
 
 describe("resolvers -> Organization -> creatorId", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === parent.creatorId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -65,7 +65,7 @@ describe("resolvers -> Organization -> creatorId", () => {
       const parent = testOrganization?.toObject();
 
       const { creator: creatorResolver } = await import(
-        "../../../src/resolvers/Organization/creator"
+        "../../../api/resolvers/Organization/creator"
       );
       if (parent) {
         await creatorResolver?.(parent, {}, {});
@@ -96,7 +96,7 @@ describe("resolvers -> Organization -> creatorId", () => {
     const parent = testOrganization?.toObject();
 
     const { creator: creatorResolver } = await import(
-      "../../../src/resolvers/Organization/creator"
+      "../../../api/resolvers/Organization/creator"
     );
     if (parent) {
       const creatorPayload = await creatorResolver?.(parent, {}, {});

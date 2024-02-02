@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, User } from "../../../src/models";
-import type { MutationJoinPublicOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Organization, User } from "../../../api/models";
+import type { MutationJoinPublicOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -19,8 +19,8 @@ import {
   USER_ALREADY_MEMBER_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
-import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
+} from "../../../api/constants";
+import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
 import type {
   TestOrganizationType,
   TestUserType,
@@ -44,12 +44,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> joinPublicOrganization", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError message if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -63,7 +63,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
       };
 
       const { joinPublicOrganization: joinPublicOrganizationResolver } =
-        await import("../../../src/resolvers/Mutation/joinPublicOrganization");
+        await import("../../../api/resolvers/Mutation/joinPublicOrganization");
 
       await joinPublicOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -72,7 +72,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
     }
   });
   it(`throws UnauthorizedError message if organization with _id === args.organizationId  required registration for the users`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -86,7 +86,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
       };
 
       const { joinPublicOrganization: joinPublicOrganizationResolver } =
-        await import("../../../src/resolvers/Mutation/joinPublicOrganization");
+        await import("../../../api/resolvers/Mutation/joinPublicOrganization");
 
       await joinPublicOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -96,7 +96,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
   });
 
   it(`throws NotFoundError message if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -126,7 +126,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
       };
 
       const { joinPublicOrganization: joinPublicOrganizationResolver } =
-        await import("../../../src/resolvers/Mutation/joinPublicOrganization");
+        await import("../../../api/resolvers/Mutation/joinPublicOrganization");
 
       await joinPublicOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -136,7 +136,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
   });
 
   it(`throws ConflictError message if user with _id === context.userId is already a member of organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -150,7 +150,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
       };
 
       const { joinPublicOrganization: joinPublicOrganizationResolver } =
-        await import("../../../src/resolvers/Mutation/joinPublicOrganization");
+        await import("../../../api/resolvers/Mutation/joinPublicOrganization");
 
       await joinPublicOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -184,7 +184,7 @@ describe("resolvers -> Mutation -> joinPublicOrganization", () => {
       userId: testUser?.id,
     };
     const { joinPublicOrganization: joinPublicOrganizationResolver } =
-      await import("../../../src/resolvers/Mutation/joinPublicOrganization");
+      await import("../../../api/resolvers/Mutation/joinPublicOrganization");
 
     const joinPublicOrganizationPayload =
       await joinPublicOrganizationResolver?.({}, args, context);

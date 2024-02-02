@@ -5,15 +5,15 @@ import {
   Organization,
   DirectChat,
   DirectChatMessage,
-} from "../../../src/models";
-import type { MutationRemoveDirectChatArgs } from "../../../src/types/generatedGraphQLTypes";
+} from "../../../api/models";
+import type { MutationRemoveDirectChatArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   CHAT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -29,7 +29,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestDirectChatType } from "../../helpers/directChat";
 import { createTestDirectChat } from "../../helpers/directChat";
-import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -71,12 +71,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeDirectChat", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -92,7 +92,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../src/resolvers/Mutation/removeDirectChat"
+        "../../../api/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -104,7 +104,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
   });
 
   it(`throws NotFoundError if no directChat exists with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -120,7 +120,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../src/resolvers/Mutation/removeDirectChat"
+        "../../../api/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -133,7 +133,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
 
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -168,7 +168,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../src/resolvers/Mutation/removeDirectChat"
+        "../../../api/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -209,7 +209,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
     };
 
     const { removeDirectChat: removeDirectChatResolver } = await import(
-      "../../../src/resolvers/Mutation/removeDirectChat"
+      "../../../api/resolvers/Mutation/removeDirectChat"
     );
     const removeDirectChatPayload = await removeDirectChatResolver?.(
       {},

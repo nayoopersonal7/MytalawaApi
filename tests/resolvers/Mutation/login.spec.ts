@@ -1,13 +1,13 @@
 import "dotenv/config";
-import { User, Organization, MembershipRequest } from "../../../src/models";
-import type { MutationLoginArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../api/models";
+import type { MutationLoginArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { login as loginResolver } from "../../../src/resolvers/Mutation/login";
+import { login as loginResolver } from "../../../api/resolvers/Mutation/login";
 import {
   INVALID_CREDENTIALS_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import {
@@ -75,12 +75,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> login", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with email === args.data.email`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -95,7 +95,7 @@ describe("resolvers -> Mutation -> login", () => {
       };
 
       const { login: loginResolver } = await import(
-        "../../../src/resolvers/Mutation/login"
+        "../../../api/resolvers/Mutation/login"
       );
 
       await loginResolver?.({}, args, {});
@@ -111,7 +111,7 @@ describe("resolvers -> Mutation -> login", () => {
 
   it(`throws ValidationError if args.data.password !== password for user with
 email === args.data.email`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -126,7 +126,7 @@ email === args.data.email`, async () => {
       };
 
       const { login: loginResolver } = await import(
-        "../../../src/resolvers/Mutation/login"
+        "../../../api/resolvers/Mutation/login"
       );
 
       await loginResolver?.({}, args, {});
@@ -139,8 +139,8 @@ email === args.data.email`, async () => {
 
   it(`updates the user with email === LAST_RESORT_SUPERADMIN_EMAIL to the superadmin role`, async () => {
     // Set the LAST_RESORT_SUPERADMIN_EMAIL to equal to the test user's email
-    vi.doMock("../../../src/constants", async () => {
-      const constants: object = await vi.importActual("../../../src/constants");
+    vi.doMock("../../../api/constants", async () => {
+      const constants: object = await vi.importActual("../../../api/constants");
       return {
         ...constants,
         LAST_RESORT_SUPERADMIN_EMAIL: testUser?.email,
@@ -155,7 +155,7 @@ email === args.data.email`, async () => {
     };
 
     const { login: loginResolver } = await import(
-      "../../../src/resolvers/Mutation/login"
+      "../../../api/resolvers/Mutation/login"
     );
 
     const loginPayload = await loginResolver?.({}, args, {});

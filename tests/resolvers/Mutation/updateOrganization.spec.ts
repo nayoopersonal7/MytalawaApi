@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, User } from "../../../src/models";
-import type { MutationUpdateOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Organization, User } from "../../../api/models";
+import type { MutationUpdateOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -17,9 +17,9 @@ import {
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
-} from "../../../src/constants";
-import { updateOrganization as updateOrganizationResolver } from "../../../src/resolvers/Mutation/updateOrganization";
-import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
+} from "../../../api/constants";
+import { updateOrganization as updateOrganizationResolver } from "../../../api/resolvers/Mutation/updateOrganization";
+import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
 import type {
   TestOrganizationType,
   TestUserType,
@@ -46,18 +46,18 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateOrganization", () => {
   it(`throws NotFoundError if no organization exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -73,7 +73,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
       };
 
       const { updateOrganization: updateOrganizationResolver } = await import(
-        "../../../src/resolvers/Mutation/updateOrganization"
+        "../../../api/resolvers/Mutation/updateOrganization"
       );
 
       await updateOrganizationResolver?.({}, args, context);
@@ -87,7 +87,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
 
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organization with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -103,7 +103,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
       };
 
       const { updateOrganization: updateOrganizationResolver } = await import(
-        "../../../src/resolvers/Mutation/updateOrganization"
+        "../../../api/resolvers/Mutation/updateOrganization"
       );
 
       await updateOrganizationResolver?.({}, args, context);
@@ -153,7 +153,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
     };
 
     const { updateOrganization: updateOrganizationResolver } = await import(
-      "../../../src/resolvers/Mutation/updateOrganization"
+      "../../../api/resolvers/Mutation/updateOrganization"
     );
 
     const updateOrganizationPayload = await updateOrganizationResolver?.(

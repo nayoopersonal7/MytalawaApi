@@ -1,7 +1,7 @@
 import mongoose, { Types } from "mongoose";
 import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
-import { addUserCustomData } from "../../../src/resolvers/Mutation/addUserCustomData";
-import { removeUserCustomData } from "../../../src/resolvers/Mutation/removeUserCustomData";
+import { addUserCustomData } from "../../../api/resolvers/Mutation/addUserCustomData";
+import { removeUserCustomData } from "../../../api/resolvers/Mutation/removeUserCustomData";
 
 import type {
   TestOrganizationType,
@@ -18,7 +18,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -67,7 +67,7 @@ describe("removeUserCustomData mutation", () => {
   });
 
   it("should disallowing removing user custom data when user is not superadmin or admin for the organization", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -104,7 +104,7 @@ describe("removeUserCustomData mutation", () => {
   });
 
   it("should throw an error when the user is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -139,7 +139,7 @@ describe("removeUserCustomData mutation", () => {
   });
 
   it("should throw an error when the organization is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -176,7 +176,7 @@ describe("removeUserCustomData mutation", () => {
   });
 
   it("should throw an error when there is no associated data between the organization and the user", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -212,7 +212,7 @@ describe("removeUserCustomData mutation", () => {
     }
   });
   it("should throw error when there is no custom data to remove", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);

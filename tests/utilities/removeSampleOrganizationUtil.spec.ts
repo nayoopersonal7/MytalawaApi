@@ -1,8 +1,8 @@
 import { describe, it, beforeAll, afterAll, expect } from "vitest";
-import { createSampleOrganization } from "../../src/utilities/createSampleOrganizationUtil";
-import { removeSampleOrganization } from "../../src/utilities/removeSampleOrganizationUtil";
+import { createSampleOrganization } from "../../api/utilities/createSampleOrganizationUtil";
+import { removeSampleOrganization } from "../../api/utilities/removeSampleOrganizationUtil";
 import type mongoose from "mongoose";
-import { Organization, SampleData } from "../../src/models";
+import { Organization, SampleData } from "../../api/models";
 import { connect, disconnect } from "../helpers/db";
 
 let MONGOOSE_INSTANCE: typeof mongoose;

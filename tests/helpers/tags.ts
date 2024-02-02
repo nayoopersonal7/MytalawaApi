@@ -1,5 +1,5 @@
-import type { InterfaceOrganizationTagUser } from "../../src/models";
-import { OrganizationTagUser, TagUser } from "../../src/models";
+import type { InterfaceOrganizationTagUser } from "../../api/models";
+import { OrganizationTagUser, TagUser } from "../../api/models";
 import { nanoid } from "nanoid";
 import type { TestUserType, TestOrganizationType } from "./userAndOrg";
 import { createTestUserAndOrganization, createTestUser } from "./userAndOrg";

@@ -5,7 +5,7 @@ import type mongoose from "mongoose";
 import type { TestDirectChatMessageType } from "../../helpers/directChat";
 import { createTestDirectChatMessage } from "../../helpers/directChat";
 import type { TestUserType } from "../../helpers/userAndOrg";
-import { filterFunction } from "../../../src/resolvers/Subscription/messageSentToDirectChat";
+import { filterFunction } from "../../../api/resolvers/Subscription/messageSentToDirectChat";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testDirectChatMessage: TestDirectChatMessageType;
@@ -25,7 +25,7 @@ describe("src -> resolvers -> Subscription -> messageSentToDirectChat", () => {
   it("subscription filter function returns true if CurrentUser is receiveror sender", async () => {
     const { messageSentToDirectChat: messageSentToDirectChatPayload } =
       await import(
-        "../../../src/resolvers/Subscription/messageSentToDirectChat"
+        "../../../api/resolvers/Subscription/messageSentToDirectChat"
       );
 
     const _args = {};
@@ -63,7 +63,7 @@ describe("src -> resolvers -> Subscription -> messageSentToDirectChat", () => {
   it("user is not notified if it is not a part of DirectChat", async () => {
     const { messageSentToDirectChat: messageSentToDirectChatPayload } =
       await import(
-        "../../../src/resolvers/Subscription/messageSentToDirectChat"
+        "../../../api/resolvers/Subscription/messageSentToDirectChat"
       );
 
     const _args = {};

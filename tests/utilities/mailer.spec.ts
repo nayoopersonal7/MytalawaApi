@@ -4,8 +4,8 @@ import {
   ERROR_IN_SENDING_MAIL,
   MAIL_PASSWORD,
   MAIL_USERNAME,
-} from "../../src/constants";
-import { mailer } from "../../src/utilities/mailer";
+} from "../../api/constants";
+import { mailer } from "../../api/utilities/mailer";
 import { nanoid } from "nanoid";
 import type Mail from "nodemailer/lib/mailer";
 

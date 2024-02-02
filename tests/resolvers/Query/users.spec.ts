@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { users as usersResolver } from "../../../src/resolvers/Query/users";
-import type { InterfaceUser } from "../../../src/models";
-import { Event, Organization, User } from "../../../src/models";
+import { users as usersResolver } from "../../../api/resolvers/Query/users";
+import type { InterfaceUser } from "../../../api/models";
+import { Event, Organization, User } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
-import type { QueryUsersArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryUsersArgs } from "../../../api/types/generatedGraphQLTypes";
 import type { Document } from "mongoose";
 import { nanoid } from "nanoid";
-import { BASE_URL, UNAUTHENTICATED_ERROR } from "../../../src/constants";
+import { BASE_URL, UNAUTHENTICATED_ERROR } from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import * as mongoose from "mongoose";
 import { createTestUser } from "../../helpers/user";
@@ -27,7 +27,7 @@ describe("resolvers -> Query -> users", () => {
   it("throws UnauthenticatedError if userId is not passed in context", async () => {
     const testObjectId = new mongoose.Types.ObjectId();
 
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -42,7 +42,7 @@ describe("resolvers -> Query -> users", () => {
       };
 
       const { users: mockedInProductionUserResolver } = await import(
-        "../../../src/resolvers/Query/users"
+        "../../../api/resolvers/Query/users"
       );
       await mockedInProductionUserResolver?.({}, args, {});
     } catch (error: any) {
@@ -68,7 +68,7 @@ describe("resolvers -> Query -> users", () => {
     };
 
     const { users: mockedInProductionUserResolver } = await import(
-      "../../../src/resolvers/Query/users"
+      "../../../api/resolvers/Query/users"
     );
 
     const usersPayload = await mockedInProductionUserResolver?.({}, args, {

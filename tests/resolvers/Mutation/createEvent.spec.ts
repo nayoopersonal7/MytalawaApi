@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, EventAttendee, Event } from "../../../src/models";
-import type { MutationCreateEventArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, EventAttendee, Event } from "../../../api/models";
+import type { MutationCreateEventArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   ORGANIZATION_NOT_AUTHORIZED_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestUserType,
@@ -21,7 +21,7 @@ import {
   InputValidationError,
   NotFoundError,
   UnauthorizedError,
-} from "../../../src/libraries/errors";
+} from "../../../api/libraries/errors";
 import { fail } from "assert";
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -51,7 +51,7 @@ beforeAll(async () => {
       },
     }
   );
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );
@@ -71,7 +71,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -111,7 +111,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -152,7 +152,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -204,7 +204,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       userId: testUser?.id,
     };
     const { createEvent: createEventResolver } = await import(
-      "../../../src/resolvers/Mutation/createEvent"
+      "../../../api/resolvers/Mutation/createEvent"
     );
 
     const createEventPayload = await createEventResolver?.({}, args, context);
@@ -293,7 +293,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       userId: testUser?.id,
     };
     const { createEvent: createEventResolver } = await import(
-      "../../../src/resolvers/Mutation/createEvent"
+      "../../../api/resolvers/Mutation/createEvent"
     );
 
     const createEventPayload = await createEventResolver?.({}, args, context);
@@ -383,7 +383,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       userId: testUser?.id,
     };
     const { createEvent: createEventResolver } = await import(
-      "../../../src/resolvers/Mutation/createEvent"
+      "../../../api/resolvers/Mutation/createEvent"
     );
 
     const createEventPayload = await createEventResolver?.({}, args, context);
@@ -480,7 +480,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
       .mockImplementationOnce(async () => `Message sent`);
 
     const { createEvent: createEventResolver } = await import(
-      "../../../src/resolvers/Mutation/createEvent"
+      "../../../api/resolvers/Mutation/createEvent"
     );
 
     await createEventResolver?.({}, args, context);
@@ -494,7 +494,7 @@ describe("resolvers -> Mutation -> createEvent", () => {
 
 describe("Check for validation conditions", () => {
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -525,7 +525,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -540,7 +540,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws String Length Validation error if description is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -571,7 +571,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -586,7 +586,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws String Length Validation error if location is greater than 50 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -616,7 +616,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);
@@ -631,7 +631,7 @@ describe("Check for validation conditions", () => {
     }
   });
   it(`throws Date Validation error if start date is greater than end date`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -661,7 +661,7 @@ describe("Check for validation conditions", () => {
       };
 
       const { createEvent: createEventResolverError } = await import(
-        "../../../src/resolvers/Mutation/createEvent"
+        "../../../api/resolvers/Mutation/createEvent"
       );
 
       await createEventResolverError?.({}, args, context);

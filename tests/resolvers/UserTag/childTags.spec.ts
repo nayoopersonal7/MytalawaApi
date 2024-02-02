@@ -1,15 +1,15 @@
 import "dotenv/config";
-import { childTags as childTagsResolver } from "../../../src/resolvers/UserTag/childTags";
+import { childTags as childTagsResolver } from "../../../api/resolvers/UserTag/childTags";
 import type {
   UserTagsConnectionResult,
   UserTagChildTagsArgs,
-} from "../../../src/types/generatedGraphQLTypes";
+} from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createTwoLevelTagsWithOrg } from "../../helpers/tags";
-import { MAXIMUM_FETCH_LIMIT } from "../../../src/constants";
+import { MAXIMUM_FETCH_LIMIT } from "../../../api/constants";
 import { Types } from "mongoose";
 
 let MONGOOSE_INSTANCE: typeof mongoose;

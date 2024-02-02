@@ -1,11 +1,11 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../src/models";
-import type { MutationBlockUserArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../api/models";
+import type { MutationBlockUserArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { blockUser as blockUserResolver } from "../../../src/resolvers/Mutation/blockUser";
+import { blockUser as blockUserResolver } from "../../../api/resolvers/Mutation/blockUser";
 import {
   MEMBER_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
@@ -13,7 +13,7 @@ import {
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -29,7 +29,7 @@ import type {
   TestOrganizationType,
 } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
 
 let testUser: TestUserType;
 let testUser2: TestUserType;
@@ -63,7 +63,7 @@ beforeAll(async () => {
       },
     }
   );
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );
@@ -113,7 +113,7 @@ describe("resolvers -> Mutation -> blockUser", () => {
   });
 
   it(`throws member not found error if user with args.userId is not a member of the organization`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -128,7 +128,7 @@ describe("resolvers -> Mutation -> blockUser", () => {
         userId: testUser?.id,
       };
       const { blockUser: blockUserResolverError } = await import(
-        "../../../src/resolvers/Mutation/blockUser"
+        "../../../api/resolvers/Mutation/blockUser"
       );
 
       await blockUserResolverError?.({}, args, context);
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> blockUser", () => {
   });
 
   it(`throws cannot block self error if  context.userId === args.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -153,7 +153,7 @@ describe("resolvers -> Mutation -> blockUser", () => {
         userId: testUser?.id,
       };
       const { blockUser: blockUserResolverError } = await import(
-        "../../../src/resolvers/Mutation/blockUser"
+        "../../../api/resolvers/Mutation/blockUser"
       );
 
       await blockUserResolverError?.({}, args, context);

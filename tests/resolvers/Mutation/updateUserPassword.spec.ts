@@ -2,16 +2,16 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceUser } from "../../../src/models";
-import { User } from "../../../src/models";
-import type { MutationUpdateUserPasswordArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { InterfaceUser } from "../../../api/models";
+import { User } from "../../../api/models";
+import type { MutationUpdateUserPasswordArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { updateUserPassword as updateUserPasswordResolver } from "../../../src/resolvers/Mutation/updateUserPassword";
+import { updateUserPassword as updateUserPasswordResolver } from "../../../api/resolvers/Mutation/updateUserPassword";
 import {
   INVALID_CREDENTIALS_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -51,13 +51,13 @@ afterAll(async () => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateUserPassword", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -77,7 +77,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
       };
 
       const { updateUserPassword: updateUserPasswordResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserPassword"
+        "../../../api/resolvers/Mutation/updateUserPassword"
       );
 
       await updateUserPasswordResolver?.({}, args, context);
@@ -90,7 +90,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
   });
 
   it(`throws INVALID Credentials error if previous password and saved password mismatch`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
@@ -110,7 +110,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
       };
 
       const { updateUserPassword: updateUserPasswordResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserPassword"
+        "../../../api/resolvers/Mutation/updateUserPassword"
       );
       await updateUserPasswordResolver?.({}, args, context);
     } catch (error: any) {
@@ -119,7 +119,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
   });
 
   it(`throws INVALID Credentials error if new password and confirm new password mismatch`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
@@ -139,7 +139,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
       };
 
       const { updateUserPassword: updateUserPasswordResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserPassword"
+        "../../../api/resolvers/Mutation/updateUserPassword"
       );
 
       await updateUserPasswordResolver?.({}, args, context);
@@ -149,7 +149,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
   });
 
   it(`throws INVALID Credentials error if new password, confirm new password and previous password are null`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
@@ -169,7 +169,7 @@ describe("resolvers -> Mutation -> updateUserPassword", () => {
       };
 
       const { updateUserPassword: updateUserPasswordResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserPassword"
+        "../../../api/resolvers/Mutation/updateUserPassword"
       );
 
       await updateUserPasswordResolver?.({}, args, context);

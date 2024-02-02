@@ -9,7 +9,7 @@ import {
   it,
   vi,
 } from "vitest";
-import { Organization } from "../../../src/models";
+import { Organization } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
 import type {
   TestOrganizationType,
@@ -34,7 +34,7 @@ afterAll(async () => {
 
 describe("resolvers -> Organization -> image", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
   it(`returns absolute url if the image is not null in the organization`, async () => {
@@ -56,7 +56,7 @@ describe("resolvers -> Organization -> image", () => {
     const parent = testOrganization?.toObject();
 
     const { image: imageResolver } = await import(
-      "../../../src/resolvers/Organization/image"
+      "../../../api/resolvers/Organization/image"
     );
     const context = {
       apiRootUrl: "http://testdomain.com",
@@ -88,7 +88,7 @@ describe("resolvers -> Organization -> image", () => {
     const parent = testOrganization?.toObject();
 
     const { image: imageResolver } = await import(
-      "../../../src/resolvers/Organization/image"
+      "../../../api/resolvers/Organization/image"
     );
     if (parent) {
       const creatorPayload = await imageResolver?.(parent, {}, {});

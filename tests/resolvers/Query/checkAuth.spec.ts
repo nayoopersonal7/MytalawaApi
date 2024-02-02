@@ -2,15 +2,15 @@ import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { checkAuth as checkAuthResolver } from "../../../src/resolvers/Query/checkAuth";
+import { checkAuth as checkAuthResolver } from "../../../api/resolvers/Query/checkAuth";
 
-import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
 import { createTestUser } from "../../helpers/userAndOrg";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
 });

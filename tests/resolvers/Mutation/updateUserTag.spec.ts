@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationUpdateUserTagArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationUpdateUserTagArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   TAG_NOT_FOUND,
   NO_CHANGE_IN_TAG_NAME,
   TAG_ALREADY_EXISTS,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -24,7 +24,7 @@ import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createRootTagsWithOrg } from "../../helpers/tags";
-import { OrganizationTagUser } from "../../../src/models";
+import { OrganizationTagUser } from "../../../api/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
@@ -44,13 +44,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> updateUserTag", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { updateUserTag: updateUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserTag"
+        "../../../api/resolvers/Mutation/updateUserTag"
       );
 
       await updateUserTagResolver?.({}, args, context);
@@ -80,7 +80,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
   });
 
   it(`throws NotFoundError if no tag exists with _id === args.input._id `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -99,7 +99,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
       };
 
       const { updateUserTag: updateUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserTag"
+        "../../../api/resolvers/Mutation/updateUserTag"
       );
 
       await updateUserTagResolver?.({}, args, context);
@@ -110,7 +110,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
   });
 
   it(`throws Not Authorized Error if the user is not a superadmin or admin of the organization of the tag beind updated`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
       };
 
       const { updateUserTag: updateUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserTag"
+        "../../../api/resolvers/Mutation/updateUserTag"
       );
 
       await updateUserTagResolver?.({}, args, context);
@@ -144,7 +144,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
   });
 
   it(`throws error if current name of the tag and the new name provided is the same`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -163,7 +163,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
       };
 
       const { updateUserTag: updateUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserTag"
+        "../../../api/resolvers/Mutation/updateUserTag"
       );
 
       await updateUserTagResolver?.({}, args, context);
@@ -176,7 +176,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
   });
 
   it(`throws error if another tag with the same new name already exists in the same organization and the same parent tag`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -195,7 +195,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
       };
 
       const { updateUserTag: updateUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserTag"
+        "../../../api/resolvers/Mutation/updateUserTag"
       );
 
       await updateUserTagResolver?.({}, args, context);
@@ -217,7 +217,7 @@ describe("resolvers -> Mutation -> updateUserTag", () => {
     };
 
     const { updateUserTag: updateUserTagResolver } = await import(
-      "../../../src/resolvers/Mutation/updateUserTag"
+      "../../../api/resolvers/Mutation/updateUserTag"
     );
 
     await updateUserTagResolver?.({}, args, context);

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { describe, expect, it, vi } from "vitest";
-import { appConfig } from "./../../src/config/appConfig";
+import { appConfig } from "./../../api/config/appConfig";
 
 vi.mock("winston", () => {
   const mformat = {
@@ -27,7 +27,7 @@ vi.mock("winston", () => {
 });
 
 import { createLogger, transports, format } from "winston";
-import { logger, stream } from "../../src/libraries";
+import { logger, stream } from "../../api/libraries";
 
 describe("logger functions", () => {
   it("basic logger test should pass", () => {

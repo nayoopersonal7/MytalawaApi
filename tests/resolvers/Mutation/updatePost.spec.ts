@@ -1,14 +1,14 @@
 import "dotenv/config";
 import { Types } from "mongoose";
-import { Post } from "../../../src/models";
-import type { MutationUpdatePostArgs } from "../../../src/types/generatedGraphQLTypes";
-import { connect, disconnect } from "../../../src/db";
-import { updatePost as updatePostResolver } from "../../../src/resolvers/Mutation/updatePost";
+import { Post } from "../../../api/models";
+import type { MutationUpdatePostArgs } from "../../../api/types/generatedGraphQLTypes";
+import { connect, disconnect } from "../../../api/db";
+import { updatePost as updatePostResolver } from "../../../api/resolvers/Mutation/updatePost";
 import {
   LENGTH_VALIDATION_ERROR,
   POST_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -30,7 +30,7 @@ beforeEach(async () => {
   testPost = temp[2];
   testPost2 = await createTestSinglePost(testUser?.id, testOrganization?.id);
 
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );
@@ -145,7 +145,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
     expect(updatePostPayload).toEqual(testUpdatePostPayload);
   });
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -166,7 +166,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../src/resolvers/Mutation/updatePost"
+        "../../../api/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
@@ -177,7 +177,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
     }
   });
   it(`throws String Length Validation error if text is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -197,7 +197,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../src/resolvers/Mutation/updatePost"
+        "../../../api/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
@@ -209,7 +209,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
   });
 
   it("throws error if title is provided and post is not pinned", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -227,7 +227,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../src/resolvers/Mutation/updatePost"
+        "../../../api/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
@@ -239,7 +239,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
   });
 
   it(`throws error if title is not provided and post is pinned`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -256,7 +256,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../src/resolvers/Mutation/updatePost"
+        "../../../api/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);

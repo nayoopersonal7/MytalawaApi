@@ -2,18 +2,18 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceUser } from "../../../src/models";
-import { User } from "../../../src/models";
-import type { MutationUpdateUserProfileArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { InterfaceUser } from "../../../api/models";
+import { User } from "../../../api/models";
+import type { MutationUpdateUserProfileArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
-import { updateUserProfile as updateUserProfileResolver } from "../../../src/resolvers/Mutation/updateUserProfile";
+import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+import { updateUserProfile as updateUserProfileResolver } from "../../../api/resolvers/Mutation/updateUserProfile";
 import {
   BASE_URL,
   EMAIL_ALREADY_EXISTS_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -81,13 +81,13 @@ afterAll(async () => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateUserProfile", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -103,7 +103,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
       };
 
       const { updateUserProfile: updateUserProfileResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserProfile"
+        "../../../api/resolvers/Mutation/updateUserProfile"
       );
 
       await updateUserProfileResolver?.({}, args, context);
@@ -116,7 +116,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
       };
 
       const { updateUserProfile: updateUserProfileResolverUserError } =
-        await import("../../../src/resolvers/Mutation/updateUserProfile");
+        await import("../../../api/resolvers/Mutation/updateUserProfile");
 
       await updateUserProfileResolverUserError?.({}, args, context);
     } catch (error: any) {
@@ -144,7 +144,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
   });
 
   it(`throws ConflictError if args.data.email is already registered for another user`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -162,7 +162,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
       };
 
       const { updateUserProfile: updateUserProfileResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserProfile"
+        "../../../api/resolvers/Mutation/updateUserProfile"
       );
 
       await updateUserProfileResolver?.({}, args, context);
@@ -175,7 +175,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
   });
 
   it(`throws ConflictError if args.data.email is already registered for another user`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -193,7 +193,7 @@ describe("resolvers -> Mutation -> updateUserProfile", () => {
       };
 
       const { updateUserProfile: updateUserProfileResolverEmailError } =
-        await import("../../../src/resolvers/Mutation/updateUserProfile");
+        await import("../../../api/resolvers/Mutation/updateUserProfile");
 
       await updateUserProfileResolverEmailError?.({}, args, context);
     } catch (error: any) {

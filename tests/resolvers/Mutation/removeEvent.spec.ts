@@ -1,16 +1,16 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Event, ActionItem } from "../../../src/models";
-import type { MutationRemoveEventArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Event, ActionItem } from "../../../api/models";
+import type { MutationRemoveEventArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { removeEvent as removeEventResolver } from "../../../src/resolvers/Mutation/removeEvent";
+import { removeEvent as removeEventResolver } from "../../../api/resolvers/Mutation/removeEvent";
 import {
   EVENT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -18,7 +18,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestEventType } from "../../helpers/events";
 import { createTestEvent } from "../../helpers/events";
-import { cacheEvents } from "../../../src/services/EventCache/cacheEvents";
+import { cacheEvents } from "../../../api/services/EventCache/cacheEvents";
 import { createTestActionItems } from "../../helpers/actionItem";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -42,7 +42,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeEvent", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -56,7 +56,7 @@ describe("resolvers -> Mutation -> removeEvent", () => {
       };
 
       const { removeEvent: removeEventResolver } = await import(
-        "../../../src/resolvers/Mutation/removeEvent"
+        "../../../api/resolvers/Mutation/removeEvent"
       );
 
       await removeEventResolver?.({}, args, context);
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> removeEvent", () => {
   });
 
   it(`throws NotFoundError if no event exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -81,7 +81,7 @@ describe("resolvers -> Mutation -> removeEvent", () => {
       };
 
       const { removeEvent: removeEventResolver } = await import(
-        "../../../src/resolvers/Mutation/removeEvent"
+        "../../../api/resolvers/Mutation/removeEvent"
       );
 
       await removeEventResolver?.({}, args, context);
@@ -94,7 +94,7 @@ describe("resolvers -> Mutation -> removeEvent", () => {
   it(`throws UnauthorizedError if user with _id === context.userId is neither an
   admin of organization with _id === event.organization for event with _id === args.id
   or an admin for event with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -130,7 +130,7 @@ describe("resolvers -> Mutation -> removeEvent", () => {
       };
 
       const { removeEvent: removeEventResolver } = await import(
-        "../../../src/resolvers/Mutation/removeEvent"
+        "../../../api/resolvers/Mutation/removeEvent"
       );
 
       await removeEventResolver?.({}, args, context);

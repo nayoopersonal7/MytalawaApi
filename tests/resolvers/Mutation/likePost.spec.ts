@@ -1,11 +1,11 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationLikePostArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationLikePostArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { likePost as likePostResolver } from "../../../src/resolvers/Mutation/likePost";
-import { POST_NOT_FOUND_ERROR } from "../../../src/constants";
+import { likePost as likePostResolver } from "../../../api/resolvers/Mutation/likePost";
+import { POST_NOT_FOUND_ERROR } from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -36,12 +36,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> likePost", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no post exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -55,7 +55,7 @@ describe("resolvers -> Mutation -> likePost", () => {
       };
 
       const { likePost: likePostResolver } = await import(
-        "../../../src/resolvers/Mutation/likePost"
+        "../../../api/resolvers/Mutation/likePost"
       );
 
       await likePostResolver?.({}, args, context);

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreatePostArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationCreatePostArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   LENGTH_VALIDATION_ERROR,
   USER_NOT_AUTHORIZED_TO_PIN,
   BASE_URL,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -28,9 +28,9 @@ import {
   createTestUserAndOrganization,
   createTestUser,
 } from "../../helpers/userAndOrg";
-import { Organization } from "../../../src/models";
-import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
-import { createPost as createPostResolverImage } from "../../../src/resolvers/Mutation/createPost";
+import { Organization } from "../../../api/models";
+import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+import { createPost as createPostResolverImage } from "../../../api/resolvers/Mutation/createPost";
 
 let testUser: TestUserType;
 let randomUser: TestUserType;
@@ -55,13 +55,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createPost", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -80,7 +80,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
 
       await createPostResolver?.({}, args, context);
@@ -93,7 +93,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -113,7 +113,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
 
       await createPostResolver?.({}, args, context);
@@ -126,7 +126,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it(`throws USER_NOT_AUTHORIZED_TO_PIN ERROR if the user is not authorized to pin the post`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -147,7 +147,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
 
       await createPostResolver?.({}, args, context);
@@ -160,7 +160,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it(`pinned post should be successfully added to the organization`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -180,7 +180,7 @@ describe("resolvers -> Mutation -> createPost", () => {
     };
 
     const { createPost: createPostResolver } = await import(
-      "../../../src/resolvers/Mutation/createPost"
+      "../../../api/resolvers/Mutation/createPost"
     );
     const createdPost = await createPostResolver?.({}, args, context);
 
@@ -219,7 +219,7 @@ describe("resolvers -> Mutation -> createPost", () => {
     };
 
     const { createPost: createPostResolver } = await import(
-      "../../../src/resolvers/Mutation/createPost"
+      "../../../api/resolvers/Mutation/createPost"
     );
 
     const createPostPayload = await createPostResolver?.({}, args, context);
@@ -265,7 +265,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -287,7 +287,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
 
       await createPostResolver?.({}, args, context);
@@ -298,7 +298,7 @@ describe("resolvers -> Mutation -> createPost", () => {
     }
   });
   it(`throws String Length Validation error if text is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -319,7 +319,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
 
       await createPostResolver?.({}, args, context);
@@ -331,7 +331,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it("throws error if title is provided and post is not pinned", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -350,7 +350,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
       await createPostResolver?.({}, args, context);
     } catch (error: any) {
@@ -361,7 +361,7 @@ describe("resolvers -> Mutation -> createPost", () => {
   });
 
   it("throws error if title is not provided and post is pinned", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -380,7 +380,7 @@ describe("resolvers -> Mutation -> createPost", () => {
       };
 
       const { createPost: createPostResolver } = await import(
-        "../../../src/resolvers/Mutation/createPost"
+        "../../../api/resolvers/Mutation/createPost"
       );
       await createPostResolver?.({}, args, context);
     } catch (error: any) {

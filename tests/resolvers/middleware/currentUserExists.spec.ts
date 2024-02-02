@@ -2,8 +2,8 @@ import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import { connect, disconnect } from "../../helpers/db";
-import { currentUserExists } from "../../../src/resolvers/middleware/currentUserExists";
-import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
+import { currentUserExists } from "../../../api/resolvers/middleware/currentUserExists";
+import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -33,12 +33,12 @@ afterAll(async () => {
 describe("resolvers -> Middleware -> currentUserExists", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

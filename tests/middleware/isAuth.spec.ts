@@ -1,9 +1,9 @@
 import type { Request } from "express";
-import { isAuth } from "../../src/middleware/isAuth";
+import { isAuth } from "../../api/middleware/isAuth";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import jwt from "jsonwebtoken";
-import { logger } from "../../src/libraries/logger";
-import { ACCESS_TOKEN_SECRET } from "../../src/constants";
+import { logger } from "../../api/libraries/logger";
+import { ACCESS_TOKEN_SECRET } from "../../api/constants";
 
 interface TestInterfaceAuthData {
   isAuth: boolean;

@@ -9,10 +9,10 @@ import express from "express";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserFunc } from "../../helpers/user";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import authDirectiveTransformer from "../../../src/directives/directiveTransformer/authDirectiveTransformer";
-import roleDirectiveTransformer from "../../../src/directives/directiveTransformer/roleDirectiveTransformer";
-import { appConfig } from "../../../src/config";
-import { errors } from "../../../src/libraries";
+import authDirectiveTransformer from "../../../api/directives/directiveTransformer/authDirectiveTransformer";
+import roleDirectiveTransformer from "../../../api/directives/directiveTransformer/roleDirectiveTransformer";
+import { appConfig } from "../../../api/config";
+import { errors } from "../../../api/libraries";
 
 const app = express();
 i18n.configure({

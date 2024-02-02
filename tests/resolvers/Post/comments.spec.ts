@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { comments as commentsResolver } from "../../../src/resolvers/Post/comments";
+import { comments as commentsResolver } from "../../../api/resolvers/Post/comments";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Comment, Post } from "../../../src/models";
+import { Comment, Post } from "../../../api/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestPostType } from "../../helpers/posts";
 import { createTestPost } from "../../helpers/posts";

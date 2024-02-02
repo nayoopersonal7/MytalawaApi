@@ -1,10 +1,10 @@
 // @ts-nocheck
 import "dotenv/config";
-import { eventsByOrganizationConnection as eventsByOrganizationConnectionResolver } from "../../../src/resolvers/Query/eventsByOrganizationConnection";
+import { eventsByOrganizationConnection as eventsByOrganizationConnectionResolver } from "../../../api/resolvers/Query/eventsByOrganizationConnection";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import type { QueryEventsByOrganizationConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
-import { Event } from "../../../src/models";
+import type { QueryEventsByOrganizationConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Event } from "../../../api/models";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import type { TestEventType } from "../../helpers/events";
 import { createEventWithRegistrant } from "../../helpers/events";

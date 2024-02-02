@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import { ActionItemCategory, User } from "../../../src/models";
-import type { MutationCreateOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
+import { ActionItemCategory, User } from "../../../api/models";
+import type { MutationCreateOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -16,10 +16,10 @@ import {
 import {
   LENGTH_VALIDATION_ERROR,
   USER_NOT_AUTHORIZED_SUPERADMIN,
-} from "../../../src/constants";
-import { createOrganization as createOrganizationResolver } from "../../../src/resolvers/Mutation/createOrganization";
-import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
-import * as uploadImage from "../../../src/utilities/uploadImage";
+} from "../../../api/constants";
+import { createOrganization as createOrganizationResolver } from "../../../api/resolvers/Mutation/createOrganization";
+import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+import * as uploadImage from "../../../api/utilities/uploadImage";
 import type { TestUserType } from "../../helpers/user";
 import { createTestUserFunc } from "../../helpers/user";
 
@@ -41,12 +41,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createOrganization", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws Not Authorised Error if user is not a super admin`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => message);
@@ -76,7 +76,7 @@ describe("resolvers -> Mutation -> createOrganization", () => {
       };
 
       const { createOrganization } = await import(
-        "../../../src/resolvers/Mutation/createOrganization"
+        "../../../api/resolvers/Mutation/createOrganization"
       );
       await createOrganization?.({}, args, context);
     } catch (error: any) {
@@ -253,7 +253,7 @@ describe("resolvers -> Mutation -> createOrganization", () => {
   });
 
   it(`throws String Length Validation error if name is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -290,7 +290,7 @@ describe("resolvers -> Mutation -> createOrganization", () => {
     }
   });
   it(`throws String Length Validation error if description is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -328,7 +328,7 @@ describe("resolvers -> Mutation -> createOrganization", () => {
     }
   });
   it("throws Address Validation Error for an invalid address", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -405,7 +405,7 @@ describe("resolvers -> Mutation -> createOrganization", () => {
     }
   });
   it("throws Address Validation Error for missing address", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );

@@ -2,16 +2,16 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceComment } from "../../../src/models";
-import { Comment, Post, User } from "../../../src/models";
-import type { MutationRemoveCommentArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { InterfaceComment } from "../../../api/models";
+import { Comment, Post, User } from "../../../api/models";
+import type { MutationRemoveCommentArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
-import { removeComment as removeCommentResolver } from "../../../src/resolvers/Mutation/removeComment";
+import { removeComment as removeCommentResolver } from "../../../api/resolvers/Mutation/removeComment";
 import {
   COMMENT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -24,7 +24,7 @@ import {
 import type { TestUserType } from "../../helpers/userAndOrg";
 import type { TestPostType } from "../../helpers/posts";
 import { createTestPost } from "../../helpers/posts";
-import { cacheComments } from "../../../src/services/CommentCache/cacheComments";
+import { cacheComments } from "../../../api/services/CommentCache/cacheComments";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -66,12 +66,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeComment", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -85,7 +85,7 @@ describe("resolvers -> Mutation -> removeComment", () => {
       };
 
       const { removeComment: removeCommentResolver } = await import(
-        "../../../src/resolvers/Mutation/removeComment"
+        "../../../api/resolvers/Mutation/removeComment"
       );
 
       await removeCommentResolver?.({}, args, context);
@@ -96,7 +96,7 @@ describe("resolvers -> Mutation -> removeComment", () => {
   });
 
   it(`throws NotFoundError if no comment exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -110,7 +110,7 @@ describe("resolvers -> Mutation -> removeComment", () => {
       };
 
       const { removeComment: removeCommentResolver } = await import(
-        "../../../src/resolvers/Mutation/removeComment"
+        "../../../api/resolvers/Mutation/removeComment"
       );
 
       await removeCommentResolver?.({}, args, context);
@@ -121,7 +121,7 @@ describe("resolvers -> Mutation -> removeComment", () => {
   });
 
   it(`throws UnauthorizedError if user with _id === context.userId is not the creator of comment with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -166,7 +166,7 @@ describe("resolvers -> Mutation -> removeComment", () => {
       };
 
       const { removeComment: removeCommentResolver } = await import(
-        "../../../src/resolvers/Mutation/removeComment"
+        "../../../api/resolvers/Mutation/removeComment"
       );
 
       await removeCommentResolver?.({}, args, context);

@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { Event } from "../../../src/models";
+import { Event } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
-import type { QueryEventsByOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryEventsByOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type {
   TestUserType,
@@ -48,7 +48,7 @@ describe("resolvers -> Query -> eventsByOrganization", () => {
       orderBy: "id_ASC",
     };
     const { eventsByOrganization } = await import(
-      "../../../src/resolvers/Query/eventsByOrganization"
+      "../../../api/resolvers/Query/eventsByOrganization"
     );
     const eventsByOrganizationPayload = await eventsByOrganization?.(
       {},

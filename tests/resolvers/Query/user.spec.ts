@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { user as userResolver } from "../../../src/resolvers/Query/user";
+import { user as userResolver } from "../../../api/resolvers/Query/user";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { BASE_URL, USER_NOT_FOUND_ERROR } from "../../../src/constants";
-import { User } from "../../../src/models";
+import { BASE_URL, USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { User } from "../../../api/models";
 
-import type { QueryUserArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryUserArgs } from "../../../api/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";

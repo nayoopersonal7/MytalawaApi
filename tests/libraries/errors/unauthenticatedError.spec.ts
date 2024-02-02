@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { describe, it, expect } from "vitest";
-import { UNAUTHENTICATED_ERROR } from "../../../src/constants";
-import { errors } from "../../../src/libraries";
+import { UNAUTHENTICATED_ERROR } from "../../../api/constants";
+import { errors } from "../../../api/libraries";
 
 describe("libraries -> errors -> unauthenticatedError", () => {
   it(`throws unauthenticatedError if user not authenticated`, () => {

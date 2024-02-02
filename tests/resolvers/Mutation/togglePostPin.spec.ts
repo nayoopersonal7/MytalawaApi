@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, User, Post } from "../../../src/models";
-import type { MutationTogglePostPinArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Organization, User, Post } from "../../../api/models";
+import type { MutationTogglePostPinArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_TO_PIN,
   LENGTH_VALIDATION_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -47,13 +47,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> togglePostPin", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if current user with _id === context.userId does not exist`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -68,7 +68,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
       };
 
       const { togglePostPin: togglePostPinResolver } = await import(
-        "../../../src/resolvers/Mutation/togglePostPin"
+        "../../../api/resolvers/Mutation/togglePostPin"
       );
 
       await togglePostPinResolver?.({}, args, context);
@@ -80,7 +80,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it(`throws NotFoundError if no post exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -95,7 +95,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
       };
 
       const { togglePostPin: togglePostPinResolver } = await import(
-        "../../../src/resolvers/Mutation/togglePostPin"
+        "../../../api/resolvers/Mutation/togglePostPin"
       );
 
       await togglePostPinResolver?.({}, args, context);
@@ -107,7 +107,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it(`throws NotAuthorized error if the user is not the admin of the org or a superadmin`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -121,7 +121,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
       };
 
       const { togglePostPin: togglePostPinResolver } = await import(
-        "../../../src/resolvers/Mutation/togglePostPin"
+        "../../../api/resolvers/Mutation/togglePostPin"
       );
 
       await togglePostPinResolver?.({}, args, context);
@@ -134,7 +134,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it(`adds a post to the pinnedPosts for an org`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -148,7 +148,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
     };
 
     const { togglePostPin: togglePostPinResolver } = await import(
-      "../../../src/resolvers/Mutation/togglePostPin"
+      "../../../api/resolvers/Mutation/togglePostPin"
     );
 
     await togglePostPinResolver?.({}, args, context);
@@ -168,7 +168,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it(`removes a post from the pinnedPosts for an org`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -182,7 +182,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
     };
 
     const { togglePostPin: togglePostPinResolver } = await import(
-      "../../../src/resolvers/Mutation/togglePostPin"
+      "../../../api/resolvers/Mutation/togglePostPin"
     );
 
     await togglePostPinResolver?.({}, args, context);
@@ -203,7 +203,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it("throws error if title is not provided to pin post", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -217,7 +217,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
       };
 
       const { togglePostPin: togglePostPinResolver } = await import(
-        "../../../src/resolvers/Mutation/togglePostPin"
+        "../../../api/resolvers/Mutation/togglePostPin"
       );
 
       await togglePostPinResolver?.({}, args, context);
@@ -227,7 +227,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
   });
 
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => message
     );
@@ -243,7 +243,7 @@ describe("resolvers -> Mutation -> togglePostPin", () => {
       };
 
       const { togglePostPin: togglePostPinResolver } = await import(
-        "../../../src/resolvers/Mutation/togglePostPin"
+        "../../../api/resolvers/Mutation/togglePostPin"
       );
 
       await togglePostPinResolver?.({}, args, context);

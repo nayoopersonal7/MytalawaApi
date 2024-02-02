@@ -7,11 +7,11 @@ import type {
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import { disconnect, connect } from "../../helpers/db";
-import { addUserCustomData } from "../../../src/resolvers/Mutation/addUserCustomData";
+import { addUserCustomData } from "../../../api/resolvers/Mutation/addUserCustomData";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -48,7 +48,7 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   });
 
   it("should throw an error if the current user is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -73,7 +73,7 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   });
 
   it("should throw an error if the organization is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

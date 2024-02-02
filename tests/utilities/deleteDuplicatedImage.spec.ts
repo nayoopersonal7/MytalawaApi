@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { deleteDuplicatedImage } from "../../src/utilities/deleteDuplicatedImage";
+import { deleteDuplicatedImage } from "../../api/utilities/deleteDuplicatedImage";
 import * as fs from "fs";
-import { logger } from "../../src/libraries";
+import { logger } from "../../api/libraries";
 dotenv.config();
 
 vi.mock("fs", () => ({

@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { actionItemCategory as actionItemCategoryResolver } from "../../../src/resolvers/Query/actionItemCategory";
+import { actionItemCategory as actionItemCategoryResolver } from "../../../api/resolvers/Query/actionItemCategory";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { ACTION_ITEM_CATEGORY_NOT_FOUND_ERROR } from "../../../src/constants";
-import type { QueryActionItemCategoryArgs } from "../../../src/types/generatedGraphQLTypes";
+import { ACTION_ITEM_CATEGORY_NOT_FOUND_ERROR } from "../../../api/constants";
+import type { QueryActionItemCategoryArgs } from "../../../api/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
 import { createTestCategory } from "../../helpers/actionItemCategory";

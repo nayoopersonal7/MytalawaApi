@@ -2,13 +2,13 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceComment } from "../../../src/models";
-import { Post, Comment } from "../../../src/models";
-import type { MutationUnlikeCommentArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { InterfaceComment } from "../../../api/models";
+import { Post, Comment } from "../../../api/models";
+import type { MutationUnlikeCommentArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { unlikeComment as unlikeCommentResolver } from "../../../src/resolvers/Mutation/unlikeComment";
-import { COMMENT_NOT_FOUND_ERROR } from "../../../src/constants";
+import { unlikeComment as unlikeCommentResolver } from "../../../api/resolvers/Mutation/unlikeComment";
+import { COMMENT_NOT_FOUND_ERROR } from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestPost } from "../../helpers/posts";
@@ -52,7 +52,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> unlikeComment", () => {
   it(`throws NotFoundError if no comment exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -66,7 +66,7 @@ describe("resolvers -> Mutation -> unlikeComment", () => {
       };
 
       const { unlikeComment: unlikeCommentResolver } = await import(
-        "../../../src/resolvers/Mutation/unlikeComment"
+        "../../../api/resolvers/Mutation/unlikeComment"
       );
 
       await unlikeCommentResolver?.({}, args, context);

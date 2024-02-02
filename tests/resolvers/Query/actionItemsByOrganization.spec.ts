@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { ActionItem, ActionItemCategory } from "../../../src/models";
+import { ActionItem, ActionItemCategory } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
-import type { QueryActionItemsByOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
-import { actionItemsByOrganization as actionItemsByOrganizationResolver } from "../../../src/resolvers/Query/actionItemsByOrganization";
+import type { QueryActionItemsByOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
+import { actionItemsByOrganization as actionItemsByOrganizationResolver } from "../../../api/resolvers/Query/actionItemsByOrganization";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type mongoose from "mongoose";
 import { createTestActionItems } from "../../helpers/actionItem";

@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationAcceptAdminArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationAcceptAdminArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { acceptAdmin as acceptAdminResolver } from "../../../src/resolvers/Mutation/acceptAdmin";
+import { acceptAdmin as acceptAdminResolver } from "../../../api/resolvers/Mutation/acceptAdmin";
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   afterAll,
   afterEach,
@@ -20,7 +20,7 @@ import {
 } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 
 let testUserSuperAdmin: TestUserType;
 let testUserAdmin: TestUserType;
@@ -38,13 +38,13 @@ afterAll(async () => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> acceptAdmin", () => {
   it(`throws not found error when user with _id === context.userId is null`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -59,7 +59,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../src/resolvers/Mutation/acceptAdmin"
+        "../../../api/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {
@@ -71,7 +71,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
   });
 
   it(`throws user is not Authorised Error if user is not SuperAdmin`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -86,7 +86,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../src/resolvers/Mutation/acceptAdmin"
+        "../../../api/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
   });
 
   it(`throws not found error when user with _id === args._id is null`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -147,7 +147,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../src/resolvers/Mutation/acceptAdmin"
+        "../../../api/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {

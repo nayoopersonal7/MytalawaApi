@@ -15,8 +15,8 @@ import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 dotenv.config();
 
-import type { InterfaceImageHash } from "../../src/models";
-import { ImageHash } from "../../src/models";
+import type { InterfaceImageHash } from "../../api/models";
+import { ImageHash } from "../../api/models";
 
 const testImageToBeDeleted = `${nanoid()}-testNewImagePath`;
 const testOldImagePath = `${nanoid()}-testOldImagePath`;
@@ -54,7 +54,7 @@ describe("utilities -> deleteImage.ts", () => {
       (_imagePath: any, callback: any) => callback(null)
     );
     const reuploadUtilities = await import(
-      "../../src/utilities/reuploadDuplicateCheck"
+      "../../api/utilities/reuploadDuplicateCheck"
     );
 
     vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
@@ -62,11 +62,11 @@ describe("utilities -> deleteImage.ts", () => {
         return false;
       }
     );
-    const { logger } = await import("../../src/libraries");
+    const { logger } = await import("../../api/libraries");
 
     const logSpy = vi.spyOn(logger, "info");
 
-    const { deleteImage } = await import("../../src/utilities/deleteImage");
+    const { deleteImage } = await import("../../api/utilities/deleteImage");
 
     await deleteImage(testImageToBeDeleted, testOldImagePath);
 
@@ -102,7 +102,7 @@ describe("utilities -> deleteImage.ts", () => {
     );
 
     const reuploadUtilities = await import(
-      "../../src/utilities/reuploadDuplicateCheck"
+      "../../api/utilities/reuploadDuplicateCheck"
     );
 
     vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
@@ -110,11 +110,11 @@ describe("utilities -> deleteImage.ts", () => {
         return false;
       }
     );
-    const { logger } = await import("../../src/libraries");
+    const { logger } = await import("../../api/libraries");
 
     const logSpy = vi.spyOn(logger, "info");
 
-    const { deleteImage } = await import("../../src/utilities/deleteImage");
+    const { deleteImage } = await import("../../api/utilities/deleteImage");
 
     await deleteImage(testImageToBeDeleted, testOldImagePath);
 
@@ -150,7 +150,7 @@ describe("utilities -> deleteImage.ts", () => {
       );
 
       const reuploadUtilities = await import(
-        "../../src/utilities/reuploadDuplicateCheck"
+        "../../api/utilities/reuploadDuplicateCheck"
       );
 
       vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
@@ -159,11 +159,11 @@ describe("utilities -> deleteImage.ts", () => {
         }
       );
 
-      const { logger } = await import("../../src/libraries");
+      const { logger } = await import("../../api/libraries");
 
       const logSpy = vi.spyOn(logger, "info");
 
-      const { deleteImage } = await import("../../src/utilities/deleteImage");
+      const { deleteImage } = await import("../../api/utilities/deleteImage");
 
       await deleteImage(testImageToBeDeleted, testOldImagePath);
 

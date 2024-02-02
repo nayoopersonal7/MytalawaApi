@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { assignee as assigneeResolver } from "../../../src/resolvers/ActionItem/assignee";
+import { assignee as assigneeResolver } from "../../../api/resolvers/ActionItem/assignee";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import type { TestActionItemType } from "../../helpers/actionItem";
 import { createTestActionItem } from "../../helpers/actionItem";

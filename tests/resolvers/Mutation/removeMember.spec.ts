@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../src/models";
-import type { MutationRemoveMemberArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../api/models";
+import type { MutationRemoveMemberArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -13,7 +13,7 @@ import {
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
   USER_REMOVING_SELF,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -119,7 +119,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it(`throws user NotFoundError if no organization exists with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -137,7 +137,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverOrgNotFoundError } =
-        await import("../../../src/resolvers/Mutation/removeMember");
+        await import("../../../api/resolvers/Mutation/removeMember");
 
       await removeMemberResolverOrgNotFoundError?.({}, args, context);
     } catch (error: any) {
@@ -147,7 +147,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is
   not an admin of the organization with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -165,7 +165,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverAdminError } = await import(
-        "../../../src/resolvers/Mutation/removeMember"
+        "../../../api/resolvers/Mutation/removeMember"
       );
 
       await removeMemberResolverAdminError?.({}, args, context);
@@ -178,7 +178,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw user not found error when user with _id === args.data.userId does not exist", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -195,7 +195,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverNotFoundError } = await import(
-        "../../../src/resolvers/Mutation/removeMember"
+        "../../../api/resolvers/Mutation/removeMember"
       );
 
       await removeMemberResolverNotFoundError?.({}, args, context);
@@ -208,7 +208,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw member not found error when user with _id === args.data.userId does not exist in the organization", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -225,7 +225,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverMemberNotFoundError } =
-        await import("../../../src/resolvers/Mutation/removeMember");
+        await import("../../../api/resolvers/Mutation/removeMember");
 
       await removeMemberResolverMemberNotFoundError?.({}, args, context);
     } catch (error: any) {
@@ -237,7 +237,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw admin cannot remove self error when user with _id === args.data.userId === context.userId", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -254,7 +254,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveSelfError } =
-        await import("../../../src/resolvers/Mutation/removeMember");
+        await import("../../../api/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveSelfError?.({}, args, context);
     } catch (error: any) {
@@ -264,7 +264,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw admin cannot remove another admin error when user with _id === args.data.userId is also an admin in the organization", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -281,7 +281,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveAdminError } =
-        await import("../../../src/resolvers/Mutation/removeMember");
+        await import("../../../api/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveAdminError?.({}, args, context);
     } catch (error: any) {
@@ -293,7 +293,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw admin cannot remove creator error when user with _id === args.data.userId is the organization creator in the organization", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -310,7 +310,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveAdminError } =
-        await import("../../../src/resolvers/Mutation/removeMember");
+        await import("../../../api/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveAdminError?.({}, args, context);
     } catch (error: any) {
@@ -334,7 +334,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
     };
 
     const { removeMember: removeMemberResolverRemoveAdminError } = await import(
-      "../../../src/resolvers/Mutation/removeMember"
+      "../../../api/resolvers/Mutation/removeMember"
     );
 
     const updatedOrganization = await removeMemberResolverRemoveAdminError?.(

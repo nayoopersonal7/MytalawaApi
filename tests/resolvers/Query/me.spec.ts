@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { me as meResolver } from "../../../src/resolvers/Query/me";
+import { me as meResolver } from "../../../api/resolvers/Query/me";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
-import { User } from "../../../src/models";
+import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { User } from "../../../api/models";
 
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";

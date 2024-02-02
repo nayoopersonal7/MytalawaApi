@@ -4,9 +4,9 @@ import {
   createAccessToken,
   createRefreshToken,
   revokeRefreshToken,
-} from "../../src/utilities";
-import type { InterfaceUser } from "../../src/models";
-import { User } from "../../src/models";
+} from "../../api/utilities";
+import type { InterfaceUser } from "../../api/models";
+import { User } from "../../api/models";
 import jwt from "jsonwebtoken";
 import type { TestUserType } from "../helpers/user";
 import { createTestUserFunc } from "../helpers/user";

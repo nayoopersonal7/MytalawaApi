@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateActionItemArgs } from "../../../src/types/generatedGraphQLTypes";
-import { createActionItem as createActionItemResolver } from "../../../src/resolvers/Mutation/createActionItem";
+import type { MutationCreateActionItemArgs } from "../../../api/types/generatedGraphQLTypes";
+import { createActionItem as createActionItemResolver } from "../../../api/resolvers/Mutation/createActionItem";
 import { connect, disconnect } from "../../helpers/db";
 import {
   USER_NOT_FOUND_ERROR,
@@ -10,7 +10,7 @@ import {
   USER_NOT_AUTHORIZED_ERROR,
   EVENT_NOT_FOUND_ERROR,
   USER_NOT_MEMBER_FOR_ORGANIZATION,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type {
@@ -21,7 +21,7 @@ import type {
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
 import { createTestCategory } from "../../helpers/actionItemCategory";
 import type { TestEventType } from "../../helpers/events";
-import { Event, User } from "../../../src/models";
+import { Event, User } from "../../../api/models";
 import { nanoid } from "nanoid";
 
 let randomUser: TestUserType;
@@ -35,7 +35,7 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );

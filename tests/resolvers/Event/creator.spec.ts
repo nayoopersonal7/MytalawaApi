@@ -1,11 +1,11 @@
 import "dotenv/config";
-import { creator as creatorResolver } from "../../../src/resolvers/Event/creator";
+import { creator as creatorResolver } from "../../../api/resolvers/Event/creator";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { createTestEventWithRegistrants } from "../../helpers/eventsWithRegistrants";
 import type { TestEventType } from "../../helpers/events";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 import { type TestUserType } from "../../helpers/userAndOrg";
 
 let MONGOOSE_INSTANCE: typeof mongoose;

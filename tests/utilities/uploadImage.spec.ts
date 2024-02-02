@@ -15,7 +15,7 @@ import {
   dropAllCollectionsFromDatabase,
 } from "../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../src/models";
+import { User } from "../../api/models";
 import path from "path";
 import type { TestUserType } from "../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../helpers/userAndOrg";
@@ -71,7 +71,7 @@ try {
           },
         };
         const imageAlreadyInDbFile = await import(
-          "../../src/utilities/imageAlreadyInDbCheck"
+          "../../api/utilities/imageAlreadyInDbCheck"
         );
         const mockedImageAlreadyInDb = vi
           .spyOn(imageAlreadyInDbFile, "imageAlreadyInDbCheck")
@@ -81,7 +81,7 @@ try {
               return "";
             }
           );
-        const { uploadImage } = await import("../../src/utilities/uploadImage");
+        const { uploadImage } = await import("../../api/utilities/uploadImage");
         const uploadImagePayload = await uploadImage(pngImage, null);
         const testUserObj = await User.findByIdAndUpdate(
           {
@@ -132,7 +132,7 @@ try {
           },
         };
         const imageAlreadyInDbFile = await import(
-          "../../src/utilities/imageAlreadyInDbCheck"
+          "../../api/utilities/imageAlreadyInDbCheck"
         );
         const mockedImageAlreadyInDb = vi
           .spyOn(imageAlreadyInDbFile, "imageAlreadyInDbCheck")
@@ -142,7 +142,7 @@ try {
               return newImagePath;
             }
           );
-        const { uploadImage } = await import("../../src/utilities/uploadImage");
+        const { uploadImage } = await import("../../api/utilities/uploadImage");
         const testUserBeforeObj = await User.findById({
           _id: testUser?.id,
         });
@@ -150,7 +150,7 @@ try {
           testUserBeforeObj?.image != null ? testUserBeforeObj?.image : null;
         console.log(oldImagePath);
         const deleteDuplicatedImage = await import(
-          "../../src/utilities/deleteImage"
+          "../../api/utilities/deleteImage"
         );
         const mockedDeleteImage = vi
           .spyOn(deleteDuplicatedImage, "deleteImage")

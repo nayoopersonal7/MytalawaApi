@@ -10,11 +10,11 @@
   ],
   "overrides": [
     {
-      "files": ["./src/typeDefs/**/*.ts"],
+      "files": ["./api/typeDefs/**/*.ts"],
       "processor": "@graphql-eslint/graphql"
     },
     {
-      "files": ["./src/typeDefs/**/*.graphql"],
+      "files": ["./api/typeDefs/**/*.graphql"],
       "parser": "@graphql-eslint/eslint-plugin",
       "plugins": ["@graphql-eslint"],
       // Do not apply naming conventions to .graphql files
@@ -31,7 +31,7 @@
     {
       // Disable explicit function return type for index.ts as it uses a lot of templated code
       // which has convulated return types
-      "files": ["./src/index.ts", "./src/utilities/copyToClipboard.ts"],
+      "files": ["./api/index.ts", "./api/utilities/copyToClipboard.ts"],
       "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-empty-function": "off"
@@ -52,7 +52,7 @@
     "no-restricted-imports": [
       "error",
       {
-        "patterns": ["**/src/**"]
+        "patterns": ["**/api/**"]
       }
     ],
 

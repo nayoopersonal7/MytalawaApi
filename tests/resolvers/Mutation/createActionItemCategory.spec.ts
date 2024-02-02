@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateActionItemCategoryArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationCreateActionItemCategoryArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
-import { createActionItemCategory as createActionItemCategoryResolver } from "../../../src/resolvers/Mutation/createActionItemCategory";
+import { createActionItemCategory as createActionItemCategoryResolver } from "../../../api/resolvers/Mutation/createActionItemCategory";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   ACTION_ITEM_CATEGORY_ALREADY_EXISTS,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import {
   createTestUser,
@@ -20,7 +20,7 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 
-import { Organization, User } from "../../../src/models";
+import { Organization, User } from "../../../api/models";
 
 let randomUser: TestUserType;
 let testUser: TestUserType;
@@ -29,7 +29,7 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );

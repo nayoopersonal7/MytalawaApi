@@ -9,13 +9,13 @@ import {
   vi,
 } from "vitest";
 import { connect, disconnect } from "../helpers/db";
-import { USER_NOT_AUTHORIZED_ADMIN } from "../../src/constants";
+import { USER_NOT_AUTHORIZED_ADMIN } from "../../api/constants";
 import type { TestOrganizationType, TestUserType } from "../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../helpers/userAndOrg";
 import mongoose from "mongoose";
-import type { InterfaceOrganization } from "../../src/models";
-import { Organization, User } from "../../src/models";
-import { ApplicationError } from "../../src/libraries/errors";
+import type { InterfaceOrganization } from "../../api/models";
+import { Organization, User } from "../../api/models";
+import { ApplicationError } from "../../api/libraries/errors";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -38,14 +38,14 @@ describe("utilities -> adminCheck", () => {
   });
 
   it("throws error if userIsOrganizationAdmin === false and isUserSuperAdmin === false", async () => {
-    const { requestContext } = await import("../../src/libraries");
+    const { requestContext } = await import("../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
 
     try {
-      const { adminCheck } = await import("../../src/utilities");
+      const { adminCheck } = await import("../../api/utilities");
       await adminCheck(
         testUser?._id,
         testOrganization ?? ({} as InterfaceOrganization)
@@ -72,7 +72,7 @@ describe("utilities -> adminCheck", () => {
       }
     );
 
-    const { adminCheck } = await import("../../src/utilities");
+    const { adminCheck } = await import("../../api/utilities");
 
     await expect(
       adminCheck(
@@ -111,7 +111,7 @@ describe("utilities -> adminCheck", () => {
       }
     );
 
-    const { adminCheck } = await import("../../src/utilities");
+    const { adminCheck } = await import("../../api/utilities");
 
     await expect(
       adminCheck(
@@ -121,14 +121,14 @@ describe("utilities -> adminCheck", () => {
     ).resolves.not.toThrowError();
   });
   it("throws error if user is not found with the specific Id", async () => {
-    const { requestContext } = await import("../../src/libraries");
+    const { requestContext } = await import("../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
 
     try {
-      const { adminCheck } = await import("../../src/utilities");
+      const { adminCheck } = await import("../../api/utilities");
       await adminCheck(
         new mongoose.Types.ObjectId(),
         testOrganization ?? ({} as InterfaceOrganization)

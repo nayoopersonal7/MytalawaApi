@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../src/models";
-import type { MutationUpdateUserTypeArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User } from "../../../api/models";
+import type { MutationUpdateUserTypeArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
   SUPERADMIN_CANT_CHANGE_OWN_ROLE,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -37,13 +37,13 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../src/constants");
+  vi.doUnmock("../../../api/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateUserType", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -60,7 +60,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserType"
+        "../../../api/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
@@ -73,7 +73,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
   });
 
   it(`throws USER not super admin error if no user with _id === context.userId is not a SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -90,7 +90,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserType"
+        "../../../api/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
@@ -103,7 +103,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.data.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserType"
+        "../../../api/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
@@ -145,7 +145,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
   });
 
   it(`throws SUPERADMIN_CANT_CHANGE_OWN_ROLE_ERROR if the user is a superadmin and tries to downgrade their own role`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -162,7 +162,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../src/resolvers/Mutation/updateUserType"
+        "../../../api/resolvers/Mutation/updateUserType"
       );
       await updateUserTypeResolver?.({}, args, context);
     } catch (error: any) {
@@ -174,7 +174,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
   });
 
   it(`updates user.userType of user with _id === args.data.id to args.data.userType`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => `Translated ${message}`
     );
@@ -202,7 +202,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
     };
 
     const { updateUserType: updateUserTypeResolver } = await import(
-      "../../../src/resolvers/Mutation/updateUserType"
+      "../../../api/resolvers/Mutation/updateUserType"
     );
 
     const updateUserTypePayload = await updateUserTypeResolver?.(

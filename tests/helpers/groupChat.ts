@@ -2,8 +2,8 @@ import { nanoid } from "nanoid";
 import type {
   InterfaceGroupChat,
   InterfaceGroupChatMessage,
-} from "../../src/models";
-import { GroupChat, GroupChatMessage } from "../../src/models";
+} from "../../api/models";
+import { GroupChat, GroupChatMessage } from "../../api/models";
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
 import type { Document } from "mongoose";

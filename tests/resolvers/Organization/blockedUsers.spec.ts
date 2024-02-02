@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { blockedUsers as blockedUsersResolver } from "../../../src/resolvers/Organization/blockedUsers";
+import { blockedUsers as blockedUsersResolver } from "../../../api/resolvers/Organization/blockedUsers";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";

@@ -2,8 +2,8 @@ import { nanoid } from "nanoid";
 import type {
   InterfaceDirectChat,
   InterfaceDirectChatMessage,
-} from "../../src/models";
-import { DirectChat, DirectChatMessage } from "../../src/models";
+} from "../../api/models";
+import { DirectChat, DirectChatMessage } from "../../api/models";
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
 import type { Document } from "mongoose";

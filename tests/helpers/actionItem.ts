@@ -1,5 +1,5 @@
-import type { InterfaceActionItem } from "../../src/models";
-import { ActionItem, ActionItemCategory, Event } from "../../src/models";
+import type { InterfaceActionItem } from "../../api/models";
+import { ActionItem, ActionItemCategory, Event } from "../../api/models";
 import type { Document } from "mongoose";
 import {
   createTestUser,

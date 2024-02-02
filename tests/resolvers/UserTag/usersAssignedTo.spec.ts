@@ -1,17 +1,17 @@
 import "dotenv/config";
-import { usersAssignedTo as usersAssignedToResolver } from "../../../src/resolvers/UserTag/usersAssignedTo";
+import { usersAssignedTo as usersAssignedToResolver } from "../../../api/resolvers/UserTag/usersAssignedTo";
 import type {
   UsersConnectionResult,
   UserTagUsersAssignedToArgs,
-} from "../../../src/types/generatedGraphQLTypes";
+} from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserTagType } from "../../helpers/tags";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTagsAndAssignToUser } from "../../helpers/tags";
-import { MAXIMUM_FETCH_LIMIT } from "../../../src/constants";
-import { TagUser } from "../../../src/models";
+import { MAXIMUM_FETCH_LIMIT } from "../../../api/constants";
+import { TagUser } from "../../../api/models";
 import { Types } from "mongoose";
 
 let MONGOOSE_INSTANCE: typeof mongoose;

@@ -1,16 +1,16 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, GroupChat } from "../../../src/models";
-import type { MutationRemoveUserFromGroupChatArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, GroupChat } from "../../../api/models";
+import type { MutationRemoveUserFromGroupChatArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { removeUserFromGroupChat as removeUserFromGroupChatResolver } from "../../../src/resolvers/Mutation/removeUserFromGroupChat";
+import { removeUserFromGroupChat as removeUserFromGroupChatResolver } from "../../../api/resolvers/Mutation/removeUserFromGroupChat";
 import {
   CHAT_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -18,7 +18,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChatMessage } from "../../helpers/groupChat";
-import { deleteOrganizationFromCache } from "../../../src/services/OrganizationCache/deleteOrganizationFromCache";
+import { deleteOrganizationFromCache } from "../../../api/services/OrganizationCache/deleteOrganizationFromCache";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -39,7 +39,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
   it(`throws NotFoundError if no groupChat exists with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -54,7 +54,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
       };
 
       const { removeUserFromGroupChat: removeUserFromGroupChatResolver } =
-        await import("../../../src/resolvers/Mutation/removeUserFromGroupChat");
+        await import("../../../api/resolvers/Mutation/removeUserFromGroupChat");
 
       await removeUserFromGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -65,7 +65,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is not
     an admin of the organization of groupChat with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -91,7 +91,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
       };
 
       const { removeUserFromGroupChat: removeUserFromGroupChatResolver } =
-        await import("../../../src/resolvers/Mutation/removeUserFromGroupChat");
+        await import("../../../api/resolvers/Mutation/removeUserFromGroupChat");
 
       await removeUserFromGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -102,7 +102,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
 
   it(`throws UnauthorizedError if users field of groupChat with _id === args.chatId
     does not contain user with _id === args.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -139,7 +139,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
       };
 
       const { removeUserFromGroupChat: removeUserFromGroupChatResolver } =
-        await import("../../../src/resolvers/Mutation/removeUserFromGroupChat");
+        await import("../../../api/resolvers/Mutation/removeUserFromGroupChat");
 
       await removeUserFromGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -150,7 +150,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
 
   it(`removes user with _id === args.userId from users list field of groupChat
   with _id === args.ChatId and returns the updated groupChat`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
     );
@@ -188,7 +188,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
   });
 
   it(`throws NotFoundError if no organization exists for groupChat with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -210,7 +210,7 @@ describe("resolvers -> Mutation -> removeUserFromGroupChat", () => {
       };
 
       const { removeUserFromGroupChat: removeUserFromGroupChatResolver } =
-        await import("../../../src/resolvers/Mutation/removeUserFromGroupChat");
+        await import("../../../api/resolvers/Mutation/removeUserFromGroupChat");
 
       await removeUserFromGroupChatResolver?.({}, args, context);
     } catch (error: any) {

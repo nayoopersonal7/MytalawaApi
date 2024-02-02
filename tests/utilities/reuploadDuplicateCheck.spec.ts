@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { ImageHash } from "../../src/models";
+import { ImageHash } from "../../api/models";
 import {
   afterAll,
   afterEach,
@@ -12,7 +12,7 @@ import {
 import { connect, disconnect } from "../helpers/db";
 import type mongoose from "mongoose";
 import { nanoid } from "nanoid";
-import { ApplicationError } from "../../src/libraries/errors";
+import { ApplicationError } from "../../api/libraries/errors";
 dotenv.config();
 
 const testNewImagePath = `${nanoid()}-testNewImagePath`;
@@ -64,7 +64,7 @@ describe("utilities -> reuploadDuplicateCheck", () => {
     const testNewImagePathCopy = testNewImagePath;
 
     const { reuploadDuplicateCheck } = await import(
-      "../../src/utilities/reuploadDuplicateCheck"
+      "../../api/utilities/reuploadDuplicateCheck"
     );
 
     const reuploadDuplicateCheckPayload = await reuploadDuplicateCheck(
@@ -77,7 +77,7 @@ describe("utilities -> reuploadDuplicateCheck", () => {
 
   it("should return false when oldImagePath= null", async () => {
     const { reuploadDuplicateCheck } = await import(
-      "../../src/utilities/reuploadDuplicateCheck"
+      "../../api/utilities/reuploadDuplicateCheck"
     );
 
     const reuploadDuplicateCheckPayload = await reuploadDuplicateCheck(
@@ -91,7 +91,7 @@ describe("utilities -> reuploadDuplicateCheck", () => {
   it("should throw an error when getting image-hash ", async () => {
     try {
       const { reuploadDuplicateCheck } = await import(
-        "../../src/utilities/reuploadDuplicateCheck"
+        "../../api/utilities/reuploadDuplicateCheck"
       );
 
       await reuploadDuplicateCheck(testOldImagePath, testNewImagePath);
@@ -111,7 +111,7 @@ describe("utilities -> reuploadDuplicateCheck", () => {
       };
     });
 
-    const { requestContext } = await import("../../src/libraries");
+    const { requestContext } = await import("../../api/libraries");
 
     const mockedRequestTranslate = vi
       .spyOn(requestContext, "translate")
@@ -121,7 +121,7 @@ describe("utilities -> reuploadDuplicateCheck", () => {
 
     try {
       const { reuploadDuplicateCheck } = await import(
-        "../../src/utilities/reuploadDuplicateCheck"
+        "../../api/utilities/reuploadDuplicateCheck"
       );
 
       await reuploadDuplicateCheck(null, testNewImagePath);

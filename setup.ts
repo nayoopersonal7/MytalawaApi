@@ -1,4 +1,4 @@
-import { MAXIMUM_IMAGE_SIZE_LIMIT_KB } from "./src/constants";
+import { MAXIMUM_IMAGE_SIZE_LIMIT_KB } from "./api/constants";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";

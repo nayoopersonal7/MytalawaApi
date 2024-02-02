@@ -7,17 +7,17 @@ import {
   vi,
   beforeEach,
 } from "vitest";
-import { generateUserData } from "../../../src/utilities/createSampleOrganizationUtil";
+import { generateUserData } from "../../../api/utilities/createSampleOrganizationUtil";
 import { faker } from "@faker-js/faker";
-import { createSampleOrganization } from "../../../src/resolvers/Mutation/createSampleOrganization";
+import { createSampleOrganization } from "../../../api/resolvers/Mutation/createSampleOrganization";
 import type mongoose from "mongoose";
-import { SampleData } from "../../../src/models";
+import { SampleData } from "../../../api/models";
 
 import {
   SAMPLE_ORGANIZATION_ALREADY_EXISTS,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { connect, disconnect } from "../../helpers/db";
 import { Types } from "mongoose";
 
@@ -37,7 +37,7 @@ beforeEach(async () => {
 
 describe("createSampleOrganization resolver", async () => {
   it("should NOT throw error when user is ADMIN", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -60,7 +60,7 @@ describe("createSampleOrganization resolver", async () => {
   });
 
   it("should NOT throw error when user is SUPERADMIN", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -83,7 +83,7 @@ describe("createSampleOrganization resolver", async () => {
   });
 
   it("should throw unauthorized error for non-admins", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -104,7 +104,7 @@ describe("createSampleOrganization resolver", async () => {
   });
 
   it("should throw error when the sample organization already exist", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );
@@ -135,7 +135,7 @@ describe("createSampleOrganization resolver", async () => {
   });
 
   it("should throw error when the current user doesn't exist", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );

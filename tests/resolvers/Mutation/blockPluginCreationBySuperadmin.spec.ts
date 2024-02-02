@@ -1,15 +1,15 @@
 import "dotenv/config";
-import { User } from "../../../src/models";
+import { User } from "../../../api/models";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationBlockPluginCreationBySuperadminArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationBlockPluginCreationBySuperadminArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { blockPluginCreationBySuperadmin as blockPluginCreationBySuperadminResolver } from "../../../src/resolvers/Mutation/blockPluginCreationBySuperadmin";
+import { blockPluginCreationBySuperadmin as blockPluginCreationBySuperadminResolver } from "../../../api/resolvers/Mutation/blockPluginCreationBySuperadmin";
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -28,7 +28,7 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
   testUser = await createTestUser();
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );
@@ -40,7 +40,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> blockPluginCreationBySuperadmin", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
   });
 
@@ -63,7 +63,7 @@ describe("resolvers -> Mutation -> blockPluginCreationBySuperadmin", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is not
   a SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -81,7 +81,7 @@ describe("resolvers -> Mutation -> blockPluginCreationBySuperadmin", () => {
       const {
         blockPluginCreationBySuperadmin: blockPluginCreationBySuperadminError,
       } = await import(
-        "../../../src/resolvers/Mutation/blockPluginCreationBySuperadmin"
+        "../../../api/resolvers/Mutation/blockPluginCreationBySuperadmin"
       );
 
       await blockPluginCreationBySuperadminError?.({}, args, context);

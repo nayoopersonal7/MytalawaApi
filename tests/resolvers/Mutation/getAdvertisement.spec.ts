@@ -1,6 +1,6 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import type { MutationCreateAdvertisementArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationCreateAdvertisementArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -46,7 +46,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> getAdvertisement", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> getAdvertisement", () => {
 
     //creating a advertisement
     const { createAdvertisement: createAdvertisementResolver } = await import(
-      "../../../src/resolvers/Mutation/createAdvertisement"
+      "../../../api/resolvers/Mutation/createAdvertisement"
     );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const createdAdvertisementPayload = await createAdvertisementResolver?.(
@@ -77,7 +77,7 @@ describe("resolvers -> Mutation -> getAdvertisement", () => {
     );
 
     const { getAdvertisements: getAdvertisementResolver } = await import(
-      "../../../src/resolvers/Query/getAdvertisements"
+      "../../../api/resolvers/Query/getAdvertisements"
     );
     const getAdvertisementPayload = await getAdvertisementResolver?.(
       {},

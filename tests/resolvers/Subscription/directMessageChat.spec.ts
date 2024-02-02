@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 describe("src -> resolvers -> Subscription -> directMessageChat", () => {
   it("should return payload", async () => {
     const { directMessageChat: directMessageChatPayload } = await import(
-      "../../../src/resolvers/Subscription/directMessageChat"
+      "../../../api/resolvers/Subscription/directMessageChat"
     );
     const _args = {};
     const _parent = {};

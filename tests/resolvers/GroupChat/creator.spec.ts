@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { creator as creatorResolver } from "../../../src/resolvers/GroupChat/creator";
+import { creator as creatorResolver } from "../../../api/resolvers/GroupChat/creator";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import type { InterfaceGroupChat } from "../../../src/models";
-import { User } from "../../../src/models";
+import type { InterfaceGroupChat } from "../../../api/models";
+import { User } from "../../../api/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChat } from "../../helpers/groupChat";

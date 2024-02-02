@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { Types } from "mongoose";
 import type mongoose from "mongoose";
-import { removeOrganizationCustomField } from "../../../src/resolvers/Mutation/removeOrganizationCustomField";
-import { addOrganizationCustomField } from "../../../src/resolvers/Mutation/addOrganizationCustomField";
+import { removeOrganizationCustomField } from "../../../api/resolvers/Mutation/removeOrganizationCustomField";
+import { addOrganizationCustomField } from "../../../api/resolvers/Mutation/addOrganizationCustomField";
 import {
   createTestUserAndOrganization,
   type TestOrganizationType,
@@ -15,11 +15,11 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 
 import { createTestUser } from "../../helpers/userAndOrg";
 
-import { OrganizationCustomField } from "../../../src/models";
+import { OrganizationCustomField } from "../../../api/models";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -38,7 +38,7 @@ afterAll(async () => {
 
 describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   it("should remove field added by the organization", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -83,7 +83,7 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   });
 
   it("should not remove field when user is unauthorized", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -127,7 +127,7 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   });
 
   it("should fail attempting to remove field", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -151,7 +151,7 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
   });
 
   it("should throw an error when user is not found", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);

@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, Event } from "../../../src/models";
-import type { MutationAdminRemoveEventArgs } from "../../../src/types/generatedGraphQLTypes";
+import { User, Organization, Event } from "../../../api/models";
+import type { MutationAdminRemoveEventArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { adminRemoveEvent as adminRemoveEventResolver } from "../../../src/resolvers/Mutation/adminRemoveEvent";
+import { adminRemoveEvent as adminRemoveEventResolver } from "../../../api/resolvers/Mutation/adminRemoveEvent";
 import {
   EVENT_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestUserType,
@@ -19,8 +19,8 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestEventType } from "../../helpers/events";
 import { createTestEvent } from "../../helpers/events";
-import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
-import { cacheEvents } from "../../../src/services/EventCache/cacheEvents";
+import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheEvents } from "../../../api/services/EventCache/cacheEvents";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -34,7 +34,7 @@ beforeAll(async () => {
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
   testEvent = resultsArray[2];
-  const { requestContext } = await import("../../../src/libraries");
+  const { requestContext } = await import("../../../api/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
     (message) => message
   );
@@ -46,7 +46,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> adminRemoveEvent", () => {
   it(`throws NotFoundError if no event exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
       (message) => message
     );

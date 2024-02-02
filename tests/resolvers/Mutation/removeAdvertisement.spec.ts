@@ -1,6 +1,6 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import type { MutationCreateAdvertisementArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationCreateAdvertisementArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -20,7 +20,7 @@ import {
   createTestUserAndOrganization,
   createTestUser,
 } from "../../helpers/userAndOrg";
-import { ADVERTISEMENT_NOT_FOUND_ERROR } from "../../../src/constants";
+import { ADVERTISEMENT_NOT_FOUND_ERROR } from "../../../api/constants";
 
 let testUser: TestUserType;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +47,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeAdvertisement", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
     };
 
     const { createAdvertisement: createAdvertisementResolver } = await import(
-      "../../../src/resolvers/Mutation/createAdvertisement"
+      "../../../api/resolvers/Mutation/createAdvertisement"
     );
 
     const createdAdvertisementPayload = await createAdvertisementResolver?.(
@@ -79,7 +79,7 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
 
     // deleting the ad
     const { removeAdvertisement } = await import(
-      "../../../src/resolvers/Mutation/removeAdvertisement"
+      "../../../api/resolvers/Mutation/removeAdvertisement"
     );
 
     const removeAdvertisementPayload = await removeAdvertisement?.(
@@ -105,12 +105,12 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
   it("should throw NOT_FOUND_ERROR on wrong advertisement", async () => {
     // deleting
     const { removeAdvertisement } = await import(
-      "../../../src/resolvers/Mutation/removeAdvertisement"
+      "../../../api/resolvers/Mutation/removeAdvertisement"
     );
     const context = {
       userId: testUser?.id,
     };
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);

@@ -5,13 +5,13 @@ import { Types } from "mongoose";
 import type {
   InterfaceAdvertisement,
   InterfaceDonation,
-} from "../../../src/models";
-import { Advertisement } from "../../../src/models";
-import type { MutationDeleteDonationByIdArgs } from "../../../src/types/generatedGraphQLTypes";
+} from "../../../api/models";
+import { Advertisement } from "../../../api/models";
+import type { MutationDeleteDonationByIdArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import { deleteAdvertisementById } from "../../../src/resolvers/Mutation/deleteAdvertisementById";
+import { deleteAdvertisementById } from "../../../api/resolvers/Mutation/deleteAdvertisementById";
 
 let testAdvertisement: InterfaceAdvertisement &
   Document<any, any, InterfaceDonation>;

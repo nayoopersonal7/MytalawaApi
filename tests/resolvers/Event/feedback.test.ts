@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { feedback as feedbackResolver } from "../../../src/resolvers/Event/feedback";
+import { feedback as feedbackResolver } from "../../../api/resolvers/Event/feedback";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";

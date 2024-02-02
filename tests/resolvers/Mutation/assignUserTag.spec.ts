@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationAssignUserTagArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationAssignUserTagArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -10,7 +10,7 @@ import {
   TAG_NOT_FOUND,
   USER_DOES_NOT_BELONG_TO_TAGS_ORGANIZATION,
   USER_ALREADY_HAS_TAG,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -24,7 +24,7 @@ import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createRootTagWithOrg } from "../../helpers/tags";
-import { TagUser } from "../../../src/models";
+import { TagUser } from "../../../api/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
@@ -44,13 +44,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> assignUserTag", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);
@@ -80,7 +80,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.input.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -97,7 +97,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       const context = { userId: adminUser?._id };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);
@@ -110,7 +110,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
   });
 
   it(`throws NotFoundError if no tag exists with _id === args.input.tagId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);
@@ -140,7 +140,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
   });
 
   it(`throws Not Authorized Error if the current user is not a superadmin or admin of the organization of the tag being assigned`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -159,7 +159,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);
@@ -174,7 +174,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
   });
 
   it(`throws Error if the request user is not a member of organization of the tag being assigned`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -193,7 +193,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);
@@ -219,7 +219,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
     };
 
     const { assignUserTag: assignUserTagResolver } = await import(
-      "../../../src/resolvers/Mutation/assignUserTag"
+      "../../../api/resolvers/Mutation/assignUserTag"
     );
 
     const payload = await assignUserTagResolver?.({}, args, context);
@@ -234,7 +234,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
   });
 
   it(`Throws USER_ALREADY_HAS_TAG error if tag with _id === args.input.tagId is already assigned to user with _id === args.input.userId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -252,7 +252,7 @@ describe("resolvers -> Mutation -> assignUserTag", () => {
       };
 
       const { assignUserTag: assignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/assignUserTag"
+        "../../../api/resolvers/Mutation/assignUserTag"
       );
 
       await assignUserTagResolver?.({}, args, context);

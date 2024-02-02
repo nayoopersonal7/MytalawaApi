@@ -1,8 +1,8 @@
-import type { MutationCreatePluginArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationCreatePluginArgs } from "../../../api/types/generatedGraphQLTypes";
 
-import { pubsub } from "../../../src/index";
+import { pubsub } from "../../../api/index";
 import { describe, it, expect } from "vitest";
-import { createPlugin as createPluginResolver } from "../../../src/resolvers/Mutation/createPlugin";
+import { createPlugin as createPluginResolver } from "../../../api/resolvers/Mutation/createPlugin";
 import { nanoid } from "nanoid";
 
 describe("resolvers -> Mutation -> createPlugin", () => {

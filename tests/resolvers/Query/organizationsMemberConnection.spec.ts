@@ -1,16 +1,16 @@
 import "dotenv/config";
-import { organizationsMemberConnection as organizationsMemberConnectionResolver } from "../../../src/resolvers/Query/organizationsMemberConnection";
-import type { InterfaceOrganization, InterfaceUser } from "../../../src/models";
-import { Organization, User } from "../../../src/models";
+import { organizationsMemberConnection as organizationsMemberConnectionResolver } from "../../../api/resolvers/Query/organizationsMemberConnection";
+import type { InterfaceOrganization, InterfaceUser } from "../../../api/models";
+import { Organization, User } from "../../../api/models";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { QueryOrganizationsMemberConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { QueryOrganizationsMemberConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
 
 import { nanoid } from "nanoid";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { BASE_URL } from "../../../src/constants";
+import { BASE_URL } from "../../../api/constants";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUsers: (InterfaceUser & Document<any, any, InterfaceUser>)[];

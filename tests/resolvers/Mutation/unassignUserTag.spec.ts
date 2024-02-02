@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationUnassignUserTagArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationUnassignUserTagArgs } from "../../../api/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -9,7 +9,7 @@ import {
   USER_NOT_AUTHORIZED_ERROR,
   TAG_NOT_FOUND,
   USER_DOES_NOT_HAVE_THE_TAG,
-} from "../../../src/constants";
+} from "../../../api/constants";
 import {
   beforeAll,
   afterAll,
@@ -23,7 +23,7 @@ import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createRootTagWithOrg } from "../../helpers/tags";
-import { TagUser } from "../../../src/models";
+import { TagUser } from "../../../api/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
@@ -43,13 +43,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> unassignUserTag", () => {
   afterEach(() => {
-    vi.doUnmock("../../../src/constants");
+    vi.doUnmock("../../../api/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -66,7 +66,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { unassignUserTag: unassignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/unassignUserTag"
+        "../../../api/resolvers/Mutation/unassignUserTag"
       );
 
       await unassignUserTagResolver?.({}, args, context);
@@ -79,7 +79,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.input.userId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -96,7 +96,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
       const context = { userId: adminUser?._id };
 
       const { unassignUserTag: unassignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/unassignUserTag"
+        "../../../api/resolvers/Mutation/unassignUserTag"
       );
 
       await unassignUserTagResolver?.({}, args, context);
@@ -109,7 +109,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
   });
 
   it(`throws NotFoundError if no tag exists with _id === args.input.tagId `, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -128,7 +128,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
       };
 
       const { unassignUserTag: unassignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/unassignUserTag"
+        "../../../api/resolvers/Mutation/unassignUserTag"
       );
 
       await unassignUserTagResolver?.({}, args, context);
@@ -139,7 +139,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
   });
 
   it(`throws Not Authorized Error if the current user is not a superadmin or admin of the organization of the tag being assigned`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -158,7 +158,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
       };
 
       const { unassignUserTag: unassignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/unassignUserTag"
+        "../../../api/resolvers/Mutation/unassignUserTag"
       );
 
       await unassignUserTagResolver?.({}, args, context);
@@ -173,7 +173,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
   });
 
   it(`throws USER_DOES_NOT_HAVE_THE_TAG error if the request tries to unassign the tag from a user who has not been tagged with the tag with _id === args.input.tagId`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -191,7 +191,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
       };
 
       const { unassignUserTag: unassignUserTagResolver } = await import(
-        "../../../src/resolvers/Mutation/unassignUserTag"
+        "../../../api/resolvers/Mutation/unassignUserTag"
       );
 
       await unassignUserTagResolver?.({}, args, context);
@@ -206,7 +206,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
   });
 
   it(`tag unassign should be successful and the user who has been unassigned the tag is returned`, async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
       (message) => `Translated ${message}`
@@ -229,7 +229,7 @@ describe("resolvers -> Mutation -> unassignUserTag", () => {
 
     // Test the unassignUserTag resolver
     const { unassignUserTag: unassignUserTagResolver } = await import(
-      "../../../src/resolvers/Mutation/unassignUserTag"
+      "../../../api/resolvers/Mutation/unassignUserTag"
     );
 
     const payload = await unassignUserTagResolver?.({}, args, context);

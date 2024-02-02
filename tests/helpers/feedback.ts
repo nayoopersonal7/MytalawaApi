@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { CheckIn, type InterfaceFeedback, Feedback } from "../../src/models";
+import { CheckIn, type InterfaceFeedback, Feedback } from "../../api/models";
 import type { Document } from "mongoose";
 import { createEventWithCheckedInUser } from "./checkIn";
 import type { TestEventType, TestCheckInType } from "./checkIn";

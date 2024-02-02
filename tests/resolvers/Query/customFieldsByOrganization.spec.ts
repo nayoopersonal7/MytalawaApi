@@ -7,9 +7,9 @@ import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import { Types } from "mongoose";
 import type mongoose from "mongoose";
 import { disconnect, connect } from "../../helpers/db";
-import { addOrganizationCustomField } from "../../../src/resolvers/Mutation/addOrganizationCustomField";
-import { customFieldsByOrganization } from "../../../src/resolvers/Query/customFieldsByOrganization";
-import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../src/constants";
+import { addOrganizationCustomField } from "../../../api/resolvers/Mutation/addOrganizationCustomField";
+import { customFieldsByOrganization } from "../../../api/resolvers/Query/customFieldsByOrganization";
+import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../api/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -52,7 +52,7 @@ describe("resolvers => Query => customFieldsByOrganization", () => {
   });
 
   it("should throw error if organization does not exist", async () => {
-    const { requestContext } = await import("../../../src/libraries");
+    const { requestContext } = await import("../../../api/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")

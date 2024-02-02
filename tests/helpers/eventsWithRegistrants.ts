@@ -1,7 +1,7 @@
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
-import type { InterfaceEvent } from "../../src/models";
-import { Event, EventAttendee, User } from "../../src/models";
+import type { InterfaceEvent } from "../../api/models";
+import { Event, EventAttendee, User } from "../../api/models";
 import type { Document } from "mongoose";
 
 export type TestEventType =

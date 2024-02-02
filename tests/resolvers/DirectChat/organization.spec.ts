@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { organization as organizationResolver } from "../../../src/resolvers/DirectChat/organization";
+import { organization as organizationResolver } from "../../../api/resolvers/DirectChat/organization";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Organization } from "../../../src/models";
+import { Organization } from "../../../api/models";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { TestDirectChatType } from "../../helpers/directChat";
 import { createTestDirectChat } from "../../helpers/directChat";

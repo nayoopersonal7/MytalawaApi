@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { ImageHash } from "../../src/models";
+import { ImageHash } from "../../api/models";
 import {
   afterAll,
   afterEach,
@@ -12,7 +12,7 @@ import {
 import { connect, disconnect } from "../helpers/db";
 import type mongoose from "mongoose";
 import { nanoid } from "nanoid";
-import { INVALID_FILE_TYPE } from "../../src/constants";
+import { INVALID_FILE_TYPE } from "../../api/constants";
 
 const testNewImagePath = `${nanoid()}-testNewImagePath`;
 const testOldImagePath = `${nanoid()}-testOldImagePath`;
@@ -60,7 +60,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
     });
 
     const { imageAlreadyInDbCheck } = await import(
-      "../../src/utilities/imageAlreadyInDbCheck"
+      "../../api/utilities/imageAlreadyInDbCheck"
     );
 
     const fileName = await imageAlreadyInDbCheck(null, testNewImagePath);
@@ -93,7 +93,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
     });
 
     const deleteDuplicatedImage = await import(
-      "../../src/utilities/deleteDuplicatedImage"
+      "../../api/utilities/deleteDuplicatedImage"
     );
 
     const mockedDeleteDuplicateImage = vi
@@ -101,7 +101,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
       .mockImplementation(() => undefined);
 
     const { imageAlreadyInDbCheck } = await import(
-      "../../src/utilities/imageAlreadyInDbCheck"
+      "../../api/utilities/imageAlreadyInDbCheck"
     );
 
     const fileName = await imageAlreadyInDbCheck(
@@ -140,7 +140,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
     });
 
     const deleteDuplicatedImage = await import(
-      "../../src/utilities/deleteDuplicatedImage"
+      "../../api/utilities/deleteDuplicatedImage"
     );
 
     const mockedDeleteDuplicateImage = vi
@@ -148,7 +148,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
       .mockImplementation(() => undefined);
 
     const { imageAlreadyInDbCheck } = await import(
-      "../../src/utilities/imageAlreadyInDbCheck"
+      "../../api/utilities/imageAlreadyInDbCheck"
     );
 
     const fileName = await imageAlreadyInDbCheck(
@@ -176,7 +176,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
       };
     });
 
-    const { requestContext } = await import("../../src/libraries");
+    const { requestContext } = await import("../../api/libraries");
 
     const mockedRequestTranslate = vi
       .spyOn(requestContext, "translate")
@@ -185,7 +185,7 @@ describe("utilities -> imageAlreadyInDbCheck", () => {
       });
 
     const { imageAlreadyInDbCheck } = await import(
-      "../../src/utilities/imageAlreadyInDbCheck"
+      "../../api/utilities/imageAlreadyInDbCheck"
     );
 
     try {

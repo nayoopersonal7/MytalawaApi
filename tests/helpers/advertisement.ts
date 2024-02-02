@@ -1,5 +1,5 @@
-import { Advertisement, User } from "../../src/models";
-import type { InterfaceUser } from "../../src/models";
+import { Advertisement, User } from "../../api/models";
+import type { InterfaceUser } from "../../api/models";
 
 import { nanoid } from "nanoid";
 import type { Document } from "mongoose";

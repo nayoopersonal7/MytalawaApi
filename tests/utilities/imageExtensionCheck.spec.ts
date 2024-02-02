@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { imageExtensionCheck } from "../../src/utilities/imageExtensionCheck";
-import * as deleteImage from "../../src/utilities/deleteImage";
-import { requestContext } from "../../src/libraries";
-import { INVALID_FILE_TYPE } from "../../src/constants";
-import { ApplicationError } from "../../src/libraries/errors";
+import { imageExtensionCheck } from "../../api/utilities/imageExtensionCheck";
+import * as deleteImage from "../../api/utilities/deleteImage";
+import { requestContext } from "../../api/libraries";
+import { INVALID_FILE_TYPE } from "../../api/constants";
+import { ApplicationError } from "../../api/libraries/errors";
 
 const testFilename = "test.anyOtherExtension";
 
