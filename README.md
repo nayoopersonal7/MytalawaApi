@@ -12,9 +12,9 @@ Talawa is a modular open source project to manage group activities of both non-p
 
 Core features include:
 
-1.  Membership management
+1.  Membership manages,dsdment
 2.  Groups management
-3.  Event registrations
+3.  Event registradlsmdsdsdtions
 4.  Recurring meetings
 5.  Facilities registrations
 
