@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { revokeRefreshTokenForUser as revokeRefreshTokenForUserResolver } from "../../../api/resolvers/Mutation/revokeRefreshTokenForUser";
+import { revokeRefreshTokenForUser as revokeRefreshTokenForUserResolver } from "../../../src/resolvers/Mutation/revokeRefreshTokenForUser";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/user";
 import { createTestUserFunc } from "../../helpers/user";

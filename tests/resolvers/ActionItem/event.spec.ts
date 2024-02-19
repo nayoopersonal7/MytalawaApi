@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { event as eventResolver } from "../../../api/resolvers/ActionItem/event";
+import { event as eventResolver } from "../../../src/resolvers/ActionItem/event";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import type { InterfaceActionItem } from "../../../api/models";
-import { ActionItem, Event } from "../../../api/models";
+import type { InterfaceActionItem } from "../../../src/models";
+import { ActionItem, Event } from "../../../src/models";
 import type {
   TestOrganizationType,
   TestUserType,
@@ -51,7 +51,7 @@ describe("resolvers -> ActionItem -> event", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const parent = updatedTestActionItem?.toObject();
@@ -59,7 +59,7 @@ describe("resolvers -> ActionItem -> event", () => {
     const eventByPayload = await eventResolver?.(
       parent as InterfaceActionItem,
       {},
-      {}
+      {},
     );
 
     expect(eventByPayload?._id).toEqual(updatedTestActionItem?.eventId);

@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { deleteDuplicatedImage } from "../../api/utilities/deleteDuplicatedImage";
+import { deleteDuplicatedImage } from "../../src/utilities/deleteDuplicatedImage";
 import * as fs from "fs";
-import { logger } from "../../api/libraries";
+import { logger } from "../../src/libraries";
 dotenv.config();
 
 vi.mock("fs", () => ({
@@ -19,20 +19,20 @@ describe("utilities -> deleteDuplicatedImage", () => {
 
   it("should delete duplicated image", () => {
     vi.spyOn(fs, "unlink").mockImplementationOnce(
-      (_imagePath: any, callback: any) => callback(null)
+      (_imagePath: any, callback: any) => callback(null),
     );
     const logSpy = vi.spyOn(logger, "info");
     deleteDuplicatedImage(testImagePath);
     expect(fs.unlink).toBeCalledWith(testImagePath, expect.any(Function));
     expect(logSpy).toBeCalledWith(
-      "File was deleted as it already exists in the db!"
+      "File was deleted as it already exists in the db!",
     );
   });
 
   it("should throw error", () => {
     const error = new Error("There was an error deleting the file.");
     vi.spyOn(fs, "unlink").mockImplementationOnce(
-      (_imagePath: any, callback: any) => callback(error)
+      (_imagePath: any, callback: any) => callback(error),
     );
     const logSpy = vi.spyOn(logger, "info");
     expect(() => deleteDuplicatedImage(testImagePath)).toThrowError(error);

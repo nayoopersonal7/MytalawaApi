@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationRemoveMemberArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationRemoveMemberArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -13,7 +13,7 @@ import {
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
   USER_REMOVING_SELF,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -67,7 +67,7 @@ beforeAll(async () => {
         adminFor: testOrganization._id,
         joinedOrganizations: testOrganization._id,
       },
-    }
+    },
   );
 
   await User.updateOne(
@@ -79,7 +79,7 @@ beforeAll(async () => {
         adminFor: testOrganization._id,
         joinedOrganizations: testOrganization._id,
       },
-    }
+    },
   );
 
   await User.updateOne(
@@ -90,7 +90,7 @@ beforeAll(async () => {
       $push: {
         joinedOrganizations: testOrganization._id,
       },
-    }
+    },
   );
 
   await User.updateOne(
@@ -104,7 +104,7 @@ beforeAll(async () => {
           joinedOrganizations: testOrganization._id,
         },
       },
-    }
+    },
   );
 });
 
@@ -119,7 +119,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it(`throws user NotFoundError if no organization exists with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -137,7 +137,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverOrgNotFoundError } =
-        await import("../../../api/resolvers/Mutation/removeMember");
+        await import("../../../src/resolvers/Mutation/removeMember");
 
       await removeMemberResolverOrgNotFoundError?.({}, args, context);
     } catch (error: any) {
@@ -147,7 +147,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is
   not an admin of the organization with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -165,20 +165,20 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverAdminError } = await import(
-        "../../../api/resolvers/Mutation/removeMember"
+        "../../../src/resolvers/Mutation/removeMember"
       );
 
       await removeMemberResolverAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
     }
   });
 
   it("should throw user not found error when user with _id === args.data.userId does not exist", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -195,20 +195,20 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverNotFoundError } = await import(
-        "../../../api/resolvers/Mutation/removeMember"
+        "../../../src/resolvers/Mutation/removeMember"
       );
 
       await removeMemberResolverNotFoundError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw member not found error when user with _id === args.data.userId does not exist in the organization", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -225,19 +225,19 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverMemberNotFoundError } =
-        await import("../../../api/resolvers/Mutation/removeMember");
+        await import("../../../src/resolvers/Mutation/removeMember");
 
       await removeMemberResolverMemberNotFoundError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(MEMBER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${MEMBER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${MEMBER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw admin cannot remove self error when user with _id === args.data.userId === context.userId", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -254,7 +254,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveSelfError } =
-        await import("../../../api/resolvers/Mutation/removeMember");
+        await import("../../../src/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveSelfError?.({}, args, context);
     } catch (error: any) {
@@ -264,7 +264,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
   });
 
   it("should throw admin cannot remove another admin error when user with _id === args.data.userId is also an admin in the organization", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -281,19 +281,19 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveAdminError } =
-        await import("../../../api/resolvers/Mutation/removeMember");
+        await import("../../../src/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(ADMIN_REMOVING_ADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${ADMIN_REMOVING_ADMIN.MESSAGE}`
+        `Translated ${ADMIN_REMOVING_ADMIN.MESSAGE}`,
       );
     }
   });
 
   it("should throw admin cannot remove creator error when user with _id === args.data.userId is the organization creator in the organization", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -310,13 +310,13 @@ describe("resolvers -> Mutation -> removeMember", () => {
       };
 
       const { removeMember: removeMemberResolverRemoveAdminError } =
-        await import("../../../api/resolvers/Mutation/removeMember");
+        await import("../../../src/resolvers/Mutation/removeMember");
 
       await removeMemberResolverRemoveAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(ADMIN_REMOVING_CREATOR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${ADMIN_REMOVING_CREATOR.MESSAGE}`
+        `Translated ${ADMIN_REMOVING_CREATOR.MESSAGE}`,
       );
     }
   });
@@ -334,13 +334,13 @@ describe("resolvers -> Mutation -> removeMember", () => {
     };
 
     const { removeMember: removeMemberResolverRemoveAdminError } = await import(
-      "../../../api/resolvers/Mutation/removeMember"
+      "../../../src/resolvers/Mutation/removeMember"
     );
 
     const updatedOrganization = await removeMemberResolverRemoveAdminError?.(
       {},
       args,
-      context
+      context,
     );
 
     const removedUser = await User.findOne({
@@ -349,7 +349,7 @@ describe("resolvers -> Mutation -> removeMember", () => {
 
     expect(updatedOrganization?.members).not.toContain(testUsers[2]?._id);
     expect(removedUser?.joinedOrganizations).not.toContain(
-      testOrganization?._id
+      testOrganization?._id,
     );
   });
 });

@@ -5,17 +5,17 @@ import { Types } from "mongoose";
 import type {
   InterfaceGroupChat,
   InterfaceGroupChatMessage,
-} from "../../../api/models";
-import { GroupChat } from "../../../api/models";
-import type { MutationSendMessageToGroupChatArgs } from "../../../api/types/generatedGraphQLTypes";
+} from "../../../src/models";
+import { GroupChat } from "../../../src/models";
+import type { MutationSendMessageToGroupChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { sendMessageToGroupChat as sendMessageToGroupChatResolver } from "../../../api/resolvers/Mutation/sendMessageToGroupChat";
+import { sendMessageToGroupChat as sendMessageToGroupChatResolver } from "../../../src/resolvers/Mutation/sendMessageToGroupChat";
 import {
   CHAT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
@@ -44,7 +44,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
   it(`throws NotFoundError if no groupChat exists with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -57,7 +57,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
       const context = { userId: testUser?.id };
 
       const { sendMessageToGroupChat: sendMessageToGroupChatResolver } =
-        await import("../../../api/resolvers/Mutation/sendMessageToGroupChat");
+        await import("../../../src/resolvers/Mutation/sendMessageToGroupChat");
 
       await sendMessageToGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
   });
 
   it(`throws NotFoundError current user with _id === context.userId does not exist`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -82,7 +82,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
       };
 
       const { sendMessageToGroupChat: sendMessageToGroupChatResolver } =
-        await import("../../../api/resolvers/Mutation/sendMessageToGroupChat");
+        await import("../../../src/resolvers/Mutation/sendMessageToGroupChat");
 
       await sendMessageToGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -93,7 +93,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
 
   it(`throws UnauthorizedError if users field of groupChat with _id === args.chatId
   does not contain current user with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -108,7 +108,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
       };
 
       const { sendMessageToGroupChat: sendMessageToGroupChatResolver } =
-        await import("../../../api/resolvers/Mutation/sendMessageToGroupChat");
+        await import("../../../src/resolvers/Mutation/sendMessageToGroupChat");
 
       await sendMessageToGroupChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -126,7 +126,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
         $push: {
           users: testUser?._id,
         },
-      }
+      },
     );
 
     const args: MutationSendMessageToGroupChatArgs = {
@@ -139,7 +139,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
         _action: "MESSAGE_SENT_TO_GROUP_CHAT",
         _payload: {
           messageSentToGroupChat: InterfaceGroupChatMessage;
-        }
+        },
       ): {
         _action: string;
         _payload: { messageSentToGroupChat: InterfaceGroupChatMessage };
@@ -161,7 +161,7 @@ describe("resolvers -> Mutation -> sendMessageToGroupChat", () => {
         groupChatMessageBelongsTo: testGroupChat._id,
         sender: testUser?._id,
         messageContent: "messageContent",
-      })
+      }),
     );
   });
 });

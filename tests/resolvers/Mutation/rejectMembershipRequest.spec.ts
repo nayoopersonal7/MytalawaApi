@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../api/models";
-import type { MutationRejectMembershipRequestArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../src/models";
+import type { MutationRejectMembershipRequestArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { rejectMembershipRequest as rejectMembershipRequestResolver } from "../../../api/resolvers/Mutation/rejectMembershipRequest";
+import { rejectMembershipRequest as rejectMembershipRequestResolver } from "../../../src/resolvers/Mutation/rejectMembershipRequest";
 import {
   MEMBERSHIP_REQUEST_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -48,12 +48,12 @@ afterAll(async () => {
 describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no membershipRequest exists with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -67,7 +67,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -78,7 +78,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
 
   it(`throws NotFoundError if no organization exists with _id === membershipRequest.organzation
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -91,7 +91,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             organization: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationRejectMembershipRequestArgs = {
@@ -103,7 +103,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -114,7 +114,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
 
   it(`throws NotFoundError if no user exists with _id === membershipRequest.user
   for membershipRequest with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -127,7 +127,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             organization: testOrganization?._id,
           },
-        }
+        },
       );
 
       await MembershipRequest.updateOne(
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             user: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationRejectMembershipRequestArgs = {
@@ -150,7 +150,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       };
 
       const { rejectMembershipRequest: rejectMembershipRequestResolver } =
-        await import("../../../api/resolvers/Mutation/rejectMembershipRequest");
+        await import("../../../src/resolvers/Mutation/rejectMembershipRequest");
 
       await rejectMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -162,7 +162,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organzation with _id === membershipRequest.organzation for membershipRequest 
   with _id === args.membershipRequestId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -176,7 +176,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             user: testUser?._id,
           },
-        }
+        },
       );
 
       await Organization.findByIdAndUpdate(
@@ -187,7 +187,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             admins: [],
           },
-        }
+        },
       );
 
       await User.findByIdAndUpdate(
@@ -198,7 +198,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
           $set: {
             userType: "USER",
           },
-        }
+        },
       );
 
       const args: MutationRejectMembershipRequestArgs = {
@@ -212,14 +212,14 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       const {
         rejectMembershipRequest: rejectMembershipRequestResolverAdminError,
       } = await import(
-        "../../../api/resolvers/Mutation/rejectMembershipRequest"
+        "../../../src/resolvers/Mutation/rejectMembershipRequest"
       );
 
       await rejectMembershipRequestResolverAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
     }
   });
@@ -233,7 +233,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
         $push: {
           admins: testUser?._id,
         },
-      }
+      },
     );
 
     const args: MutationRejectMembershipRequestArgs = {
@@ -248,7 +248,7 @@ describe("resolvers -> Mutation -> rejectMembershipRequest", () => {
       await rejectMembershipRequestResolver?.({}, args, context);
 
     expect(rejectMembershipRequestPayload?._id).toEqual(
-      testMembershipRequest?._id
+      testMembershipRequest?._id,
     );
 
     const testUpdatedUser = await User.findOne({

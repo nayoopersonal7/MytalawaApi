@@ -1,6 +1,6 @@
 FROM node:lts
 
-WORKDIR /usr/api/app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 

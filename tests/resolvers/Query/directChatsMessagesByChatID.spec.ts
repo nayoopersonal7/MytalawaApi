@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { CHAT_NOT_FOUND_ERROR } from "../../../api/constants";
-import { directChatsMessagesByChatID as directChatsMessagesByChatIDResolver } from "../../../api/resolvers/Query/directChatsMessagesByChatID";
+import { CHAT_NOT_FOUND_ERROR } from "../../../src/constants";
+import { directChatsMessagesByChatID as directChatsMessagesByChatIDResolver } from "../../../src/resolvers/Query/directChatsMessagesByChatID";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
 
-import { DirectChatMessage } from "../../../api/models";
-import type { QueryDirectChatsMessagesByChatIdArgs } from "../../../api/types/generatedGraphQLTypes";
+import { DirectChatMessage } from "../../../src/models";
+import type { QueryDirectChatsMessagesByChatIdArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import {
   createTestUser,
@@ -30,19 +30,19 @@ beforeAll(async () => {
   const testDirectChat1 = await createTestDirectChatwithUsers(
     testUser1?._id,
     testOrganization?._id,
-    [testUser1?._id, testUser2?._id]
+    [testUser1?._id, testUser2?._id],
   );
   const testDirectChat2 = await createTestDirectChatwithUsers(
     testUser2?._id,
     testOrganization?._id,
-    [testUser2?._id]
+    [testUser2?._id],
   );
 
   testDirectChats = [testDirectChat1, testDirectChat2];
   await createDirectChatMessage(
     testUser1?._id,
     testUser2?._id,
-    testDirectChats[0]?._id
+    testDirectChats[0]?._id,
   );
 });
 
@@ -90,7 +90,7 @@ describe("resolvers -> Query -> directChatsMessagesByChatID", () => {
     }).lean();
 
     expect(directChatsMessagesByChatIdPayload).toEqual(
-      directChatMessagesByChatId
+      directChatMessagesByChatId,
     );
   });
 });

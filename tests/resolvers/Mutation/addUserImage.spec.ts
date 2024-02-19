@@ -3,8 +3,8 @@ import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import { connect, disconnect } from "../../helpers/db";
 
-import type { MutationAddUserImageArgs } from "../../../api/types/generatedGraphQLTypes";
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import type { MutationAddUserImageArgs } from "../../../src/types/generatedGraphQLTypes";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -16,8 +16,8 @@ import {
 } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
-import { addUserImage as addUserImageResolverUserImage } from "../../../api/resolvers/Mutation/addUserImage";
+import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
+import { addUserImage as addUserImageResolverUserImage } from "../../../src/resolvers/Mutation/addUserImage";
 
 let testUser: TestUserType;
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -38,11 +38,11 @@ afterAll(async () => {
 describe("resolvers -> Mutation -> addUserImage", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -58,14 +58,14 @@ describe("resolvers -> Mutation -> addUserImage", () => {
       };
 
       const { addUserImage: addUserImageResolverUserError } = await import(
-        "../../../api/resolvers/Mutation/addUserImage"
+        "../../../src/resolvers/Mutation/addUserImage"
       );
 
       await addUserImageResolverUserError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
@@ -75,7 +75,7 @@ describe("resolvers -> Mutation -> addUserImage", () => {
       file: "newImageFile.png",
     };
     vi.spyOn(uploadEncodedImage, "uploadEncodedImage").mockImplementation(
-      async (encodedImageURL: string) => encodedImageURL
+      async (encodedImageURL: string) => encodedImageURL,
     );
     const context = {
       userId: testUser?._id,
@@ -84,7 +84,7 @@ describe("resolvers -> Mutation -> addUserImage", () => {
     const addUserImagePayload = await addUserImageResolverUserImage?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(addUserImagePayload).toEqual({

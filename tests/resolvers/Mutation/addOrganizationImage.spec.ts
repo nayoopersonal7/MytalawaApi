@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization } from "../../../api/models";
-import type { MutationAddOrganizationImageArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Organization } from "../../../src/models";
+import type { MutationAddOrganizationImageArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { addOrganizationImage as addOrganizationImageResolver } from "../../../api/resolvers/Mutation/addOrganizationImage";
-import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
-import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../api/constants";
+import { addOrganizationImage as addOrganizationImageResolver } from "../../../src/resolvers/Mutation/addOrganizationImage";
+import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
+import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../src/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -46,12 +46,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> addOrganizationImage", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -65,7 +65,7 @@ describe("resolvers -> Mutation -> addOrganizationImage", () => {
       };
 
       const { addOrganizationImage } = await import(
-        "../../../api/resolvers/Mutation/addOrganizationImage"
+        "../../../src/resolvers/Mutation/addOrganizationImage"
       );
       await addOrganizationImage?.({}, args, context);
     } catch (error: any) {
@@ -82,10 +82,10 @@ describe("resolvers -> Mutation -> addOrganizationImage", () => {
         $set: {
           image: testImagePath,
         },
-      }
+      },
     );
     vi.spyOn(uploadEncodedImage, "uploadEncodedImage").mockImplementation(
-      async (encodedImageURL: string) => encodedImageURL
+      async (encodedImageURL: string) => encodedImageURL,
     );
     const args: MutationAddOrganizationImageArgs = {
       organizationId: testOrganization?.id,
@@ -97,7 +97,7 @@ describe("resolvers -> Mutation -> addOrganizationImage", () => {
     const addOrganizationImagePayload = await addOrganizationImageResolver?.(
       {},
       args,
-      context
+      context,
     );
     const updatedTestOrganization = await Organization.findOne({
       _id: testOrganization?._id,

@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { myLanguage as myLanguageResolver } from "../../../api/resolvers/Query/myLanguage";
+import { myLanguage as myLanguageResolver } from "../../../src/resolvers/Query/myLanguage";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
-import { User } from "../../../api/models";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
+import { User } from "../../../src/models";
 import { nanoid } from "nanoid";
 
 import { beforeAll, afterAll, describe, it, expect } from "vitest";

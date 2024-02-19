@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, EventAttendee } from "../../../api/models";
-import type { MutationUnregisterForEventByUserArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, EventAttendee } from "../../../src/models";
+import type { MutationUnregisterForEventByUserArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   EVENT_NOT_FOUND_ERROR,
   USER_ALREADY_UNREGISTERED_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -36,13 +36,13 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> unregisterForEventByUser", () => {
   it(`throws NotFoundError if no event exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -58,20 +58,20 @@ describe("resolvers -> Mutation -> unregisterForEventByUser", () => {
 
       const { unregisterForEventByUser: unregisterForEventByUserResolver } =
         await import(
-          "../../../api/resolvers/Mutation/unregisterForEventByUser"
+          "../../../src/resolvers/Mutation/unregisterForEventByUser"
         );
 
       await unregisterForEventByUserResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(EVENT_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if current user with _id === context.userId is not a registrant of event with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -87,14 +87,14 @@ describe("resolvers -> Mutation -> unregisterForEventByUser", () => {
 
       const { unregisterForEventByUser: unregisterForEventByUserResolver } =
         await import(
-          "../../../api/resolvers/Mutation/unregisterForEventByUser"
+          "../../../src/resolvers/Mutation/unregisterForEventByUser"
         );
 
       await unregisterForEventByUserResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_ALREADY_UNREGISTERED_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_ALREADY_UNREGISTERED_ERROR.MESSAGE}`
+        `Translated ${USER_ALREADY_UNREGISTERED_ERROR.MESSAGE}`,
       );
     }
   });
@@ -114,7 +114,7 @@ describe("resolvers -> Mutation -> unregisterForEventByUser", () => {
         $push: {
           registeredEvents: testEvent?._id,
         },
-      }
+      },
     );
 
     const args: MutationUnregisterForEventByUserArgs = {
@@ -126,7 +126,7 @@ describe("resolvers -> Mutation -> unregisterForEventByUser", () => {
     };
 
     const { unregisterForEventByUser: unregisterForEventByUserResolver } =
-      await import("../../../api/resolvers/Mutation/unregisterForEventByUser");
+      await import("../../../src/resolvers/Mutation/unregisterForEventByUser");
 
     await unregisterForEventByUserResolver?.({}, args, context);
 

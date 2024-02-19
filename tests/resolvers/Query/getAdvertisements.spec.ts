@@ -1,10 +1,10 @@
 import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Advertisement } from "../../../api/models";
+import { Advertisement } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { createTestPlugin } from "../../helpers/plugins";
-import { getAdvertisements } from "../../../api/resolvers/Query/getAdvertisements";
+import { getAdvertisements } from "../../../src/resolvers/Query/getAdvertisements";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 

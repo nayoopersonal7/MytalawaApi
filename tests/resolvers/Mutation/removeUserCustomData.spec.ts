@@ -1,7 +1,7 @@
 import mongoose, { Types } from "mongoose";
 import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
-import { addUserCustomData } from "../../../api/resolvers/Mutation/addUserCustomData";
-import { removeUserCustomData } from "../../../api/resolvers/Mutation/removeUserCustomData";
+import { addUserCustomData } from "../../../src/resolvers/Mutation/addUserCustomData";
+import { removeUserCustomData } from "../../../src/resolvers/Mutation/removeUserCustomData";
 
 import type {
   TestOrganizationType,
@@ -18,7 +18,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -46,7 +46,7 @@ describe("removeUserCustomData mutation", () => {
       },
       {
         userId: testUser?._id,
-      }
+      },
     );
 
     const args = {
@@ -59,7 +59,7 @@ describe("removeUserCustomData mutation", () => {
     const removeCustomData = await removeUserCustomData?.({}, args, context);
 
     expect(removeCustomData?.organizationId).toBe(
-      addedCustomData?.organizationId
+      addedCustomData?.organizationId,
     );
     expect(removeCustomData?.userId).toBe(addedCustomData?.userId);
     expect(removeCustomData?.values).toStrictEqual(addedCustomData?.values);
@@ -67,7 +67,7 @@ describe("removeUserCustomData mutation", () => {
   });
 
   it("should disallowing removing user custom data when user is not superadmin or admin for the organization", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -83,7 +83,7 @@ describe("removeUserCustomData mutation", () => {
       },
       {
         userId: testUser?._id,
-      }
+      },
     );
 
     const args = {
@@ -98,13 +98,13 @@ describe("removeUserCustomData mutation", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw an error when the user is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -118,7 +118,7 @@ describe("removeUserCustomData mutation", () => {
       },
       {
         userId: testUser?._id,
-      }
+      },
     );
 
     const args = {
@@ -133,13 +133,13 @@ describe("removeUserCustomData mutation", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw an error when the organization is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -153,7 +153,7 @@ describe("removeUserCustomData mutation", () => {
       },
       {
         userId: testUser?._id,
-      }
+      },
     );
 
     const args = {
@@ -167,16 +167,16 @@ describe("removeUserCustomData mutation", () => {
       await removeUserCustomData?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw an error when there is no associated data between the organization and the user", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -190,7 +190,7 @@ describe("removeUserCustomData mutation", () => {
       },
       {
         userId: testUser?._id,
-      }
+      },
     );
 
     const args = {
@@ -204,15 +204,15 @@ describe("removeUserCustomData mutation", () => {
       await removeUserCustomData?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
   it("should throw error when there is no custom data to remove", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -229,7 +229,7 @@ describe("removeUserCustomData mutation", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(CUSTOM_DATA_NOT_FOUND.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${CUSTOM_DATA_NOT_FOUND.MESSAGE}`
+        `Translated ${CUSTOM_DATA_NOT_FOUND.MESSAGE}`,
       );
     }
   });

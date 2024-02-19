@@ -15,7 +15,7 @@ import {
   dropAllCollectionsFromDatabase,
 } from "../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../api/models";
+import { User } from "../../src/models";
 import path from "path";
 import type { TestUserType } from "../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../helpers/userAndOrg";
@@ -62,8 +62,8 @@ try {
               .createReadStream(
                 path.join(
                   __dirname,
-                  "../../public/markdown/images/talawa-logo-lite-200x200.png"
-                )
+                  "../../public/markdown/images/talawa-logo-lite-200x200.png",
+                ),
               )
               .on("error", (error) => {
                 console.log(error);
@@ -71,7 +71,7 @@ try {
           },
         };
         const imageAlreadyInDbFile = await import(
-          "../../api/utilities/imageAlreadyInDbCheck"
+          "../../src/utilities/imageAlreadyInDbCheck"
         );
         const mockedImageAlreadyInDb = vi
           .spyOn(imageAlreadyInDbFile, "imageAlreadyInDbCheck")
@@ -79,9 +79,9 @@ try {
             async (oldImagePath: string | null, newImagePath: string) => {
               console.log(oldImagePath, newImagePath);
               return "";
-            }
+            },
           );
-        const { uploadImage } = await import("../../api/utilities/uploadImage");
+        const { uploadImage } = await import("../../src/utilities/uploadImage");
         const uploadImagePayload = await uploadImage(pngImage, null);
         const testUserObj = await User.findByIdAndUpdate(
           {
@@ -94,21 +94,21 @@ try {
           },
           {
             new: true,
-          }
+          },
         ).lean();
         expect(mockedImageAlreadyInDb).toHaveBeenCalledWith(
           null,
-          testUserObj?.image
+          testUserObj?.image,
         );
         expect(uploadImagePayload?.newImagePath).toEqual(testUserObj?.image);
         fs.unlink(
           path.join(
             __dirname,
-            "../../".concat(uploadImagePayload.newImagePath)
+            "../../".concat(uploadImagePayload.newImagePath),
           ),
           (err) => {
             if (err) throw err;
-          }
+          },
         );
       } catch (error) {
         console.log(error);
@@ -123,8 +123,8 @@ try {
               .createReadStream(
                 path.join(
                   __dirname,
-                  "../../public/markdown/images/talawa-logo-lite-200x200.png"
-                )
+                  "../../public/markdown/images/talawa-logo-lite-200x200.png",
+                ),
               )
               .on("error", (err) => {
                 console.log(err);
@@ -132,7 +132,7 @@ try {
           },
         };
         const imageAlreadyInDbFile = await import(
-          "../../api/utilities/imageAlreadyInDbCheck"
+          "../../src/utilities/imageAlreadyInDbCheck"
         );
         const mockedImageAlreadyInDb = vi
           .spyOn(imageAlreadyInDbFile, "imageAlreadyInDbCheck")
@@ -140,9 +140,9 @@ try {
             async (oldImagePath: string | null, newImagePath: string) => {
               console.log(oldImagePath, newImagePath);
               return newImagePath;
-            }
+            },
           );
-        const { uploadImage } = await import("../../api/utilities/uploadImage");
+        const { uploadImage } = await import("../../src/utilities/uploadImage");
         const testUserBeforeObj = await User.findById({
           _id: testUser?.id,
         });
@@ -150,7 +150,7 @@ try {
           testUserBeforeObj?.image != null ? testUserBeforeObj?.image : null;
         console.log(oldImagePath);
         const deleteDuplicatedImage = await import(
-          "../../api/utilities/deleteImage"
+          "../../src/utilities/deleteImage"
         );
         const mockedDeleteImage = vi
           .spyOn(deleteDuplicatedImage, "deleteImage")
@@ -167,25 +167,25 @@ try {
           },
           {
             new: true,
-          }
+          },
         ).lean();
         expect(mockedDeleteImage).toBeCalledWith(
           oldImagePath,
-          testUserObj?.image
+          testUserObj?.image,
         );
         expect(mockedImageAlreadyInDb).toHaveBeenCalledWith(
           oldImagePath,
-          testUserObj?.image
+          testUserObj?.image,
         );
         expect(uploadImagePayload?.newImagePath).toEqual(testUserObj?.image);
         fs.unlink(
           path.join(
             __dirname,
-            "../../".concat(uploadImagePayload.newImagePath)
+            "../../".concat(uploadImagePayload.newImagePath),
           ),
           (err) => {
             if (err) throw err;
-          }
+          },
         );
       } catch (error) {
         console.log(error);

@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { actionItems as actionItemsResolver } from "../../../api/resolvers/Event/actionItems";
+import { actionItems as actionItemsResolver } from "../../../src/resolvers/Event/actionItems";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { ActionItem } from "../../../api/models";
+import { ActionItem } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestEventType } from "../../helpers/events";
 import { createTestActionItems } from "../../helpers/actionItem";

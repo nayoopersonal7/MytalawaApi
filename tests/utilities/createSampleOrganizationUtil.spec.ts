@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import type mongoose from "mongoose";
-import { Plugin } from "../../api/models";
+import { Plugin } from "../../src/models";
 import { faker } from "@faker-js/faker";
 import {
   generateRandomPlugins,
   generateUserData,
   generatePostData,
   generateEventData as generateEventDataFn,
-} from "../../api/utilities/createSampleOrganizationUtil";
+} from "../../src/utilities/createSampleOrganizationUtil";
 
 import { connect, disconnect } from "../helpers/db";
 
@@ -87,7 +87,7 @@ describe("generateUserData function", () => {
     expect(event.startTime).toEqual(expect.any(Date));
     expect(event.endTime).toEqual(expect.any(Date));
     expect(event.recurrance).toEqual(
-      expect.stringMatching(/^(ONCE|DAILY|WEEKLY|MONTHLY|YEARLY)$/)
+      expect.stringMatching(/^(ONCE|DAILY|WEEKLY|MONTHLY|YEARLY)$/),
     );
     expect(event.isPublic).toEqual(expect.any(Boolean));
     expect(event.isRegisterable).toEqual(expect.any(Boolean));
@@ -130,7 +130,7 @@ describe("generatePostData function", () => {
 
       const pluginPromises = await generateRandomPlugins(
         numberOfPlugins,
-        users.map((user) => user._id.toString())
+        users.map((user) => user._id.toString()),
       );
 
       expect(Array.isArray(pluginPromises)).toBe(true);

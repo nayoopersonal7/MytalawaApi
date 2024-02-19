@@ -1,9 +1,9 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 
-import { logout as logoutResolver } from "../../../api/resolvers/Mutation/logout";
+import { logout as logoutResolver } from "../../../src/resolvers/Mutation/logout";
 import {
   beforeAll,
   afterAll,
@@ -31,7 +31,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> logout", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 

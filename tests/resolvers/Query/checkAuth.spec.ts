@@ -2,15 +2,15 @@ import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { checkAuth as checkAuthResolver } from "../../../api/resolvers/Query/checkAuth";
+import { checkAuth as checkAuthResolver } from "../../../src/resolvers/Query/checkAuth";
 
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
 import { createTestUser } from "../../helpers/userAndOrg";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
 });
@@ -53,7 +53,7 @@ describe("resolvers -> Query -> checkAuth", () => {
       },
       {
         image: `path`,
-      }
+      },
     );
 
     testUser = await User.findOne({

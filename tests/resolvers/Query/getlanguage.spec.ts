@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { getlanguage as getLanguageResolver } from "../../../api/resolvers/Query/getlanguage";
+import { getlanguage as getLanguageResolver } from "../../../src/resolvers/Query/getlanguage";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
-import type { InterfaceLanguage } from "../../../api/models";
-import { Language } from "../../../api/models";
+import type { InterfaceLanguage } from "../../../src/models";
+import { Language } from "../../../src/models";
 
-import type { QueryGetlanguageArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryGetlanguageArgs } from "../../../src/types/generatedGraphQLTypes";
 import { nanoid } from "nanoid";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 
@@ -81,7 +81,7 @@ describe("resolvers -> Query -> getLanguage", () => {
           translation: "value2",
           verified: false,
         }),
-      ])
+      ]),
     );
   });
 });

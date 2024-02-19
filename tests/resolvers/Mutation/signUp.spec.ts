@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../api/models";
-import type { MutationSignUpArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { MutationSignUpArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   LAST_RESORT_SUPERADMIN_EMAIL,
   ORGANIZATION_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -23,8 +23,8 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
-import { signUp as signUpResolverImage } from "../../../api/resolvers/Mutation/signUp";
+import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
+import { signUp as signUpResolverImage } from "../../../src/resolvers/Mutation/signUp";
 
 const testImagePath = `${nanoid().toLowerCase()}test.png`;
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -35,8 +35,8 @@ vi.mock("../../utilities/uploadEncodedImage", () => ({
   uploadEncodedImage: vi.fn(),
 }));
 
-vi.mock("../../../api/constants", async () => {
-  const constants: object = await vi.importActual("../../../api/constants");
+vi.mock("../../../src/constants", async () => {
+  const constants: object = await vi.importActual("../../../src/constants");
   return {
     ...constants,
     LAST_RESORT_SUPERADMIN_EMAIL: "admin@email.com",
@@ -74,7 +74,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       },
     };
     const { signUp: signUpResolver } = await import(
-      "../../../api/resolvers/Mutation/signUp"
+      "../../../src/resolvers/Mutation/signUp"
     );
 
     const signUpPayload = await signUpResolver?.({}, args, {});
@@ -113,7 +113,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       },
     };
     const { signUp: signUpResolver } = await import(
-      "../../../api/resolvers/Mutation/signUp"
+      "../../../src/resolvers/Mutation/signUp"
     );
 
     const signUpPayload = await signUpResolver?.({}, args, {});
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> signUp", () => {
   });
   it(`when uploadImage is called with newFile `, async () => {
     vi.spyOn(uploadEncodedImage, "uploadEncodedImage").mockImplementation(
-      async (encodedImageURL: string) => encodedImageURL
+      async (encodedImageURL: string) => encodedImageURL,
     );
 
     const email = `email${nanoid().toLowerCase()}@gmail.com`;
@@ -180,7 +180,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       },
     };
     const { signUp: signUpResolver } = await import(
-      "../../../api/resolvers/Mutation/signUp"
+      "../../../src/resolvers/Mutation/signUp"
     );
     await signUpResolver?.({}, args, {});
     const createdUser = await User.findOne({
@@ -202,7 +202,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       },
     };
     const { signUp: signUpResolver } = await import(
-      "../../../api/resolvers/Mutation/signUp"
+      "../../../src/resolvers/Mutation/signUp"
     );
     await signUpResolver?.({}, args, {});
     const createdUser = await User.findOne({
@@ -221,7 +221,7 @@ describe("resolvers -> Mutation -> signUp", () => {
 
   it(`throws ConflictError  message if a user already with email === args.data.email already exists`, async () => {
     const EMAIL_MESSAGE = "email.alreadyExists";
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -238,7 +238,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       };
 
       const { signUp: signUpResolver } = await import(
-        "../../../api/resolvers/Mutation/signUp"
+        "../../../src/resolvers/Mutation/signUp"
       );
 
       await signUpResolver?.({}, args, {});
@@ -248,7 +248,7 @@ describe("resolvers -> Mutation -> signUp", () => {
     }
   });
   it(`throws NotFoundError message if no organization exists with _id === args.data.organizationUserBelongsToId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -267,7 +267,7 @@ describe("resolvers -> Mutation -> signUp", () => {
       };
 
       const { signUp: signUpResolver } = await import(
-        "../../../api/resolvers/Mutation/signUp"
+        "../../../src/resolvers/Mutation/signUp"
       );
 
       await signUpResolver?.({}, args, {});

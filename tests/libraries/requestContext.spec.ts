@@ -8,7 +8,7 @@ import {
   init,
   translate,
   translatePlural,
-} from "../../api/libraries/requestContext";
+} from "../../src/libraries/requestContext";
 import type { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { EventEmitter } from "stream";
@@ -54,7 +54,7 @@ describe("middleware -> requestContext", () => {
     middleware()(
       mockRequest as Request,
       mockResponse as Response,
-      nextFunction as NextFunction
+      nextFunction as NextFunction,
     );
     expect(nextFunction).toBeCalledTimes(1);
   });
@@ -91,7 +91,7 @@ describe("middleware -> requestContext", () => {
       translate({});
     } catch (error: any) {
       expect(error.message).toEqual(
-        "i18n is not initialized, try app.use(i18n.init);"
+        "i18n is not initialized, try app.use(i18n.init);",
       );
     }
   });
@@ -101,7 +101,7 @@ describe("middleware -> requestContext", () => {
       translatePlural({});
     } catch (error: any) {
       expect(error.message).toEqual(
-        "i18n is not initialized, try app.use(i18n.init);"
+        "i18n is not initialized, try app.use(i18n.init);",
       );
     }
   });

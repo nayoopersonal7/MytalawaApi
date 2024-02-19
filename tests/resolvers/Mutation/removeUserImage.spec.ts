@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   USER_NOT_FOUND_ERROR,
   USER_PROFILE_IMAGE_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -35,12 +35,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeUserImage", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -51,21 +51,21 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
       };
 
       const { removeUserImage: removeUserImageResolver } = await import(
-        "../../../api/resolvers/Mutation/removeUserImage"
+        "../../../src/resolvers/Mutation/removeUserImage"
       );
 
       await removeUserImageResolver?.({}, {}, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if no user.image exists for currentUser
   with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -76,21 +76,21 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
       };
 
       const { removeUserImage: removeUserImageResolver } = await import(
-        "../../../api/resolvers/Mutation/removeUserImage"
+        "../../../src/resolvers/Mutation/removeUserImage"
       );
 
       await removeUserImageResolver?.({}, {}, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(USER_PROFILE_IMAGE_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_PROFILE_IMAGE_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_PROFILE_IMAGE_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`sets image field to null for organization with _id === args.organizationId
   and returns the updated user`, async () => {
-    const utilities = await import("../../../api/utilities");
+    const utilities = await import("../../../src/utilities");
 
     const deleteImageSpy = vi
       .spyOn(utilities, "deleteImage")
@@ -106,7 +106,7 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
         $set: {
           image: testImage,
         },
-      }
+      },
     );
 
     const context = {
@@ -114,13 +114,13 @@ describe("resolvers -> Mutation -> removeUserImage", () => {
     };
 
     const { removeUserImage: removeUserImageResolver } = await import(
-      "../../../api/resolvers/Mutation/removeUserImage"
+      "../../../src/resolvers/Mutation/removeUserImage"
     );
 
     const removeUserImagePayload = await removeUserImageResolver?.(
       {},
       {},
-      context
+      context,
     );
 
     const updatedTestUser = await User.findOne({

@@ -9,10 +9,10 @@ import express from "express";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserFunc } from "../../helpers/user";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import authDirectiveTransformer from "../../../api/directives/directiveTransformer/authDirectiveTransformer";
-import roleDirectiveTransformer from "../../../api/directives/directiveTransformer/roleDirectiveTransformer";
-import { appConfig } from "../../../api/config";
-import { errors } from "../../../api/libraries";
+import authDirectiveTransformer from "../../../src/directives/directiveTransformer/authDirectiveTransformer";
+import roleDirectiveTransformer from "../../../src/directives/directiveTransformer/roleDirectiveTransformer";
+import { appConfig } from "../../../src/config";
+import { errors } from "../../../src/libraries";
 
 const app = express();
 i18n.configure({
@@ -89,7 +89,7 @@ it("throws UnauthenticatedError when context is expired", async () => {
       },
       {
         contextValue: authenticatedContext,
-      }
+      },
     );
   } catch (err) {
     if (err instanceof errors.UnauthenticatedError) {
@@ -126,7 +126,7 @@ it("throws UnauthenticatedError when context: isAuth == false", async () => {
       },
       {
         contextValue: authenticatedContext,
-      }
+      },
     );
   } catch (err) {
     if (err instanceof errors.UnauthenticatedError) {
@@ -163,7 +163,7 @@ it("checks if the resolver is supplied, and return null data, if not", async () 
     },
     {
       contextValue: authenticatedContext,
-    }
+    },
   );
 
   //@ts-ignore
@@ -198,7 +198,7 @@ it("returns data if isAuth == true and expire == false", async () => {
     },
     {
       contextValue: authenticatedContext,
-    }
+    },
   );
   //@ts-ignore
   expect(result.body.singleResult.data).toEqual({ hello: "hi" });

@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateGroupChatArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateGroupChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { createGroupChat as createGroupChatResolver } from "../../../api/resolvers/Mutation/createGroupChat";
+import { createGroupChat as createGroupChatResolver } from "../../../src/resolvers/Mutation/createGroupChat";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -26,9 +26,9 @@ beforeAll(async () => {
 
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 
@@ -93,7 +93,7 @@ describe("resolvers -> Mutation -> createGroupChat", () => {
     const createGroupChatPayload = await createGroupChatResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createGroupChatPayload).toEqual(
@@ -102,7 +102,7 @@ describe("resolvers -> Mutation -> createGroupChat", () => {
         creatorId: testUser?._id,
         users: [testUser?._id],
         organization: testOrganization?._id,
-      })
+      }),
     );
   });
 });

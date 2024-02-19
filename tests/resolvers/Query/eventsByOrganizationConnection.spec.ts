@@ -1,10 +1,10 @@
 // @ts-nocheck
 import "dotenv/config";
-import { eventsByOrganizationConnection as eventsByOrganizationConnectionResolver } from "../../../api/resolvers/Query/eventsByOrganizationConnection";
+import { eventsByOrganizationConnection as eventsByOrganizationConnectionResolver } from "../../../src/resolvers/Query/eventsByOrganizationConnection";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import type { QueryEventsByOrganizationConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
-import { Event } from "../../../api/models";
+import type { QueryEventsByOrganizationConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Event } from "../../../src/models";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import type { TestEventType } from "../../helpers/events";
 import { createEventWithRegistrant } from "../../helpers/events";
@@ -20,19 +20,19 @@ beforeAll(async () => {
     testUser?._id,
     testOrganization?._id,
     true,
-    "ONCE"
+    "ONCE",
   );
   const testEvent2 = await createEventWithRegistrant(
     testUser?._id,
     testOrganization?._id,
     false,
-    "DAILY"
+    "DAILY",
   );
   const testEvent3 = await createEventWithRegistrant(
     testUser?._id,
     testOrganization?._id,
     false,
-    "DAILY"
+    "DAILY",
   );
   testEvents = [testEvent1, testEvent2, testEvent3];
 });

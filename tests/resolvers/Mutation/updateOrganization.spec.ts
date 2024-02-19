@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, User } from "../../../api/models";
-import type { MutationUpdateOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Organization, User } from "../../../src/models";
+import type { MutationUpdateOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -17,9 +17,9 @@ import {
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
-} from "../../../api/constants";
-import { updateOrganization as updateOrganizationResolver } from "../../../api/resolvers/Mutation/updateOrganization";
-import * as uploadEncodedImage from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+} from "../../../src/constants";
+import { updateOrganization as updateOrganizationResolver } from "../../../src/resolvers/Mutation/updateOrganization";
+import * as uploadEncodedImage from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
 import type {
   TestOrganizationType,
   TestUserType,
@@ -46,18 +46,18 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateOrganization", () => {
   it(`throws NotFoundError if no organization exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -73,21 +73,21 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
       };
 
       const { updateOrganization: updateOrganizationResolver } = await import(
-        "../../../api/resolvers/Mutation/updateOrganization"
+        "../../../src/resolvers/Mutation/updateOrganization"
       );
 
       await updateOrganizationResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(ORGANIZATION_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organization with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -103,14 +103,14 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
       };
 
       const { updateOrganization: updateOrganizationResolver } = await import(
-        "../../../api/resolvers/Mutation/updateOrganization"
+        "../../../src/resolvers/Mutation/updateOrganization"
       );
 
       await updateOrganizationResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_AUTHORIZED_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
     }
   });
@@ -124,7 +124,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
         $set: {
           admins: [testUser?._id],
         },
-      }
+      },
     );
 
     await User.updateOne(
@@ -135,7 +135,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
         $set: {
           adminFor: [testOrganization?._id],
         },
-      }
+      },
     );
 
     const args: MutationUpdateOrganizationArgs = {
@@ -153,13 +153,13 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
     };
 
     const { updateOrganization: updateOrganizationResolver } = await import(
-      "../../../api/resolvers/Mutation/updateOrganization"
+      "../../../src/resolvers/Mutation/updateOrganization"
     );
 
     const updateOrganizationPayload = await updateOrganizationResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     const testUpdateOrganizationPayload = await Organization.findOne({
@@ -178,7 +178,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
         $set: {
           admins: [testUser?._id],
         },
-      }
+      },
     );
 
     await User.updateOne(
@@ -189,7 +189,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
         $set: {
           adminFor: [testOrganization?._id],
         },
-      }
+      },
     );
 
     const args: MutationUpdateOrganizationArgs = {
@@ -205,7 +205,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
     };
 
     vi.spyOn(uploadEncodedImage, "uploadEncodedImage").mockImplementation(
-      async (encodedImageURL: string) => encodedImageURL
+      async (encodedImageURL: string) => encodedImageURL,
     );
 
     const context = {
@@ -215,7 +215,7 @@ describe("resolvers -> Mutation -> updateOrganization", () => {
     const updateOrganizationPayload = await updateOrganizationResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     const testUpdateOrganizationPayload = await Organization.findOne({

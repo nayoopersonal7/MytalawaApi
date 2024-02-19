@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationAcceptAdminArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationAcceptAdminArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { acceptAdmin as acceptAdminResolver } from "../../../api/resolvers/Mutation/acceptAdmin";
+import { acceptAdmin as acceptAdminResolver } from "../../../src/resolvers/Mutation/acceptAdmin";
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   afterAll,
   afterEach,
@@ -20,7 +20,7 @@ import {
 } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 
 let testUserSuperAdmin: TestUserType;
 let testUserAdmin: TestUserType;
@@ -38,13 +38,13 @@ afterAll(async () => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> acceptAdmin", () => {
   it(`throws not found error when user with _id === context.userId is null`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -59,19 +59,19 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../api/resolvers/Mutation/acceptAdmin"
+        "../../../src/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws user is not Authorised Error if user is not SuperAdmin`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -86,13 +86,13 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../api/resolvers/Mutation/acceptAdmin"
+        "../../../src/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`,
       );
     }
   });
@@ -107,7 +107,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
           userType: "SUPERADMIN",
           adminApproved: true,
         },
-      }
+      },
     );
 
     const args: MutationAcceptAdminArgs = {
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
   });
 
   it(`throws not found error when user with _id === args._id is null`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -147,13 +147,13 @@ describe("resolvers -> Mutation -> acceptAdmin", () => {
       };
 
       const { acceptAdmin } = await import(
-        "../../../api/resolvers/Mutation/acceptAdmin"
+        "../../../src/resolvers/Mutation/acceptAdmin"
       );
       await acceptAdmin?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });

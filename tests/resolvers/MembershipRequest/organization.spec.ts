@@ -1,11 +1,11 @@
 import "dotenv/config";
-import { organization as organizationResolver } from "../../../api/resolvers/MembershipRequest/organization";
+import { organization as organizationResolver } from "../../../src/resolvers/MembershipRequest/organization";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestMembershipRequestType } from "../../helpers/membershipRequests";
 import { createTestMembershipRequest } from "../../helpers/membershipRequests";
-import { Organization } from "../../../api/models";
+import { Organization } from "../../../src/models";
 
 let testMembershipRequest: TestMembershipRequestType;
 let MONGOOSE_INSTANCE: typeof mongoose;

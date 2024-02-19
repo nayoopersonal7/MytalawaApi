@@ -7,9 +7,9 @@ import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import { Types } from "mongoose";
 import type mongoose from "mongoose";
 import { disconnect, connect } from "../../helpers/db";
-import { addOrganizationCustomField } from "../../../api/resolvers/Mutation/addOrganizationCustomField";
-import { customFieldsByOrganization } from "../../../api/resolvers/Query/customFieldsByOrganization";
-import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../api/constants";
+import { addOrganizationCustomField } from "../../../src/resolvers/Mutation/addOrganizationCustomField";
+import { customFieldsByOrganization } from "../../../src/resolvers/Query/customFieldsByOrganization";
+import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../src/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -35,7 +35,7 @@ describe("resolvers => Query => customFieldsByOrganization", () => {
         name: "dataName",
         type: "dataType",
       },
-      { userId: testUser?._id }
+      { userId: testUser?._id },
     );
 
     const args = {
@@ -52,7 +52,7 @@ describe("resolvers => Query => customFieldsByOrganization", () => {
   });
 
   it("should throw error if organization does not exist", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -65,7 +65,7 @@ describe("resolvers => Query => customFieldsByOrganization", () => {
         name: "dataName",
         type: "dataType",
       },
-      { userId: testUser?._id }
+      { userId: testUser?._id },
     );
 
     const args = {
@@ -79,10 +79,10 @@ describe("resolvers => Query => customFieldsByOrganization", () => {
       await customFieldsByOrganization?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });

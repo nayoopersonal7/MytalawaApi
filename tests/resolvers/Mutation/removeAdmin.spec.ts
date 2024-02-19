@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationRemoveAdminArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationRemoveAdminArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { removeAdmin as removeAdminResolver } from "../../../api/resolvers/Mutation/removeAdmin";
+import { removeAdmin as removeAdminResolver } from "../../../src/resolvers/Mutation/removeAdmin";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
   USER_NOT_ORGANIZATION_ADMIN,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -29,7 +29,7 @@ import {
   createTestUser,
   createTestUserAndOrganization,
 } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUserRemoved: TestUserType;
@@ -50,12 +50,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeAdmin", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -72,7 +72,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
       };
 
       const { removeAdmin: removeAdminResolver } = await import(
-        "../../../api/resolvers/Mutation/removeAdmin"
+        "../../../src/resolvers/Mutation/removeAdmin"
       );
 
       await removeAdminResolver?.({}, args, context);
@@ -83,7 +83,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.data.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -100,7 +100,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
       };
 
       const { removeAdmin: removeAdminResolver } = await import(
-        "../../../api/resolvers/Mutation/removeAdmin"
+        "../../../src/resolvers/Mutation/removeAdmin"
       );
 
       await removeAdminResolver?.({}, args, context);
@@ -112,7 +112,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
 
   it(`throws UnauthorizedError if user with _id === args.data.userId is not an admin
   of organzation with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -148,20 +148,20 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
       };
 
       const { removeAdmin: removeAdminAdminError } = await import(
-        "../../../api/resolvers/Mutation/removeAdmin"
+        "../../../src/resolvers/Mutation/removeAdmin"
       );
 
       await removeAdminAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_ORGANIZATION_ADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_ORGANIZATION_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_ORGANIZATION_ADMIN.MESSAGE}`,
       );
     }
   });
 
   it(`throws Current user must be a super admin error if user with _id === args.data.userId is not a SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -181,7 +181,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -200,16 +200,16 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
       };
 
       const { removeAdmin: removeAdminAdminError } = await import(
-        "../../../api/resolvers/Mutation/removeAdmin"
+        "../../../src/resolvers/Mutation/removeAdmin"
       );
 
       await removeAdminAdminError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE
+        USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`,
       );
     }
   });
@@ -224,7 +224,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
         $set: {
           creatorId: testUserRemover?._id,
         },
-      }
+      },
     );
 
     await User.updateOne(
@@ -236,7 +236,7 @@ describe("resolvers -> Mutation -> removeAdmin", () => {
           adminApproved: true,
           userType: "SUPERADMIN",
         },
-      }
+      },
     );
 
     const args: MutationRemoveAdminArgs = {

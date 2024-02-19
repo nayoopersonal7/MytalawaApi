@@ -1,6 +1,6 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import type { MutationCreateAdvertisementArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateAdvertisementArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -20,7 +20,7 @@ import {
   createTestUserAndOrganization,
   createTestUser,
 } from "../../helpers/userAndOrg";
-import { ADVERTISEMENT_NOT_FOUND_ERROR } from "../../../api/constants";
+import { ADVERTISEMENT_NOT_FOUND_ERROR } from "../../../src/constants";
 
 let testUser: TestUserType;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +47,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeAdvertisement", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
@@ -67,37 +67,45 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
     };
 
     const { createAdvertisement: createAdvertisementResolver } = await import(
-      "../../../api/resolvers/Mutation/createAdvertisement"
+      "../../../src/resolvers/Mutation/createAdvertisement"
     );
 
     const createdAdvertisementPayload = await createAdvertisementResolver?.(
       {},
       args,
-      context
+      context,
     );
     const createdAdvertisementId = createdAdvertisementPayload?._id || "";
 
     // deleting the ad
     const { removeAdvertisement } = await import(
-      "../../../api/resolvers/Mutation/removeAdvertisement"
+      "../../../src/resolvers/Mutation/removeAdvertisement"
     );
 
     const removeAdvertisementPayload = await removeAdvertisement?.(
       {},
       { id: createdAdvertisementId },
-      context
+      context,
     );
 
+    const removeAdvertisementPayloadFalsyId = await removeAdvertisement?.(
+      {},
+      { id: "" },
+      context,
+    );
     expect(removeAdvertisementPayload).toHaveProperty(
       "_id",
-      createdAdvertisementId
+      createdAdvertisementId,
     );
-
+    if (removeAdvertisementPayloadFalsyId) {
+      expect(removeAdvertisementPayloadFalsyId).toHaveProperty("_id", "");
+    } else {
+      console.error("removeAdvertisementPayloadFalsyId is undefined or null");
+    }
     expect(removeAdvertisementPayload).toHaveProperty("name", "myad");
-
     expect(removeAdvertisementPayload).toHaveProperty(
       "link",
-      "https://www.example.com"
+      "https://www.example.com",
     );
 
     expect(removeAdvertisementPayload).toHaveProperty("type", "POPUP");
@@ -105,12 +113,12 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
   it("should throw NOT_FOUND_ERROR on wrong advertisement", async () => {
     // deleting
     const { removeAdvertisement } = await import(
-      "../../../api/resolvers/Mutation/removeAdvertisement"
+      "../../../src/resolvers/Mutation/removeAdvertisement"
     );
     const context = {
       userId: testUser?.id,
     };
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -120,13 +128,15 @@ describe("resolvers -> Mutation -> removeAdvertisement", () => {
       const removeAdvertisementPayload = await removeAdvertisement?.(
         {},
         { id: "64d1f8cb77a4b51004f824b8" },
-        context
+        context,
       );
-    } catch (error: any) {
-      expect(spy).toBeCalledWith(ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE);
-      expect(error.message).toEqual(
-        `Translated ${ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE}`
-      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        expect(spy).toBeCalledWith(ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE);
+        expect(error.message).toEqual(
+          `Translated ${ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE}`,
+        );
+      }
     }
   });
 });

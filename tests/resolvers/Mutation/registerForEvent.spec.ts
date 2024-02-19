@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Event, EventAttendee } from "../../../api/models";
-import type { MutationRegisterForEventArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Event, EventAttendee } from "../../../src/models";
+import type { MutationRegisterForEventArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { registerForEvent as registerForEventResolver } from "../../../api/resolvers/Mutation/registerForEvent";
+import { registerForEvent as registerForEventResolver } from "../../../src/resolvers/Mutation/registerForEvent";
 import {
   EVENT_NOT_FOUND_ERROR,
   REGISTRANT_ALREADY_EXIST_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -38,12 +38,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> registerForEvent", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no event exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -58,7 +58,7 @@ describe("resolvers -> Mutation -> registerForEvent", () => {
       };
 
       const { registerForEvent: registerForEventResolver } = await import(
-        "../../../api/resolvers/Mutation/registerForEvent"
+        "../../../src/resolvers/Mutation/registerForEvent"
       );
 
       await registerForEventResolver?.({}, args, context);
@@ -69,7 +69,7 @@ describe("resolvers -> Mutation -> registerForEvent", () => {
   });
 
   it(`throws error if user with _id === context.userId is already a registrant of event with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -84,7 +84,7 @@ describe("resolvers -> Mutation -> registerForEvent", () => {
       };
 
       const { registerForEvent: registerForEventResolver } = await import(
-        "../../../api/resolvers/Mutation/registerForEvent"
+        "../../../src/resolvers/Mutation/registerForEvent"
       );
 
       await registerForEventResolver?.({}, args, context);
@@ -108,7 +108,7 @@ describe("resolvers -> Mutation -> registerForEvent", () => {
         $set: {
           registeredEvents: [],
         },
-      }
+      },
     );
 
     const args: MutationRegisterForEventArgs = {
@@ -122,7 +122,7 @@ describe("resolvers -> Mutation -> registerForEvent", () => {
     const registerForEventPayload = await registerForEventResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     const testRegisterForEventPayload = await Event.findOne({

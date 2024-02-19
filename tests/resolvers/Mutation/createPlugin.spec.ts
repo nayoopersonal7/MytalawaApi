@@ -1,8 +1,8 @@
-import type { MutationCreatePluginArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreatePluginArgs } from "../../../src/types/generatedGraphQLTypes";
 
-import { pubsub } from "../../../api/index";
+import { pubsub } from "../../../src/index";
 import { describe, it, expect } from "vitest";
-import { createPlugin as createPluginResolver } from "../../../api/resolvers/Mutation/createPlugin";
+import { createPlugin as createPluginResolver } from "../../../src/resolvers/Mutation/createPlugin";
 import { nanoid } from "nanoid";
 
 describe("resolvers -> Mutation -> createPlugin", () => {
@@ -25,7 +25,7 @@ describe("resolvers -> Mutation -> createPlugin", () => {
     expect(createPluginPayload).toEqual(
       expect.objectContaining({
         ...data,
-      })
+      }),
     );
   });
 });

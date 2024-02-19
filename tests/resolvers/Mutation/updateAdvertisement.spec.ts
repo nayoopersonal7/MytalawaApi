@@ -1,9 +1,9 @@
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Advertisement } from "../../../api/models";
-import type { MutationUpdateAdvertisementArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Advertisement } from "../../../src/models";
+import type { MutationUpdateAdvertisementArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
-import { updateAdvertisement as updateAdvertisementResolver } from "../../../api/resolvers/Mutation/updateAdvertisement";
+import { updateAdvertisement as updateAdvertisementResolver } from "../../../src/resolvers/Mutation/updateAdvertisement";
 import {
   ADVERTISEMENT_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
@@ -12,7 +12,7 @@ import {
   START_DATE_VALIDATION_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   FIELD_NON_EMPTY_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import { createTestUser, type TestUserType } from "../../helpers/userAndOrg";
 import {
@@ -40,7 +40,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> updateAdvertisement", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -57,19 +57,19 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { updateAdvertisement: updateAdvertisementResolverNotFoundError } =
-        await import("../../../api/resolvers/Mutation/updateAdvertisement");
+        await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverNotFoundError?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws Authorization Error if the userType is USER`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -86,19 +86,19 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
       const context = { userId: testUser?._id };
 
       const { updateAdvertisement: updateAdvertisementResolverNotFoundError } =
-        await import("../../../api/resolvers/Mutation/updateAdvertisement");
+        await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverNotFoundError?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ERROR.MESSAGE);
     }
   });
 
   it(`throws NotFoundError if no advertisement exists with _id === args.id `, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -117,21 +117,21 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
       };
 
       const { updateAdvertisement: updateAdvertisementResolverNotFoundError } =
-        await import("../../../api/resolvers/Mutation/updateAdvertisement");
+        await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverNotFoundError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE
+        ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ADVERTISEMENT_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`updates the advertisement with _id === args.id and returns it`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -156,7 +156,7 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
     const updateAdvertisementPayload = await updateAdvertisementResolver?.(
       {},
       args,
-      context
+      context,
     );
     const { advertisement } = updateAdvertisementPayload || {};
 
@@ -185,7 +185,7 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
   });
 
   it(`throws ValidationError if endDate is before startDate`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -208,18 +208,18 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
 
       const {
         updateAdvertisement: updateAdvertisementResolverValidationError,
-      } = await import("../../../api/resolvers/Mutation/updateAdvertisement");
+      } = await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverValidationError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(END_DATE_VALIDATION_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${END_DATE_VALIDATION_ERROR.MESSAGE}`
+        `Translated ${END_DATE_VALIDATION_ERROR.MESSAGE}`,
       );
     }
   });
   it(`throws ValidationError if startDate is before current Date`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -236,19 +236,19 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
 
       const {
         updateAdvertisement: updateAdvertisementResolverValidationError,
-      } = await import("../../../api/resolvers/Mutation/updateAdvertisement");
+      } = await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverValidationError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(START_DATE_VALIDATION_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${START_DATE_VALIDATION_ERROR.MESSAGE}`
+        `Translated ${START_DATE_VALIDATION_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws InputValidationError if no field other than _id is present in args.input`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -264,18 +264,18 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
       const context = { userId: testSuperAdmin?._id };
 
       const { updateAdvertisement: updateAdvertisementResolverInputError } =
-        await import("../../../api/resolvers/Mutation/updateAdvertisement");
+        await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverInputError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(INPUT_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${INPUT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${INPUT_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
   it(`throws InputValidationError if a field has null value or empty string`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -292,13 +292,13 @@ describe("resolvers -> Mutation -> updateAdvertisement", () => {
       const context = { userId: testSuperAdmin?._id };
 
       const { updateAdvertisement: updateAdvertisementResolverInputError } =
-        await import("../../../api/resolvers/Mutation/updateAdvertisement");
+        await import("../../../src/resolvers/Mutation/updateAdvertisement");
 
       await updateAdvertisementResolverInputError?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(FIELD_NON_EMPTY_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${FIELD_NON_EMPTY_ERROR.MESSAGE}`
+        `Translated ${FIELD_NON_EMPTY_ERROR.MESSAGE}`,
       );
     }
   });

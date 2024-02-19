@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { user as userResolver } from "../../../api/resolvers/CheckIn/user";
+import { user as userResolver } from "../../../src/resolvers/CheckIn/user";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import {
   createEventWithCheckedInUser,
   type TestCheckInType,

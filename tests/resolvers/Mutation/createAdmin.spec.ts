@@ -1,24 +1,24 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationCreateAdminArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationCreateAdminArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { createAdmin as createAdminResolver } from "../../../api/resolvers/Mutation/createAdmin";
+import { createAdmin as createAdminResolver } from "../../../src/resolvers/Mutation/createAdmin";
 import {
   ORGANIZATION_MEMBER_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -30,9 +30,9 @@ beforeAll(async () => {
 
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 
@@ -70,7 +70,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             creatorId: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationCreateAdminArgs = {
@@ -100,7 +100,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             creatorId: testUser?._id,
           },
-        }
+        },
       );
 
       await User.updateOne(
@@ -111,7 +111,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             userType: "SUPERADMIN",
           },
-        }
+        },
       );
 
       const args: MutationCreateAdminArgs = {
@@ -148,7 +148,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
       await createAdminResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        ORGANIZATION_MEMBER_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_MEMBER_NOT_FOUND_ERROR.MESSAGE,
       );
     }
   });
@@ -167,7 +167,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -203,7 +203,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (updatedOrganization !== null) {

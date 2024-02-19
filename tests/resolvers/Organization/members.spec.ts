@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { members as membersResolver } from "../../../api/resolvers/Organization/members";
+import { members as membersResolver } from "../../../src/resolvers/Organization/members";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";

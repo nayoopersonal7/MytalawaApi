@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, GroupChat } from "../../../api/models";
-import type { MutationAddUserToGroupChatArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Organization, GroupChat } from "../../../src/models";
+import type { MutationAddUserToGroupChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -11,7 +11,7 @@ import {
   USER_ALREADY_MEMBER_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -27,7 +27,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChat } from "../../helpers/groupChat";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -48,12 +48,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> addUserToGroupChat", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no groupChat exists with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -68,7 +68,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
       };
 
       const { addUserToGroupChat } = await import(
-        "../../../api/resolvers/Mutation/addUserToGroupChat"
+        "../../../src/resolvers/Mutation/addUserToGroupChat"
       );
       await addUserToGroupChat?.({}, args, context);
     } catch (error: any) {
@@ -79,7 +79,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
 
   it(`throws NotFoundError if no organization exists with _id === groupChat.organization
   for groupChat with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -92,7 +92,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
           $set: {
             organization: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationAddUserToGroupChatArgs = {
@@ -105,7 +105,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
       };
 
       const { addUserToGroupChat } = await import(
-        "../../../api/resolvers/Mutation/addUserToGroupChat"
+        "../../../src/resolvers/Mutation/addUserToGroupChat"
       );
       await addUserToGroupChat?.({}, args, context);
     } catch (error: any) {
@@ -117,7 +117,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
   it(`throws UnauthorizedError if current user with _id === context.userId is
   not an admin of organization with _id === groupChat.organization for groupChat
   with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
           $set: {
             organization: testOrganization?._id,
           },
-        }
+        },
       );
 
       await Organization.updateOne(
@@ -143,7 +143,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
           $set: {
             admins: [],
           },
-        }
+        },
       );
 
       const args: MutationAddUserToGroupChatArgs = {
@@ -155,12 +155,12 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
         userId: testUser?.id,
       };
       const { addUserToGroupChat } = await import(
-        "../../../api/resolvers/Mutation/addUserToGroupChat"
+        "../../../src/resolvers/Mutation/addUserToGroupChat"
       );
       await addUserToGroupChat?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
 
       expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
@@ -168,7 +168,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -184,7 +184,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -201,7 +201,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
       };
 
       const { addUserToGroupChat } = await import(
-        "../../../api/resolvers/Mutation/addUserToGroupChat"
+        "../../../src/resolvers/Mutation/addUserToGroupChat"
       );
       await addUserToGroupChat?.({}, args, context);
     } catch (error: any) {
@@ -212,7 +212,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
 
   it(`throws ConflictError if user with _id === args.userId is already a member 
   of groupChat with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -227,7 +227,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
       };
 
       const { addUserToGroupChat } = await import(
-        "../../../api/resolvers/Mutation/addUserToGroupChat"
+        "../../../src/resolvers/Mutation/addUserToGroupChat"
       );
       await addUserToGroupChat?.({}, args, context);
     } catch (error: any) {
@@ -245,7 +245,7 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
         $set: {
           users: [],
         },
-      }
+      },
     );
 
     const args: MutationAddUserToGroupChatArgs = {
@@ -257,12 +257,12 @@ describe("resolvers -> Mutation -> addUserToGroupChat", () => {
       userId: testUser?.id,
     };
     const { addUserToGroupChat } = await import(
-      "../../../api/resolvers/Mutation/addUserToGroupChat"
+      "../../../src/resolvers/Mutation/addUserToGroupChat"
     );
     const addUserToGroupChatPayload = await addUserToGroupChat?.(
       {},
       args,
-      context
+      context,
     );
     expect(addUserToGroupChatPayload?._id).toEqual(testGroupChat?._id);
     expect(addUserToGroupChatPayload?.users).toEqual([testUser?._id]);

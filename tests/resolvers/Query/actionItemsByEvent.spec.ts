@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { ActionItem } from "../../../api/models";
+import { ActionItem } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
-import type { QueryActionItemsByEventArgs } from "../../../api/types/generatedGraphQLTypes";
-import { actionItemsByEvent as actionItemsByEventsResolver } from "../../../api/resolvers/Query/actionItemsByEvent";
+import type { QueryActionItemsByEventArgs } from "../../../src/types/generatedGraphQLTypes";
+import { actionItemsByEvent as actionItemsByEventsResolver } from "../../../src/resolvers/Query/actionItemsByEvent";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type mongoose from "mongoose";
 import { createTestActionItems } from "../../helpers/actionItem";
@@ -29,7 +29,7 @@ describe("resolvers -> Query -> actionItemsByEvent", () => {
     const actionItemsByEventPayload = await actionItemsByEventsResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const actionItemsByEventInfo = await ActionItem.find({

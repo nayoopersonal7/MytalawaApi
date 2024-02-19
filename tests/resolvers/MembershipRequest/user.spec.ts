@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { user as userResolver } from "../../../api/resolvers/MembershipRequest/user";
+import { user as userResolver } from "../../../src/resolvers/MembershipRequest/user";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import type { TestMembershipRequestType } from "../../helpers/membershipRequests";
 import { createTestMembershipRequest } from "../../helpers/membershipRequests";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";

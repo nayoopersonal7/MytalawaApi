@@ -1,5 +1,5 @@
-import type { InterfaceUser } from "../../../api/models";
-import { User } from "../../../api/models";
+import type { InterfaceUser } from "../../../src/models";
+import { User } from "../../../src/models";
 import { beforeAll, afterAll, it, expect } from "vitest";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
@@ -7,16 +7,16 @@ import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import { ApolloServer } from "@apollo/server";
 import { gql } from "graphql-tag";
-import { errors } from "../../../api/libraries";
+import { errors } from "../../../src/libraries";
 import { nanoid } from "nanoid";
 import "dotenv/config";
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import i18n from "i18n";
 import express from "express";
-import { appConfig } from "../../../api/config";
+import { appConfig } from "../../../src/config";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import authDirectiveTransformer from "../../../api/directives/directiveTransformer/authDirectiveTransformer";
-import roleDirectiveTransformer from "../../../api/directives/directiveTransformer/roleDirectiveTransformer";
+import authDirectiveTransformer from "../../../src/directives/directiveTransformer/authDirectiveTransformer";
+import roleDirectiveTransformer from "../../../src/directives/directiveTransformer/roleDirectiveTransformer";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 
@@ -103,7 +103,7 @@ it("throws NotFoundError if no user exists with _id === context.userId", async (
       },
       {
         contextValue: authenticatedContext,
-      }
+      },
     );
   } catch (err) {
     if (err instanceof errors.NotFoundError) {
@@ -143,7 +143,7 @@ it("throws UnauthenticatedError if user exists but userType != requires", async 
       },
       {
         contextValue: authenticatedContext,
-      }
+      },
     );
 
     //@ts-ignore
@@ -185,7 +185,7 @@ it("returns data if user exists and userType === requires", async () => {
     },
     {
       contextValue: authenticatedContext,
-    }
+    },
   );
 
   //@ts-ignore
@@ -223,7 +223,7 @@ it("checks if the resolver is supplied, and return null data, if not", async () 
     },
     {
       contextValue: authenticatedContext,
-    }
+    },
   );
   //@ts-ignore
 

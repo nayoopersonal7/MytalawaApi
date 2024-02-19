@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { validatePaginationArgs } from "../../../api/libraries/validators/validatePaginationArgs";
-import { MAXIMUM_FETCH_LIMIT } from "../../../api/constants";
-import type { CursorPaginationInput } from "../../../api/types/generatedGraphQLTypes";
+import { validatePaginationArgs } from "../../../src/libraries/validators/validatePaginationArgs";
+import { MAXIMUM_FETCH_LIMIT } from "../../../src/constants";
+import type { CursorPaginationInput } from "../../../src/types/generatedGraphQLTypes";
 
 describe("validators -> validatePaginationArgs", () => {
   it("returns MaximumValueError if the limit exceeds the maximum fetch limit", () => {

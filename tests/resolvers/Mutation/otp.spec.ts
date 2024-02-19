@@ -1,13 +1,13 @@
 import "dotenv/config";
-import type { MutationOtpArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationOtpArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { otp as otpResolver } from "../../../api/resolvers/Mutation/otp";
+import { otp as otpResolver } from "../../../src/resolvers/Mutation/otp";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import { mailer } from "../../../api/utilities";
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { mailer } from "../../../src/utilities";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import { nanoid } from "nanoid";
 
 let testUser: TestUserType;
@@ -42,13 +42,13 @@ describe("resolvers -> Mutation -> otp", () => {
         email: testUser?.email,
       },
     };
-    vi.mock("../../../api/utilities", () => ({
+    vi.mock("../../../src/utilities", () => ({
       mailer: vi.fn().mockResolvedValue({ message: "success" }),
     }));
 
-    vi.doMock("../../../api/constants", async () => {
+    vi.doMock("../../../src/constants", async () => {
       const actualConstants: object = await vi.importActual(
-        "../../../api/constants"
+        "../../../src/constants",
       );
 
       return {

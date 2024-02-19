@@ -3,9 +3,9 @@ import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import { connect, disconnect } from "../../helpers/db";
 
-import { directChatsByUserID as directChatsByUserIDResolver } from "../../../api/resolvers/Query/directChatsByUserID";
-import { DirectChat } from "../../../api/models";
-import type { QueryDirectChatsByUserIdArgs } from "../../../api/types/generatedGraphQLTypes";
+import { directChatsByUserID as directChatsByUserIDResolver } from "../../../src/resolvers/Query/directChatsByUserID";
+import { DirectChat } from "../../../src/models";
+import type { QueryDirectChatsByUserIdArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { createTestDirectChat } from "../../helpers/directChat";
 import type { TestUserType } from "../../helpers/userAndOrg";
@@ -46,7 +46,7 @@ describe("resolvers -> Query -> directChatsByUserID", () => {
     const directChatsByUserIdPayload = await directChatsByUserIDResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const directChatsByUserId = await DirectChat.find({

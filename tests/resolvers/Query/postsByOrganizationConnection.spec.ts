@@ -1,22 +1,22 @@
 // @ts-nocheck
 import "dotenv/config";
-import { postsByOrganizationConnection as postsByOrganizationConnectionResolver } from "../../../api/resolvers/Query/postsByOrganizationConnection";
+import { postsByOrganizationConnection as postsByOrganizationConnectionResolver } from "../../../src/resolvers/Query/postsByOrganizationConnection";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
 
-import type { QueryPostsByOrganizationConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryPostsByOrganizationConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type {
   TestUserType,
   TestOrganizationType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import type { InterfacePost } from "../../../api/models";
-import { Post } from "../../../api/models";
+import type { InterfacePost } from "../../../src/models";
+import { Post } from "../../../src/models";
 import { nanoid } from "nanoid";
-import { BASE_URL } from "../../../api/constants";
+import { BASE_URL } from "../../../src/constants";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testOrganization: TestOrganizationType;
@@ -251,7 +251,7 @@ describe("resolvers -> Query -> postsByOrganizationConnection", () => {
         $set: {
           imageUrl: undefined,
         },
-      }
+      },
     );
 
     const where = {

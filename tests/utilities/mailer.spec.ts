@@ -4,8 +4,8 @@ import {
   ERROR_IN_SENDING_MAIL,
   MAIL_PASSWORD,
   MAIL_USERNAME,
-} from "../../api/constants";
-import { mailer } from "../../api/utilities/mailer";
+} from "../../src/constants";
+import { mailer } from "../../src/utilities/mailer";
 import { nanoid } from "nanoid";
 import type Mail from "nodemailer/lib/mailer";
 
@@ -44,7 +44,7 @@ describe("utilities -> mailer", () => {
       .mockImplementationOnce(() => {
         const mockSendMail = (
           _mailOptions: Mail.Options,
-          callBackFn: (_err: Error | null, _info: object) => void
+          callBackFn: (_err: Error | null, _info: object) => void,
         ): any => {
           return callBackFn(null, mockInfo);
         };
@@ -64,7 +64,7 @@ describe("utilities -> mailer", () => {
       .mockImplementationOnce(() => {
         const mockSendMail = (
           _mailOptions: Mail.Options,
-          callBackFn: (_err: Error | null, _info: object | null) => void
+          callBackFn: (_err: Error | null, _info: object | null) => void,
         ): any => {
           return callBackFn(new Error("rejects Promise"), null);
         };

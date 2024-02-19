@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, GroupChat } from "../../../api/models";
-import type { MutationAdminRemoveGroupArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Organization, GroupChat } from "../../../src/models";
+import type { MutationAdminRemoveGroupArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { adminRemoveGroup as adminRemoveGroupResolver } from "../../../api/resolvers/Mutation/adminRemoveGroup";
+import { adminRemoveGroup as adminRemoveGroupResolver } from "../../../src/resolvers/Mutation/adminRemoveGroup";
 import {
   CHAT_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestUserType,
@@ -19,7 +19,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChat } from "../../helpers/groupChat";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -33,9 +33,9 @@ beforeAll(async () => {
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
   testGroupChat = resultsArray[2];
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 
@@ -71,7 +71,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
           $set: {
             organization: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationAdminRemoveGroupArgs = {
@@ -98,7 +98,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
           $set: {
             organization: testOrganization?._id,
           },
-        }
+        },
       );
 
       const args: MutationAdminRemoveGroupArgs = {
@@ -126,7 +126,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
           $set: {
             organization: testOrganization?._id,
           },
-        }
+        },
       );
 
       const updatedOrganization = await Organization.findOneAndUpdate(
@@ -140,7 +140,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       cacheOrganizations([updatedOrganization!]);
@@ -171,7 +171,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     cacheOrganizations([updatedOrganization!]);
@@ -187,7 +187,7 @@ describe("resolvers -> Mutation -> adminRemoveGroup", () => {
     const adminRemoveGroupPayload = await adminRemoveGroupResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(adminRemoveGroupPayload).toEqual({

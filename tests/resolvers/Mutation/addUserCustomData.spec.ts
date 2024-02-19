@@ -7,11 +7,11 @@ import type {
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import { disconnect, connect } from "../../helpers/db";
-import { addUserCustomData } from "../../../api/resolvers/Mutation/addUserCustomData";
+import { addUserCustomData } from "../../../src/resolvers/Mutation/addUserCustomData";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -42,13 +42,13 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
     expect(customDataDoc?.values).toHaveProperty(args.dataName, args.dataValue);
     expect(customDataDoc?.userId.toString()).toBe(testUser?._id.toString());
     expect(customDataDoc?.organizationId.toString()).toBe(
-      testOrganization?._id.toString()
+      testOrganization?._id.toString(),
     );
     expect(customDataDoc?.userId.toString()).toBe(testUser?._id.toString());
   });
 
   it("should throw an error if the current user is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -67,13 +67,13 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw an error if the organization is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -91,10 +91,10 @@ describe("resolvers => Mutation => removeOrganizationCustomField", () => {
       await addUserCustomData?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });

@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { organization as organizationResolver } from "../../../api/resolvers/UserTag/organization";
+import { organization as organizationResolver } from "../../../src/resolvers/UserTag/organization";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createRootTagWithOrg } from "../../helpers/tags";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
-import { Organization } from "../../../api/models";
+import { Organization } from "../../../src/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testTag: TestUserTagType, testOrg: TestOrganizationType;

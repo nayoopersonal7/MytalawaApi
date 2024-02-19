@@ -1,5 +1,5 @@
-import { Advertisement, User } from "../../api/models";
-import type { InterfaceUser } from "../../api/models";
+import { Advertisement, User } from "../../src/models";
+import type { InterfaceUser } from "../../src/models";
 
 import { nanoid } from "nanoid";
 import type { Document } from "mongoose";
@@ -30,7 +30,7 @@ export const createTestAdvertisement =
 
     // Create test advertisement in the database
     const createdAdvertisement = await Advertisement.create(
-      testAdvertisementData
+      testAdvertisementData,
     );
 
     return createdAdvertisement.toObject();

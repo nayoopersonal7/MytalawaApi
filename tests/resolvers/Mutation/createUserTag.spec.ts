@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateUserTagArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateUserTagArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -11,7 +11,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   TAG_NOT_FOUND,
   TAG_ALREADY_EXISTS,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -26,7 +26,7 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
-import { OrganizationTagUser } from "../../../api/models";
+import { OrganizationTagUser } from "../../../src/models";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createRootTagWithOrg } from "../../helpers/tags";
 
@@ -51,13 +51,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createUserTag", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -75,20 +75,20 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.input.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -106,20 +106,20 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(ORGANIZATION_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws TAG_NOT_FOUND error if the parentTagId is provided (not null) but no tag exists with _id === args.input.parentTagId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -138,7 +138,7 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
@@ -149,7 +149,7 @@ describe("resolvers -> Mutation -> createUserTag", () => {
   });
 
   it(`throws INCORRECT_TAG_INPUT error if the parent tag is provided (not null) but the parent tag doesn't belong to the provided organization (specified by args.input.organizationId)`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -168,20 +168,20 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(INCORRECT_TAG_INPUT.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${INCORRECT_TAG_INPUT.MESSAGE}`
+        `Translated ${INCORRECT_TAG_INPUT.MESSAGE}`,
       );
     }
   });
 
   it(`throws USER_NOT_AUTHORIZED_TO_CREATE_TAG error if the user is not authorized to create the tag`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -200,20 +200,20 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_TO_CREATE_TAG.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_TO_CREATE_TAG.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_TO_CREATE_TAG.MESSAGE}`,
       );
     }
   });
 
   it(`throws TAG_ALREADY_EXISTS error if the tag with the same name and same parent already exists`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -232,7 +232,7 @@ describe("resolvers -> Mutation -> createUserTag", () => {
       };
 
       const { createUserTag: createUserTagResolver } = await import(
-        "../../../api/resolvers/Mutation/createUserTag"
+        "../../../src/resolvers/Mutation/createUserTag"
       );
 
       await createUserTagResolver?.({}, args, context);
@@ -243,9 +243,9 @@ describe("resolvers -> Mutation -> createUserTag", () => {
   });
 
   it(`tag should be successfully added`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     const args: MutationCreateUserTagArgs = {
@@ -261,7 +261,7 @@ describe("resolvers -> Mutation -> createUserTag", () => {
     };
 
     const { createUserTag: createUserTagResolver } = await import(
-      "../../../api/resolvers/Mutation/createUserTag"
+      "../../../src/resolvers/Mutation/createUserTag"
     );
 
     const createdTag = await createUserTagResolver?.({}, args, context);
@@ -271,7 +271,7 @@ describe("resolvers -> Mutation -> createUserTag", () => {
         organizationId: testOrganization?._id,
         name: "TestUserTag",
         parentTagId: testTag?._id,
-      })
+      }),
     );
 
     const createdTagExists = await OrganizationTagUser.exists({

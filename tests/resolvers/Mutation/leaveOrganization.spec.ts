@@ -1,16 +1,16 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationLeaveOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationLeaveOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { leaveOrganization as leaveOrganizationResolver } from "../../../api/resolvers/Mutation/leaveOrganization";
+import { leaveOrganization as leaveOrganizationResolver } from "../../../src/resolvers/Mutation/leaveOrganization";
 import {
   MEMBER_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -25,7 +25,7 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -44,11 +44,11 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> leaveOrganization", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
   it(`throws NotFoundError if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -62,7 +62,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
       };
 
       const { leaveOrganization: leaveOrganizationResolver } = await import(
-        "../../../api/resolvers/Mutation/leaveOrganization"
+        "../../../src/resolvers/Mutation/leaveOrganization"
       );
 
       await leaveOrganizationResolver?.({}, args, context);
@@ -73,7 +73,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -87,7 +87,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
       };
 
       const { leaveOrganization: leaveOrganizationResolver } = await import(
-        "../../../api/resolvers/Mutation/leaveOrganization"
+        "../../../src/resolvers/Mutation/leaveOrganization"
       );
 
       await leaveOrganizationResolver?.({}, args, context);
@@ -99,7 +99,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
 
   it(`throws ConflictError if user with _id === context.userId is not a member
   of organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -116,7 +116,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -132,7 +132,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
       };
 
       const { leaveOrganization: leaveOrganizationResolver } = await import(
-        "../../../api/resolvers/Mutation/leaveOrganization"
+        "../../../src/resolvers/Mutation/leaveOrganization"
       );
 
       await leaveOrganizationResolver?.({}, args, context);
@@ -154,7 +154,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (updatedOrganization !== null) {
@@ -172,7 +172,7 @@ describe("resolvers -> Mutation -> leaveOrganization", () => {
     const leaveOrganizationPayload = await leaveOrganizationResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     const updatedTestUser = await User.findOne({

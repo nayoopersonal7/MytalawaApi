@@ -1,8 +1,8 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { EventAttendee } from "../../../api/models";
-import type { MutationCheckInArgs } from "../../../api/types/generatedGraphQLTypes";
+import { EventAttendee } from "../../../src/models";
+import type { MutationCheckInArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   EVENT_NOT_FOUND_ERROR,
@@ -10,7 +10,7 @@ import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_REGISTERED_FOR_EVENT,
   USER_ALREADY_CHECKED_IN,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import { createTestUser, type TestUserType } from "../../helpers/userAndOrg";
 import { type TestEventType } from "../../helpers/events";
@@ -33,7 +33,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> checkIn", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId `, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -50,20 +50,20 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: Types.ObjectId().toString() };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws NotFoundError if no event exists with _id === args.data.eventId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -80,20 +80,20 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: randomTestUser!._id };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(EVENT_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws Unauthorized Error if the current user is not an admin of the  event`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -110,20 +110,20 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: randomTestUser!._id };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ERROR.MESSAGE);
     }
   });
 
   it(`throws NotFoundError if the request user with _id = args.data.userId does not exist`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -140,20 +140,20 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: testUser!._id };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws Conflict Error if the request user with _id = args.data.userId is not an attendee of the event with _id = args.data.eventId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -170,16 +170,16 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: testUser!._id };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_REGISTERED_FOR_EVENT.MESSAGE}`
+        `Translated ${USER_NOT_REGISTERED_FOR_EVENT.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(
-        USER_NOT_REGISTERED_FOR_EVENT.MESSAGE
+        USER_NOT_REGISTERED_FOR_EVENT.MESSAGE,
       );
     }
   });
@@ -197,7 +197,7 @@ describe("resolvers -> Mutation -> checkIn", () => {
     const context = { userId: testUser!._id };
 
     const { checkIn: checkInResolver } = await import(
-      "../../../api/resolvers/Mutation/checkIn"
+      "../../../src/resolvers/Mutation/checkIn"
     );
 
     const payload = await checkInResolver?.({}, args, context);
@@ -216,7 +216,7 @@ describe("resolvers -> Mutation -> checkIn", () => {
   });
 
   it(`throws error if the request user with _id = args.data.userId is already checkedIn for the event`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -233,13 +233,13 @@ describe("resolvers -> Mutation -> checkIn", () => {
       const context = { userId: testUser!._id };
 
       const { checkIn: checkInResolver } = await import(
-        "../../../api/resolvers/Mutation/checkIn"
+        "../../../src/resolvers/Mutation/checkIn"
       );
 
       await checkInResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_ALREADY_CHECKED_IN.MESSAGE}`
+        `Translated ${USER_ALREADY_CHECKED_IN.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_ALREADY_CHECKED_IN.MESSAGE);
     }

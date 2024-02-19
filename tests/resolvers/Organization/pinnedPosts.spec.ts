@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { pinnedPosts as pinnedPostsResolver } from "../../../api/resolvers/Organization/pinnedPosts";
+import { pinnedPosts as pinnedPostsResolver } from "../../../src/resolvers/Organization/pinnedPosts";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Organization, Post } from "../../../api/models";
+import { Organization, Post } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type {
   TestOrganizationType,
@@ -27,7 +27,7 @@ beforeAll(async () => {
       $push: {
         pinnedPosts: testPost?.id,
       },
-    }
+    },
   );
 });
 

@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { registeredEventsByUser as registeredEventsByUserResolver } from "../../../api/resolvers/Query/registeredEventsByUser";
+import { registeredEventsByUser as registeredEventsByUserResolver } from "../../../src/resolvers/Query/registeredEventsByUser";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Event } from "../../../api/models";
-import type { QueryRegisteredEventsByUserArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Event } from "../../../src/models";
+import type { QueryRegisteredEventsByUserArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";

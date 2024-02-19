@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { describe, it, expect } from "vitest";
-import { INTERNAL_SERVER_ERROR } from "../../../api/constants";
-import { errors } from "../../../api/libraries";
+import { INTERNAL_SERVER_ERROR } from "../../../src/constants";
+import { errors } from "../../../src/libraries";
 
 describe("libraries -> errors -> internalServerError", () => {
   it(`throws internalServerError if there is error from the server side `, () => {
@@ -9,7 +9,7 @@ describe("libraries -> errors -> internalServerError", () => {
       throw new errors.InternalServerError(
         INTERNAL_SERVER_ERROR.MESSAGE,
         INTERNAL_SERVER_ERROR.CODE,
-        INTERNAL_SERVER_ERROR.PARAM
+        INTERNAL_SERVER_ERROR.PARAM,
       );
     } catch (error: any) {
       expect(error.errors).toEqual([

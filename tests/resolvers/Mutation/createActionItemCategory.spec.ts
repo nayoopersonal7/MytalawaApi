@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateActionItemCategoryArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateActionItemCategoryArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
-import { createActionItemCategory as createActionItemCategoryResolver } from "../../../api/resolvers/Mutation/createActionItemCategory";
+import { createActionItemCategory as createActionItemCategoryResolver } from "../../../src/resolvers/Mutation/createActionItemCategory";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   ACTION_ITEM_CATEGORY_ALREADY_EXISTS,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import {
   createTestUser,
@@ -20,7 +20,7 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 
-import { Organization, User } from "../../../api/models";
+import { Organization, User } from "../../../src/models";
 
 let randomUser: TestUserType;
 let testUser: TestUserType;
@@ -29,9 +29,9 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 
   randomUser = await createTestUser();
@@ -108,14 +108,14 @@ describe("resolvers -> Mutation -> createCategory", () => {
     const createCategoryPayload = await createActionItemCategoryResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createCategoryPayload).toEqual(
       expect.objectContaining({
         organizationId: testOrganization?._id,
         name: "Default",
-      })
+      }),
     );
   });
 
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> createCategory", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const args: MutationCreateActionItemCategoryArgs = {
@@ -144,14 +144,14 @@ describe("resolvers -> Mutation -> createCategory", () => {
     const createCategoryPayload = await createActionItemCategoryResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createCategoryPayload).toEqual(
       expect.objectContaining({
         organizationId: testOrganization?._id,
         name: "Default2",
-      })
+      }),
     );
   });
 
@@ -169,7 +169,7 @@ describe("resolvers -> Mutation -> createCategory", () => {
       await createActionItemCategoryResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        ACTION_ITEM_CATEGORY_ALREADY_EXISTS.MESSAGE
+        ACTION_ITEM_CATEGORY_ALREADY_EXISTS.MESSAGE,
       );
     }
   });

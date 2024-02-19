@@ -1,7 +1,7 @@
 import type { TestUserType, TestOrganizationType } from "./userAndOrg";
 import { createTestUser, createTestUserAndOrganization } from "./userAndOrg";
-import type { InterfaceMembershipRequest } from "../../api/models";
-import { MembershipRequest, Organization, User } from "../../api/models";
+import type { InterfaceMembershipRequest } from "../../src/models";
+import { MembershipRequest, Organization, User } from "../../src/models";
 import type { Document } from "mongoose";
 import { nanoid } from "nanoid";
 
@@ -40,7 +40,7 @@ export const createTestMembershipRequest = async (): Promise<
           adminFor: testOrganization._id,
           membershipRequests: testMembershipRequest._id,
         },
-      }
+      },
     );
 
     await Organization.updateOne(
@@ -51,7 +51,7 @@ export const createTestMembershipRequest = async (): Promise<
         $push: {
           membershipRequests: testMembershipRequest._id,
         },
-      }
+      },
     );
 
     return [testUser, testOrganization, testMembershipRequest];
@@ -85,7 +85,7 @@ export const createTestMembershipRequestAsNew = async (): Promise<
       },
       {
         new: true,
-      }
+      },
     );
 
     testOrganization = await Organization.findOneAndUpdate(
@@ -99,7 +99,7 @@ export const createTestMembershipRequestAsNew = async (): Promise<
       },
       {
         new: true,
-      }
+      },
     );
     return [testUser, testOrganization, testMembershipRequest];
   } else {

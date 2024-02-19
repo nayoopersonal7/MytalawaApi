@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { organization as organizationResolver } from "../../../api/resolvers/GroupChat/organization";
+import { organization as organizationResolver } from "../../../src/resolvers/GroupChat/organization";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { Organization } from "../../../api/models";
+import { Organization } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChat } from "../../helpers/groupChat";

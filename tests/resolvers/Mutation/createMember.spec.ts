@@ -1,16 +1,16 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationCreateMemberArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationCreateMemberArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { createMember as createMemberResolver } from "../../../api/resolvers/Mutation/createMember";
+import { createMember as createMemberResolver } from "../../../src/resolvers/Mutation/createMember";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
   MEMBER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -28,9 +28,9 @@ beforeAll(async () => {
 
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 
@@ -49,7 +49,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             creatorId: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationCreateMemberArgs = {
@@ -79,7 +79,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             creatorId: testUser?._id,
           },
-        }
+        },
       );
 
       await User.updateOne(
@@ -90,7 +90,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $set: {
             userType: "SUPERADMIN",
           },
-        }
+        },
       );
 
       const args: MutationCreateMemberArgs = {
@@ -140,7 +140,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
           $push: {
             members: testUser?._id,
           },
-        }
+        },
       );
 
       const args: MutationCreateMemberArgs = {
@@ -168,7 +168,7 @@ describe("resolvers -> Mutation -> createAdmin", () => {
       .lean();
 
     const updatedOrganizationCheck = updatedTestOrganization?.members.some(
-      (member) => member.equals(testUser?._id)
+      (member) => member.equals(testUser?._id),
     );
 
     expect(updatedOrganizationCheck).toBe(true);

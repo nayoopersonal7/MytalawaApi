@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { creator as creatorResolver } from "../../../api/resolvers/Comment/creator";
+import { creator as creatorResolver } from "../../../src/resolvers/Comment/creator";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
-import type { InterfaceComment } from "../../../api/models";
-import { Comment, User } from "../../../api/models";
+import type { InterfaceComment } from "../../../src/models";
+import { Comment, User } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestPostType } from "../../helpers/posts";
 import { createTestPost } from "../../helpers/posts";

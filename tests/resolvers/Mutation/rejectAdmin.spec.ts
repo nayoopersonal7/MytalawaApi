@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../api/models";
-import type { MutationRejectAdminArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { MutationRejectAdminArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { rejectAdmin as rejectAdminResolver } from "../../../api/resolvers/Mutation/rejectAdmin";
+import { rejectAdmin as rejectAdminResolver } from "../../../src/resolvers/Mutation/rejectAdmin";
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -39,11 +39,11 @@ afterAll(async () => {
 describe("resolvers -> Mutation -> rejectAdmin", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
   it(`throws Error if userType of user with _id === context.userId is not SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -62,12 +62,12 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
         },
         {
           userType: "USER",
-        }
+        },
       );
       await rejectAdminResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`,
       );
 
       expect(spy).toHaveBeenCalledWith(USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE);
@@ -75,7 +75,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -89,7 +89,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
       };
 
       const { rejectAdmin: rejectAdminResolver } = await import(
-        "../../../api/resolvers/Mutation/rejectAdmin"
+        "../../../src/resolvers/Mutation/rejectAdmin"
       );
 
       await rejectAdminResolver?.({}, args, context);
@@ -100,7 +100,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -113,7 +113,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
           $set: {
             userType: "SUPERADMIN",
           },
-        }
+        },
       );
 
       const args: MutationRejectAdminArgs = {
@@ -125,7 +125,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
       };
 
       const { rejectAdmin: rejectAdminResolver } = await import(
-        "../../../api/resolvers/Mutation/rejectAdmin"
+        "../../../src/resolvers/Mutation/rejectAdmin"
       );
       await rejectAdminResolver?.({}, args, context);
     } catch (error: any) {
@@ -144,7 +144,7 @@ describe("resolvers -> Mutation -> rejectAdmin", () => {
     };
 
     const { rejectAdmin: rejectAdminResolver } = await import(
-      "../../../api/resolvers/Mutation/rejectAdmin"
+      "../../../src/resolvers/Mutation/rejectAdmin"
     );
 
     const flag = await rejectAdminResolver?.({}, args, context);

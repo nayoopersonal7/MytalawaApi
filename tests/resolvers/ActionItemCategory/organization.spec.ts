@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { organization as organizationResolver } from "../../../api/resolvers/ActionItemCategory/organization";
+import { organization as organizationResolver } from "../../../src/resolvers/ActionItemCategory/organization";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { Organization } from "../../../api/models";
+import { Organization } from "../../../src/models";
 import { type TestOrganizationType } from "../../helpers/userAndOrg";
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
 import { createTestCategory } from "../../helpers/actionItemCategory";

@@ -1,10 +1,10 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
-import type { MutationSaveFcmTokenArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { MutationSaveFcmTokenArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { saveFcmToken as saveFcmTokenResolver } from "../../../api/resolvers/Mutation/saveFcmToken";
+import { saveFcmToken as saveFcmTokenResolver } from "../../../src/resolvers/Mutation/saveFcmToken";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/user";
 import { createTestUserFunc } from "../../helpers/user";

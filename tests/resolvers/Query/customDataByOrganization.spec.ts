@@ -1,13 +1,13 @@
 import type mongoose from "mongoose";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { customDataByOrganization } from "../../../api/resolvers/Query/customDataByOrganization";
+import { customDataByOrganization } from "../../../src/resolvers/Query/customDataByOrganization";
 import type {
   TestOrganizationType,
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
 import { connect, disconnect } from "../../helpers/db";
-import { addUserCustomData } from "../../../api/resolvers/Mutation/addUserCustomData";
+import { addUserCustomData } from "../../../src/resolvers/Mutation/addUserCustomData";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -33,7 +33,7 @@ describe("resolvers => Query => customDataByOrganization", () => {
         dataName: "testDataName",
         dataValue: "testDataValue",
       },
-      { userId: testUser?._id }
+      { userId: testUser?._id },
     );
 
     const args = {

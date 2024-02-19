@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { averageFeedbackScore as averageFeedbackScoreResolver } from "../../../api/resolvers/Event/averageFeedbackScore";
+import { averageFeedbackScore as averageFeedbackScoreResolver } from "../../../src/resolvers/Event/averageFeedbackScore";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
@@ -30,7 +30,7 @@ describe("resolvers -> Event -> averageFeedbackScore", () => {
     const averageFeedbackScorePayload = await averageFeedbackScoreResolver?.(
       parent,
       {},
-      {}
+      {},
     );
 
     expect(averageFeedbackScorePayload).toEqual(0);
@@ -44,7 +44,7 @@ describe("resolvers -> Event -> averageFeedbackScore", () => {
     const averageFeedbackScorePayload = await averageFeedbackScoreResolver?.(
       parent,
       {},
-      {}
+      {},
     );
 
     expect(averageFeedbackScorePayload).toEqual(3);

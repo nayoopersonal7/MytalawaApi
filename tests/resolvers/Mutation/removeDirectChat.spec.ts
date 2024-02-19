@@ -5,15 +5,15 @@ import {
   Organization,
   DirectChat,
   DirectChatMessage,
-} from "../../../api/models";
-import type { MutationRemoveDirectChatArgs } from "../../../api/types/generatedGraphQLTypes";
+} from "../../../src/models";
+import type { MutationRemoveDirectChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   CHAT_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -29,7 +29,7 @@ import type {
 } from "../../helpers/userAndOrg";
 import type { TestDirectChatType } from "../../helpers/directChat";
 import { createTestDirectChat } from "../../helpers/directChat";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -61,7 +61,7 @@ beforeAll(async () => {
     },
     {
       new: true,
-    }
+    },
   );
 });
 
@@ -71,12 +71,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removeDirectChat", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -92,19 +92,19 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../api/resolvers/Mutation/removeDirectChat"
+        "../../../src/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(ORGANIZATION_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if no directChat exists with _id === args.chatId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -120,20 +120,20 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../api/resolvers/Mutation/removeDirectChat"
+        "../../../src/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(CHAT_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${CHAT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${CHAT_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws UnauthorizedError if user with _id === context.userId is not an admin
   of organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -151,7 +151,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (updatedOrganization !== null) {
@@ -168,12 +168,12 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       };
 
       const { removeDirectChat: removeDirectChatResolver } = await import(
-        "../../../api/resolvers/Mutation/removeDirectChat"
+        "../../../src/resolvers/Mutation/removeDirectChat"
       );
       await removeDirectChatResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
 
       expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
@@ -192,7 +192,7 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (updatedOrganization !== null) {
@@ -209,12 +209,12 @@ describe("resolvers -> Mutation -> removeDirectChat", () => {
     };
 
     const { removeDirectChat: removeDirectChatResolver } = await import(
-      "../../../api/resolvers/Mutation/removeDirectChat"
+      "../../../src/resolvers/Mutation/removeDirectChat"
     );
     const removeDirectChatPayload = await removeDirectChatResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(removeDirectChatPayload).toEqual(testDirectChat?.toObject());

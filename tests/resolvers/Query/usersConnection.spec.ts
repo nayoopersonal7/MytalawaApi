@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { usersConnection as usersConnectionResolver } from "../../../api/resolvers/Query/usersConnection";
+import { usersConnection as usersConnectionResolver } from "../../../src/resolvers/Query/usersConnection";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
-import type { QueryUsersConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { QueryUsersConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import {
@@ -23,7 +23,7 @@ beforeAll(async () => {
     testUsers[0]?._id,
     testOrganization?._id,
     true,
-    "ONCE"
+    "ONCE",
   );
 });
 
@@ -41,7 +41,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
     const users = await User.find()
       .limit(0)
@@ -91,7 +91,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -153,7 +153,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -215,7 +215,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -277,7 +277,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -339,7 +339,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -389,7 +389,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -426,7 +426,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -463,7 +463,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -500,7 +500,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -537,7 +537,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)
@@ -571,7 +571,7 @@ describe("resolvers -> Query -> usersConnection", () => {
     const usersConnectionPayload = await usersConnectionResolver?.(
       {},
       args,
-      {}
+      {},
     );
 
     const users = await User.find(where)

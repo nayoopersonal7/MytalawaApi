@@ -1,5 +1,5 @@
-import type { InterfaceOrganizationTagUser } from "../../api/models";
-import { OrganizationTagUser, TagUser } from "../../api/models";
+import type { InterfaceOrganizationTagUser } from "../../src/models";
+import { OrganizationTagUser, TagUser } from "../../src/models";
 import { nanoid } from "nanoid";
 import type { TestUserType, TestOrganizationType } from "./userAndOrg";
 import { createTestUserAndOrganization, createTestUser } from "./userAndOrg";
@@ -21,7 +21,7 @@ export const createRootTagWithOrg = async (): Promise<
 };
 
 export const createRootTagsWithOrg = async (
-  numberOfTags = 1
+  numberOfTags = 1,
 ): Promise<[TestUserType, TestOrganizationType, TestUserTagType[]]> => {
   const [testUser, testOrganization] = await createTestUserAndOrganization();
   const tags: TestUserTagType[] = [];
@@ -42,7 +42,7 @@ export const createTwoLevelTagsWithOrg = async (): Promise<
   [
     TestUserType,
     TestOrganizationType,
-    [TestUserTagType, TestUserTagType, TestUserTagType]
+    [TestUserTagType, TestUserTagType, TestUserTagType],
   ]
 > => {
   const [testUser, testOrg, testRootTag] = await createRootTagWithOrg();
@@ -66,7 +66,7 @@ export const createTwoLevelTagsWithOrg = async (): Promise<
 
 export const createAndAssignUsersToTag = async (
   tag: TestUserTagType,
-  numberOfUsers = 1
+  numberOfUsers = 1,
 ): Promise<TestUserType[]> => {
   const testUsers: TestUserType[] = [];
 
@@ -83,7 +83,7 @@ export const createAndAssignUsersToTag = async (
 };
 
 export const createTagsAndAssignToUser = async (
-  numberOfTags = 1
+  numberOfTags = 1,
 ): Promise<[TestUserType, TestOrganizationType, TestUserTagType[]]> => {
   const [testUser, testOrg, testTag] = await createRootTagWithOrg();
   await TagUser.create({

@@ -1,11 +1,11 @@
 import "dotenv/config";
-import { attendeesCheckInStatus as attendeesResolver } from "../../../api/resolvers/Event/attendeesCheckInStatus";
+import { attendeesCheckInStatus as attendeesResolver } from "../../../src/resolvers/Event/attendeesCheckInStatus";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { createEventWithCheckedInUser } from "../../helpers/checkIn";
 import type { TestEventType } from "../../helpers/events";
-import { EventAttendee } from "../../../api/models";
+import { EventAttendee } from "../../../src/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testEvent: TestEventType;

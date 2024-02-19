@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { directChatMessageBelongsTo as directChatMessageBelongsToResolver } from "../../../api/resolvers/DirectChatMessage/directChatMessageBelongsTo";
+import { directChatMessageBelongsTo as directChatMessageBelongsToResolver } from "../../../src/resolvers/DirectChatMessage/directChatMessageBelongsTo";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { DirectChat } from "../../../api/models";
+import { DirectChat } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestDirectChatMessageType } from "../../helpers/directChat";
 import { createTestDirectChatMessage } from "../../helpers/directChat";
@@ -32,7 +32,7 @@ describe("resolvers -> DirectChatMessage -> directChatMessageBelongsTo", () => {
     }).lean();
 
     expect(directChatMessageBelongsToPayload).toEqual(
-      directChatMessageBelongsTo
+      directChatMessageBelongsTo,
     );
   });
 });

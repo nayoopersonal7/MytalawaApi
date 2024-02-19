@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { creator as creatorResolver } from "../../../api/resolvers/ActionItemCategory/creator";
+import { creator as creatorResolver } from "../../../src/resolvers/ActionItemCategory/creator";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
 import { createTestCategory } from "../../helpers/actionItemCategory";

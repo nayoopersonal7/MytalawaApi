@@ -12,7 +12,7 @@ export default defineConfig({
     globalSetup: ["./tests/helpers/globalSetup.ts"],
 
     coverage: {
-      // This tells vitest to include all files from ./api in test coverage.
+      // This tells vitest to include all files from ./src in test coverage.
       all: true,
 
       // This tells vitest the directory to get coverage for.

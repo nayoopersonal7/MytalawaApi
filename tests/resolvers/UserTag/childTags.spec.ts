@@ -1,15 +1,15 @@
 import "dotenv/config";
-import { childTags as childTagsResolver } from "../../../api/resolvers/UserTag/childTags";
+import { childTags as childTagsResolver } from "../../../src/resolvers/UserTag/childTags";
 import type {
   UserTagsConnectionResult,
   UserTagChildTagsArgs,
-} from "../../../api/types/generatedGraphQLTypes";
+} from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserTagType } from "../../helpers/tags";
 import { createTwoLevelTagsWithOrg } from "../../helpers/tags";
-import { MAXIMUM_FETCH_LIMIT } from "../../../api/constants";
+import { MAXIMUM_FETCH_LIMIT } from "../../../src/constants";
 import { Types } from "mongoose";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -80,16 +80,16 @@ describe("resolvers -> Tag -> childTags", () => {
     const payload = (await childTagsResolver?.(
       parent,
       args,
-      {}
+      {},
     )) as UserTagsConnectionResult;
 
     expect(payload.errors.length).toEqual(0);
     expect(payload.data).not.toBeNull();
     expect(payload.data!.pageInfo.startCursor).toEqual(
-      testChildTag1!._id.toString()
+      testChildTag1!._id.toString(),
     );
     expect(payload.data!.pageInfo.endCursor).toEqual(
-      testChildTag2!._id.toString()
+      testChildTag2!._id.toString(),
     );
     expect(payload.data!.edges[0].node).toEqual(testChildTag1);
   });

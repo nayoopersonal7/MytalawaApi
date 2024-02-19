@@ -1,6 +1,6 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import type { MutationCreateAdvertisementArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateAdvertisementArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -45,7 +45,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createAdvertisement", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
@@ -65,20 +65,20 @@ describe("resolvers -> Mutation -> createAdvertisement", () => {
     };
 
     const { createAdvertisement: createAdvertisementResolver } = await import(
-      "../../../api/resolvers/Mutation/createAdvertisement"
+      "../../../src/resolvers/Mutation/createAdvertisement"
     );
 
     const createdAdvertisementPayload = await createAdvertisementResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createdAdvertisementPayload).toHaveProperty("name", "myad");
 
     expect(createdAdvertisementPayload).toHaveProperty(
       "link",
-      "https://www.example.com"
+      "https://www.example.com",
     );
 
     expect(createdAdvertisementPayload).toHaveProperty("type", "POPUP");

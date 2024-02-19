@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { Types } from "mongoose";
 import type mongoose from "mongoose";
-import { addOrganizationCustomField } from "../../../api/resolvers/Mutation/addOrganizationCustomField";
+import { addOrganizationCustomField } from "../../../src/resolvers/Mutation/addOrganizationCustomField";
 import {
   createTestUser,
   createTestUserAndOrganization,
@@ -16,7 +16,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -45,18 +45,18 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     const newCustomField = await addOrganizationCustomField?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(newCustomField?.name).toBe("testName");
     expect(newCustomField?.type).toBe("testType");
     expect(newCustomField?.organizationId.toString()).toBe(
-      testOrganization?._id.toString()
+      testOrganization?._id.toString(),
     );
   });
 
   it("should throw error when user attempting to add custom field is not an admin", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -77,13 +77,13 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
     }
   });
 
   it("should throw error when customfield name is missing", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -101,13 +101,13 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(CUSTOM_FIELD_NAME_MISSING.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${CUSTOM_FIELD_NAME_MISSING.MESSAGE}`
+        `Translated ${CUSTOM_FIELD_NAME_MISSING.MESSAGE}`,
       );
     }
   });
 
   it("should throw error when customfield type is missing", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -125,13 +125,13 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(CUSTOM_FIELD_TYPE_MISSING.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${CUSTOM_FIELD_TYPE_MISSING.MESSAGE}`
+        `Translated ${CUSTOM_FIELD_TYPE_MISSING.MESSAGE}`,
       );
     }
   });
 
   it("should throw an error if user is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -153,12 +153,12 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
   it("should throw an error if organization is not found", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -175,10 +175,10 @@ describe("resolvers => Mutation => addOrganizationCustomField", () => {
       await addOrganizationCustomField?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenLastCalledWith(
-        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE
+        ORGANIZATION_NOT_FOUND_ERROR.MESSAGE,
       );
       expect(error.message).toEqual(
-        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${ORGANIZATION_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });

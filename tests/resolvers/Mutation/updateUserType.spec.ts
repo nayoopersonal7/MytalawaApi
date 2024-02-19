@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User } from "../../../api/models";
-import type { MutationUpdateUserTypeArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { MutationUpdateUserTypeArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   USER_NOT_AUTHORIZED_SUPERADMIN,
   USER_NOT_FOUND_ERROR,
   SUPERADMIN_CANT_CHANGE_OWN_ROLE,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -37,13 +37,13 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
 describe("resolvers -> Mutation -> updateUserType", () => {
   it(`throws NotFoundError if no user exists with _id === context.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -60,20 +60,20 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../api/resolvers/Mutation/updateUserType"
+        "../../../src/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws USER not super admin error if no user with _id === context.userId is not a SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -90,20 +90,20 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../api/resolvers/Mutation/updateUserType"
+        "../../../src/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_SUPERADMIN.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if no user exists with _id === args.data.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -118,7 +118,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       const args: MutationUpdateUserTypeArgs = {
@@ -132,20 +132,20 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../api/resolvers/Mutation/updateUserType"
+        "../../../src/resolvers/Mutation/updateUserType"
       );
 
       await updateUserTypeResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws SUPERADMIN_CANT_CHANGE_OWN_ROLE_ERROR if the user is a superadmin and tries to downgrade their own role`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -162,21 +162,21 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       };
 
       const { updateUserType: updateUserTypeResolver } = await import(
-        "../../../api/resolvers/Mutation/updateUserType"
+        "../../../src/resolvers/Mutation/updateUserType"
       );
       await updateUserTypeResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(SUPERADMIN_CANT_CHANGE_OWN_ROLE.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${SUPERADMIN_CANT_CHANGE_OWN_ROLE.MESSAGE}`
+        `Translated ${SUPERADMIN_CANT_CHANGE_OWN_ROLE.MESSAGE}`,
       );
     }
   });
 
   it(`updates user.userType of user with _id === args.data.id to args.data.userType`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     await User.updateOne(
@@ -188,7 +188,7 @@ describe("resolvers -> Mutation -> updateUserType", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const args: MutationUpdateUserTypeArgs = {
@@ -202,13 +202,13 @@ describe("resolvers -> Mutation -> updateUserType", () => {
     };
 
     const { updateUserType: updateUserTypeResolver } = await import(
-      "../../../api/resolvers/Mutation/updateUserType"
+      "../../../src/resolvers/Mutation/updateUserType"
     );
 
     const updateUserTypePayload = await updateUserTypeResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(updateUserTypePayload).toEqual(true);

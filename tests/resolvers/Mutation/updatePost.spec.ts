@@ -1,14 +1,14 @@
 import "dotenv/config";
 import { Types } from "mongoose";
-import { Post } from "../../../api/models";
-import type { MutationUpdatePostArgs } from "../../../api/types/generatedGraphQLTypes";
-import { connect, disconnect } from "../../../api/db";
-import { updatePost as updatePostResolver } from "../../../api/resolvers/Mutation/updatePost";
+import { Post } from "../../../src/models";
+import type { MutationUpdatePostArgs } from "../../../src/types/generatedGraphQLTypes";
+import { connect, disconnect } from "../../../src/db";
+import { updatePost as updatePostResolver } from "../../../src/resolvers/Mutation/updatePost";
 import {
   LENGTH_VALIDATION_ERROR,
   POST_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -30,9 +30,9 @@ beforeEach(async () => {
   testPost = temp[2];
   testPost2 = await createTestSinglePost(testUser?.id, testOrganization?.id);
 
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 afterEach(async () => {
@@ -69,7 +69,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
 
       await Post.updateOne(
         { _id: testPost?._id },
-        { $set: { creatorId: Types.ObjectId().toString() } }
+        { $set: { creatorId: Types.ObjectId().toString() } },
       );
 
       await updatePostResolver?.({}, args, context);
@@ -145,9 +145,9 @@ describe("resolvers -> Mutation -> updatePost", () => {
     expect(updatePostPayload).toEqual(testUpdatePostPayload);
   });
   it(`throws String Length Validation error if title is greater than 256 characters`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdatePostArgs = {
@@ -166,20 +166,20 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../api/resolvers/Mutation/updatePost"
+        "../../../src/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `${LENGTH_VALIDATION_ERROR.MESSAGE} 256 characters in title`
+        `${LENGTH_VALIDATION_ERROR.MESSAGE} 256 characters in title`,
       );
     }
   });
   it(`throws String Length Validation error if text is greater than 500 characters`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdatePostArgs = {
@@ -197,21 +197,21 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../api/resolvers/Mutation/updatePost"
+        "../../../src/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `${LENGTH_VALIDATION_ERROR.MESSAGE} 500 characters in information`
+        `${LENGTH_VALIDATION_ERROR.MESSAGE} 500 characters in information`,
       );
     }
   });
 
   it("throws error if title is provided and post is not pinned", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdatePostArgs = {
@@ -227,21 +227,21 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../api/resolvers/Mutation/updatePost"
+        "../../../src/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Post needs to be pinned inorder to add a title`
+        `Post needs to be pinned inorder to add a title`,
       );
     }
   });
 
   it(`throws error if title is not provided and post is pinned`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdatePostArgs = {
@@ -256,7 +256,7 @@ describe("resolvers -> Mutation -> updatePost", () => {
       };
 
       const { updatePost: updatePostResolver } = await import(
-        "../../../api/resolvers/Mutation/updatePost"
+        "../../../src/resolvers/Mutation/updatePost"
       );
 
       await updatePostResolver?.({}, args, context);

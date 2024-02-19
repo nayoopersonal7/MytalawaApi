@@ -1,16 +1,16 @@
 import "dotenv/config";
-import { organizationsMemberConnection as organizationsMemberConnectionResolver } from "../../../api/resolvers/Query/organizationsMemberConnection";
-import type { InterfaceOrganization, InterfaceUser } from "../../../api/models";
-import { Organization, User } from "../../../api/models";
+import { organizationsMemberConnection as organizationsMemberConnectionResolver } from "../../../src/resolvers/Query/organizationsMemberConnection";
+import type { InterfaceOrganization, InterfaceUser } from "../../../src/models";
+import { Organization, User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { QueryOrganizationsMemberConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryOrganizationsMemberConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
 
 import { nanoid } from "nanoid";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { BASE_URL } from "../../../api/constants";
+import { BASE_URL } from "../../../src/constants";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUsers: (InterfaceUser & Document<any, any, InterfaceUser>)[];
@@ -65,7 +65,7 @@ beforeAll(async () => {
         adminFor: testOrganization._id,
         joinedOrganizations: testOrganization._id,
       },
-    }
+    },
   );
 
   await User.updateOne(
@@ -77,7 +77,7 @@ beforeAll(async () => {
         adminFor: testOrganization._id,
         joinedOrganizations: testOrganization._id,
       },
-    }
+    },
   );
 
   await User.updateOne(
@@ -89,7 +89,7 @@ beforeAll(async () => {
         adminFor: [testOrganization._id],
         joinedOrganizations: [testOrganization._id],
       },
-    }
+    },
   );
 });
 
@@ -797,7 +797,7 @@ describe("resolvers -> Query -> organizationsMemberConnection", () => {
       await organizationsMemberConnectionResolver?.({}, args, {});
     } catch (error: any) {
       expect(error).toEqual(
-        "Missing Skip parameter. Set it to either 0 or some other value"
+        "Missing Skip parameter. Set it to either 0 or some other value",
       );
     }
   });
@@ -873,7 +873,7 @@ describe("resolvers -> Query -> organizationsMemberConnection", () => {
         $set: {
           image: `image/image.png`,
         },
-      }
+      },
     );
     const where = {
       joinedOrganizations: {
@@ -937,7 +937,7 @@ describe("resolvers -> Query -> organizationsMemberConnection", () => {
         $set: {
           image: `image/image.png`,
         },
-      }
+      },
     );
     const where = {
       joinedOrganizations: {

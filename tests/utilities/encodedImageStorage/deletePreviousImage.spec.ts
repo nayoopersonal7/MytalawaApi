@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type mongoose from "mongoose";
 import { connect, disconnect } from "../../helpers/db";
-import { deletePreviousImage } from "../../../api/utilities/encodedImageStorage/deletePreviousImage";
-import { EncodedImage } from "../../../api/models/EncodedImage";
-import { uploadEncodedImage } from "../../../api/utilities/encodedImageStorage/uploadEncodedImage";
+import { deletePreviousImage } from "../../../src/utilities/encodedImageStorage/deletePreviousImage";
+import { EncodedImage } from "../../../src/models/EncodedImage";
+import { uploadEncodedImage } from "../../../src/utilities/encodedImageStorage/uploadEncodedImage";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testPreviousImagePath: string;

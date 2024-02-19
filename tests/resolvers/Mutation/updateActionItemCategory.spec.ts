@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationUpdateActionItemCategoryArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationUpdateActionItemCategoryArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ADMIN,
   ACTION_ITEM_CATEGORY_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type {
@@ -15,10 +15,10 @@ import type {
   TestUserType,
 } from "../../helpers/userAndOrg";
 
-import { updateActionItemCategory as updateActionItemCategoryResolver } from "../../../api/resolvers/Mutation/updateActionItemCategory";
+import { updateActionItemCategory as updateActionItemCategoryResolver } from "../../../src/resolvers/Mutation/updateActionItemCategory";
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
 import { createTestCategory } from "../../helpers/actionItemCategory";
-import { User } from "../../../api/models";
+import { User } from "../../../src/models";
 
 let randomUser: TestUserType;
 let testUser: TestUserType;
@@ -28,9 +28,9 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 
   randomUser = await createTestUser();
@@ -80,7 +80,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
       await updateActionItemCategoryResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        ACTION_ITEM_CATEGORY_NOT_FOUND_ERROR.MESSAGE
+        ACTION_ITEM_CATEGORY_NOT_FOUND_ERROR.MESSAGE,
       );
     }
   });
@@ -121,7 +121,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
     const updatedCategory = await updateActionItemCategoryResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(updatedCategory).toEqual(
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
         organizationId: testOrganization?._id,
         name: "updatedDefault",
         isDisabled: true,
-      })
+      }),
     );
   });
 
@@ -143,7 +143,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const args: MutationUpdateActionItemCategoryArgs = {
@@ -161,7 +161,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
     const updatedCategory = await updateActionItemCategoryResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(updatedCategory).toEqual(
@@ -169,7 +169,7 @@ describe("resolvers -> Mutation -> updateActionItemCategoryResolver", () => {
         organizationId: testOrganization?._id,
         name: "updatedDefault",
         isDisabled: false,
-      })
+      }),
     );
   });
 });

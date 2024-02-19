@@ -1,15 +1,15 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../api/models";
-import type { MutationSendMembershipRequestArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../src/models";
+import type { MutationSendMembershipRequestArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { sendMembershipRequest as sendMembershipRequestResolver } from "../../../api/resolvers/Mutation/sendMembershipRequest";
+import { sendMembershipRequest as sendMembershipRequestResolver } from "../../../src/resolvers/Mutation/sendMembershipRequest";
 import {
   MEMBERSHIP_REQUEST_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
@@ -37,7 +37,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> sendMembershipRequest", () => {
   it(`throws NotFoundError if no organization exists with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -51,7 +51,7 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
       };
 
       const { sendMembershipRequest: sendMembershipRequestResolver } =
-        await import("../../../api/resolvers/Mutation/sendMembershipRequest");
+        await import("../../../src/resolvers/Mutation/sendMembershipRequest");
 
       await sendMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -62,7 +62,7 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
 
   it(`throws NotFoundError if a membershipRequest with fields user === context.userId
   and organization === args.organizationId does not exists`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -76,7 +76,7 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
       };
 
       const { sendMembershipRequest: sendMembershipRequestResolver } =
-        await import("../../../api/resolvers/Mutation/sendMembershipRequest");
+        await import("../../../src/resolvers/Mutation/sendMembershipRequest");
 
       await sendMembershipRequestResolver?.({}, args, context);
     } catch (error: any) {
@@ -98,7 +98,7 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
         $set: {
           membershipRequests: [],
         },
-      }
+      },
     );
 
     await User.updateOne(
@@ -109,7 +109,7 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
         $set: {
           membershipRequests: [],
         },
-      }
+      },
     );
 
     const args: MutationSendMembershipRequestArgs = {
@@ -123,14 +123,14 @@ describe("resolvers -> Mutation -> sendMembershipRequest", () => {
     const sendMembershipRequestPayload = await sendMembershipRequestResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(sendMembershipRequestPayload).toEqual(
       expect.objectContaining({
         user: testUser?._id,
         organization: testOrganization?._id,
-      })
+      }),
     );
   });
 });

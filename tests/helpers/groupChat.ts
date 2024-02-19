@@ -2,8 +2,8 @@ import { nanoid } from "nanoid";
 import type {
   InterfaceGroupChat,
   InterfaceGroupChatMessage,
-} from "../../api/models";
-import { GroupChat, GroupChatMessage } from "../../api/models";
+} from "../../src/models";
+import { GroupChat, GroupChatMessage } from "../../src/models";
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
 import type { Document } from "mongoose";
@@ -39,7 +39,7 @@ export const createTestGroupChatMessage = async (): Promise<
     TestUserType,
     TestOrganizationType,
     TestGroupChatType,
-    TestGroupChatMessageType
+    TestGroupChatMessageType,
   ]
 > => {
   const [testUser, testOrganization, testGroupChat] =

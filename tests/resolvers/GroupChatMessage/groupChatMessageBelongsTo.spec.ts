@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { groupChatMessageBelongsTo as groupChatMessageBelongsToResolver } from "../../../api/resolvers/GroupChatMessage/groupChatMessageBelongsTo";
+import { groupChatMessageBelongsTo as groupChatMessageBelongsToResolver } from "../../../src/resolvers/GroupChatMessage/groupChatMessageBelongsTo";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { GroupChat } from "../../../api/models";
+import { GroupChat } from "../../../src/models";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { TestGroupChatMessageType } from "../../helpers/groupChat";
 import { createTestGroupChatMessage } from "../../helpers/groupChat";

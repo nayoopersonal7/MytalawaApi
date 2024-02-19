@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-import { User } from "../../../api/models";
-import type { MutationUpdateLanguageArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User } from "../../../src/models";
+import type { MutationUpdateLanguageArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
@@ -30,7 +30,7 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  vi.doUnmock("../../../api/constants");
+  vi.doUnmock("../../../src/constants");
   vi.resetModules();
 });
 
@@ -45,13 +45,13 @@ describe("resolvers -> Mutation -> updateLanguage", () => {
     };
 
     const { updateLanguage: updateLanguageResolver } = await import(
-      "../../../api/resolvers/Mutation/updateLanguage"
+      "../../../src/resolvers/Mutation/updateLanguage"
     );
 
     const updateLanguagePayload = await updateLanguageResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     const testUpdateLanguagePayload = await User.findOne({

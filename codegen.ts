@@ -2,10 +2,10 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   // Points to our schema and the additional scalar Upload which is added by Apollo-Server at runtime
-  schema: ["./api/typeDefs/**/*.ts"],
+  schema: ["./src/typeDefs/**/*.ts"],
 
   generates: {
-    "./api/types/generatedGraphQLTypes.ts": {
+    "./src/types/generatedGraphQLTypes.ts": {
       plugins: ["typescript", "typescript-resolvers"],
 
       config: {
@@ -30,6 +30,8 @@ const config: CodegenConfig = {
           ActionItemCategory:
             "../models/ActionItemCategory#InterfaceActionItemCategory",
 
+          AgendaCategory: "../models/AgendaCategory#InterfaceAgendaCategory",
+
           CheckIn: "../models/CheckIn#InterfaceCheckIn",
 
           MessageChat: "../models/MessageChat#InterfaceMessageChat",
@@ -46,6 +48,9 @@ const config: CodegenConfig = {
           Event: "../models/Event#InterfaceEvent",
 
           EventAttendee: "../models/EventAttendee#InterfaceEventAttendee",
+
+          UserFamily: "../models/userFamily#InterfaceUserFamily",
+          EventVolunteer: "../models/EventVolunteer#InterfaceEventVolunteer",
 
           Feedback: "../models/Feedback#InterfaceFeedback",
 

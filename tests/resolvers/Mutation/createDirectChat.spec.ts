@@ -1,13 +1,13 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationCreateDirectChatArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateDirectChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -41,12 +41,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createDirectChat", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError message if no organization exists  with _id === args.data.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -62,7 +62,7 @@ describe("resolvers -> Mutation -> createDirectChat", () => {
       };
 
       const { createDirectChat: createDirectChatResolver } = await import(
-        "../../../api/resolvers/Mutation/createDirectChat"
+        "../../../src/resolvers/Mutation/createDirectChat"
       );
       await createDirectChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -72,7 +72,7 @@ describe("resolvers -> Mutation -> createDirectChat", () => {
   });
 
   it(`throws NotFoundError message if no user exists with _id === context.userIds`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -89,7 +89,7 @@ describe("resolvers -> Mutation -> createDirectChat", () => {
       };
 
       const { createDirectChat: createDirectChatResolver } = await import(
-        "../../../api/resolvers/Mutation/createDirectChat"
+        "../../../src/resolvers/Mutation/createDirectChat"
       );
       await createDirectChatResolver?.({}, args, context);
     } catch (error: any) {
@@ -109,13 +109,13 @@ describe("resolvers -> Mutation -> createDirectChat", () => {
       userId: testUser?.id,
     };
     const { createDirectChat: createDirectChatResolver } = await import(
-      "../../../api/resolvers/Mutation/createDirectChat"
+      "../../../src/resolvers/Mutation/createDirectChat"
     );
 
     const createDirectChatPayload = await createDirectChatResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createDirectChatPayload).toEqual(
@@ -123,7 +123,7 @@ describe("resolvers -> Mutation -> createDirectChat", () => {
         creatorId: testUser?._id,
         users: [testUser?._id],
         organization: testOrganization?._id,
-      })
+      }),
     );
   });
 });

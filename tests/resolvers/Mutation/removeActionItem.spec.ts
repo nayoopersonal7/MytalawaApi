@@ -1,27 +1,27 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationRemoveActionItemArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationRemoveActionItemArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import {
   USER_NOT_FOUND_ERROR,
   ACTION_ITEM_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   EVENT_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import {
   createTestUser,
   createTestUserAndOrganization,
 } from "../../helpers/userAndOrg";
-import { removeActionItem as removeActionItemResolver } from "../../../api/resolvers/Mutation/removeActionItem";
+import { removeActionItem as removeActionItemResolver } from "../../../src/resolvers/Mutation/removeActionItem";
 import type {
   TestOrganizationType,
   TestUserType,
 } from "../../helpers/userAndOrg";
 
 import type { TestActionItemCategoryType } from "../../helpers/actionItemCategory";
-import { ActionItem, Event, User } from "../../../api/models";
+import { ActionItem, Event, User } from "../../../src/models";
 import type { TestActionItemType } from "../../helpers/actionItem";
 import {
   createNewTestActionItem,
@@ -42,9 +42,9 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 
   randomUser = await createTestUser();
@@ -132,14 +132,14 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
     const removedActionItemPayload = await removeActionItemResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     // console.log(removedActionItemPayload);
     expect(removedActionItemPayload).toEqual(
       expect.objectContaining({
         assigneeId: assignedTestUser?._id,
-      })
+      }),
     );
   });
 
@@ -159,7 +159,7 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const args: MutationRemoveActionItemArgs = {
@@ -173,13 +173,13 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
     const removedActionItemPayload = await removeActionItemResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(removedActionItemPayload).toEqual(
       expect.objectContaining({
         assigneeId: randomUser?._id,
-      })
+      }),
     );
   });
 
@@ -199,7 +199,7 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     try {
@@ -233,7 +233,7 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const args: MutationRemoveActionItemArgs = {
@@ -247,13 +247,13 @@ describe("resolvers -> Mutation -> removeActionItem", () => {
     const removedActionItemPayload = await removeActionItemResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(removedActionItemPayload).toEqual(
       expect.objectContaining({
         assigneeId: randomUser?._id,
-      })
+      }),
     );
   });
 });

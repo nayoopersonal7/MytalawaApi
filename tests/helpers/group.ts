@@ -1,7 +1,7 @@
 import type { TestOrganizationType, TestUserType } from "./userAndOrg";
 import { createTestUserAndOrganization } from "./userAndOrg";
-import type { InterfaceGroup } from "../../api/models";
-import { Group } from "../../api/models";
+import type { InterfaceGroup } from "../../src/models";
+import { Group } from "../../src/models";
 import type { Document } from "mongoose";
 
 export type TestGroupType =

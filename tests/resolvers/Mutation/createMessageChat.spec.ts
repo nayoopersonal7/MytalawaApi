@@ -2,12 +2,12 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceUser, InterfaceMessageChat } from "../../../api/models";
-import { User } from "../../../api/models";
-import type { MutationCreateMessageChatArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { InterfaceUser, InterfaceMessageChat } from "../../../src/models";
+import { User } from "../../../src/models";
+import type { MutationCreateMessageChatArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import { nanoid } from "nanoid";
 import {
   beforeAll,
@@ -49,12 +49,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> createMessageChat", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === args.data.receiver`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
@@ -72,13 +72,13 @@ describe("resolvers -> Mutation -> createMessageChat", () => {
       };
 
       const { createMessageChat: createMessageChatResolver } = await import(
-        "../../../api/resolvers/Mutation/createMessageChat"
+        "../../../src/resolvers/Mutation/createMessageChat"
       );
       await createMessageChatResolver?.({}, args, context);
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
@@ -96,7 +96,7 @@ describe("resolvers -> Mutation -> createMessageChat", () => {
         _action: "CHAT_CHANNEL",
         _payload: {
           directMessageChat: InterfaceMessageChat;
-        }
+        },
       ): {
         _action: string;
         _payload: { directMessageChat: InterfaceMessageChat };
@@ -111,12 +111,12 @@ describe("resolvers -> Mutation -> createMessageChat", () => {
     };
 
     const { createMessageChat: createMessageChatResolver } = await import(
-      "../../../api/resolvers/Mutation/createMessageChat"
+      "../../../src/resolvers/Mutation/createMessageChat"
     );
     const createMessageChatPayload = await createMessageChatResolver?.(
       {},
       args,
-      context
+      context,
     );
 
     expect(createMessageChatPayload).toEqual(
@@ -125,7 +125,7 @@ describe("resolvers -> Mutation -> createMessageChat", () => {
         receiver: testUsers[1]._id,
         message: "message",
         languageBarrier: false,
-      })
+      }),
     );
   });
 });

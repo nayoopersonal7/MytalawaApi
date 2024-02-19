@@ -1,8 +1,8 @@
-import type { InterfaceOrganization } from "../../../api/models";
-import { SampleData, Organization } from "../../../api/models";
-import { generateUserData } from "../../../api/utilities/createSampleOrganizationUtil";
+import type { InterfaceOrganization } from "../../../src/models";
+import { SampleData, Organization } from "../../../src/models";
+import { generateUserData } from "../../../src/utilities/createSampleOrganizationUtil";
 import { expect, describe, it, vi, afterAll, beforeAll } from "vitest";
-import { removeSampleOrganization } from "../../../api/resolvers/Mutation/removeSampleOrganization";
+import { removeSampleOrganization } from "../../../src/resolvers/Mutation/removeSampleOrganization";
 import type mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 import { connect, disconnect } from "../../helpers/db";
@@ -10,7 +10,7 @@ import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 /* eslint-disable */
 const ORGANIZATION_ID = ((): InterfaceOrganization &
   mongoose.Document<any, any, InterfaceOrganization> => {
@@ -57,9 +57,9 @@ afterAll(async () => {
 
 describe("Remove Sample Organization Resolver - User Authorization", async () => {
   it("should NOT throw error when user is ADMIN", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const admin = generateUserData(ORGANIZATION_ID.toString(), "ADMIN");
@@ -72,15 +72,15 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
     const adminResult = await removeSampleOrganization!(
       parent,
       args,
-      adminContext
+      adminContext,
     );
     expect(adminResult).toBe(true);
   });
 
   it("should not throw error when user is a SUPERADMIN", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const _id = faker.database.mongodbObjectId();
@@ -113,7 +113,7 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
     sampleDocument.save();
     const superadmin = generateUserData(
       organization._id.toString(),
-      "SUPERADMIN"
+      "SUPERADMIN",
     );
 
     (await superadmin).save();
@@ -125,16 +125,16 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
     const superAdminResult = await removeSampleOrganization!(
       parent,
       args,
-      superAdminContext
+      superAdminContext,
     );
 
     expect(superAdminResult).toBe(true);
   });
 
   it("should throw unauthorized error for non-admins", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const _id = faker.database.mongodbObjectId();
@@ -179,9 +179,9 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
   });
 
   it("should throw user not found error when user is non-existent", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const randomUserId = faker.database.mongodbObjectId();
@@ -198,9 +198,9 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
   });
 
   it("should NOT throw error when user is ADMIN", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const randomOrganizationId = faker.database.mongodbObjectId();
@@ -220,9 +220,9 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
   });
 
   it("should NOT throw error when organization doesn't exist", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const admin = generateUserData(ORGANIZATION_ID.toString(), "ADMIN");
@@ -242,9 +242,9 @@ describe("Remove Sample Organization Resolver - User Authorization", async () =>
   });
 
   it("should throw error when the collection name is not a valid one", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const admin = generateUserData(ORGANIZATION_ID.toString(), "ADMIN");

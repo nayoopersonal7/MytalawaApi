@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { membershipRequests as membershipRequestsResolver } from "../../../api/resolvers/Organization/membershipRequests";
+import { membershipRequests as membershipRequestsResolver } from "../../../src/resolvers/Organization/membershipRequests";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../api/models";
+import { User, Organization, MembershipRequest } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type {
   TestOrganizationType,
@@ -36,7 +36,7 @@ beforeAll(async () => {
     },
     {
       new: true,
-    }
+    },
   );
 
   testOrganization = await Organization.findOneAndUpdate(
@@ -50,7 +50,7 @@ beforeAll(async () => {
     },
     {
       new: true,
-    }
+    },
   );
 });
 
@@ -66,7 +66,7 @@ describe("resolvers -> Organization -> membershipRequests", () => {
       const membershipRequestsPayload = await membershipRequestsResolver?.(
         parent,
         {},
-        {}
+        {},
       );
 
       const membershipRequests = await MembershipRequest.find({

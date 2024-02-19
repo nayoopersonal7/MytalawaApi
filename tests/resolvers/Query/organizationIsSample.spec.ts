@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type mongoose from "mongoose";
-import { isSampleOrganization } from "../../../api/resolvers/Query/organizationIsSample";
-import { Organization, SampleData } from "../../../api/models";
+import { isSampleOrganization } from "../../../src/resolvers/Query/organizationIsSample";
+import { Organization, SampleData } from "../../../src/models";
 import { faker } from "@faker-js/faker";
-import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../api/constants";
+import { ORGANIZATION_NOT_FOUND_ERROR } from "../../../src/constants";
 import { connect, disconnect } from "../../helpers/db";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -18,9 +18,9 @@ afterAll(async () => {
 
 describe("determine whether organization is a sample or not", async () => {
   it("isSampleOrganization should return true if organizationId exists in SampleData collection", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const _id = faker.database.mongodbObjectId();
@@ -66,9 +66,9 @@ describe("determine whether organization is a sample or not", async () => {
   });
 
   it("isSampleOrganization should return false if organizationId does not exist in SampleData collection", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const _id = faker.database.mongodbObjectId();
@@ -106,9 +106,9 @@ describe("determine whether organization is a sample or not", async () => {
 
 describe("ensure organization exists in organization collection", async () => {
   it("should throw error when organization doesn't exist in the 'Organization' collection", async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
 
     const randomId = faker.database.mongodbObjectId();

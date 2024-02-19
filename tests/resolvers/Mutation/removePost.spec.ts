@@ -1,14 +1,14 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { MutationRemovePostArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationRemovePostArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
 import {
   POST_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
 import type { TestPostType } from "../../helpers/posts";
@@ -22,7 +22,7 @@ import {
   vi,
   afterEach,
 } from "vitest";
-import { Post } from "../../../api/models";
+import { Post } from "../../../src/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -41,15 +41,15 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> removePost", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
     vi.resetAllMocks();
   });
 
   it(`throws NotFoundError if current user with _id === context.userId does not exist`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     try {
@@ -62,21 +62,21 @@ describe("resolvers -> Mutation -> removePost", () => {
       };
 
       const { removePost: removePostResolver } = await import(
-        "../../../api/resolvers/Mutation/removePost"
+        "../../../src/resolvers/Mutation/removePost"
       );
 
       await removePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws NotFoundError if no post exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     try {
@@ -89,21 +89,21 @@ describe("resolvers -> Mutation -> removePost", () => {
       };
 
       const { removePost: removePostResolver } = await import(
-        "../../../api/resolvers/Mutation/removePost"
+        "../../../src/resolvers/Mutation/removePost"
       );
 
       await removePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${POST_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${POST_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`throws UnauthorizedError if a non-creator / non-superadmin / non-admin of the org tries to delete the post`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     try {
@@ -116,21 +116,21 @@ describe("resolvers -> Mutation -> removePost", () => {
       };
 
       const { removePost: removePostResolver } = await import(
-        "../../../api/resolvers/Mutation/removePost"
+        "../../../src/resolvers/Mutation/removePost"
       );
 
       await removePostResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ERROR.MESSAGE}`,
       );
     }
   });
 
   it(`deletes the post with no image and video with _id === args.id and returns it`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
 
     const args: MutationRemovePostArgs = {
@@ -142,7 +142,7 @@ describe("resolvers -> Mutation -> removePost", () => {
     };
 
     const { removePost: removePostResolver } = await import(
-      "../../../api/resolvers/Mutation/removePost"
+      "../../../src/resolvers/Mutation/removePost"
     );
 
     const removePostPayload = await removePostResolver?.({}, args, context);
@@ -150,12 +150,12 @@ describe("resolvers -> Mutation -> removePost", () => {
   });
 
   it(`deletes the post with image with _id === args.id and returns it`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
     const deletePreviousImage = await import(
-      "../../../api/utilities/encodedImageStorage/deletePreviousImage"
+      "../../../src/utilities/encodedImageStorage/deletePreviousImage"
     );
     const deleteImageSpy = vi
       .spyOn(deletePreviousImage, "deletePreviousImage")
@@ -172,7 +172,7 @@ describe("resolvers -> Mutation -> removePost", () => {
           imageUrl: "images/fakeImagePathimage.png",
         },
       },
-      { new: true }
+      { new: true },
     ).lean();
 
     const args: MutationRemovePostArgs = {
@@ -184,7 +184,7 @@ describe("resolvers -> Mutation -> removePost", () => {
     };
 
     const { removePost: removePostResolver } = await import(
-      "../../../api/resolvers/Mutation/removePost"
+      "../../../src/resolvers/Mutation/removePost"
     );
 
     const removePostPayload = await removePostResolver?.({}, args, context);
@@ -193,12 +193,12 @@ describe("resolvers -> Mutation -> removePost", () => {
   });
 
   it(`deletes the post with video with _id === args.id and returns it`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementationOnce(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
     const deletePreviousVideo = await import(
-      "../../../api/utilities/encodedVideoStorage/deletePreviousVideo"
+      "../../../src/utilities/encodedVideoStorage/deletePreviousVideo"
     );
     const deleteVideoSpy = vi
       .spyOn(deletePreviousVideo, "deletePreviousVideo")
@@ -215,7 +215,7 @@ describe("resolvers -> Mutation -> removePost", () => {
           videoUrl: "videos/fakeVideoPathvideo.png",
         },
       },
-      { new: true }
+      { new: true },
     ).lean();
 
     const args: MutationRemovePostArgs = {
@@ -227,7 +227,7 @@ describe("resolvers -> Mutation -> removePost", () => {
     };
 
     const { removePost: removePostResolver } = await import(
-      "../../../api/resolvers/Mutation/removePost"
+      "../../../src/resolvers/Mutation/removePost"
     );
 
     const removePostPayload = await removePostResolver?.({}, args, context);

@@ -1,4 +1,5 @@
 # Talawa API
+
 💬 Join the community on Slack. The link can be found in the `Talawa` [README.md](https://github.com/PalisadoesFoundation/talawa) file.
 
 [![N|Solid](public/markdown/images/talawa-logo-lite-200x200.png)](https://github.com/PalisadoesFoundation/talawa-api)
@@ -12,9 +13,9 @@ Talawa is a modular open source project to manage group activities of both non-p
 
 Core features include:
 
-1.  Membership manages,dsdment
+1.  Membership management
 2.  Groups management
-3.  Event registradlsmdsdsdtions
+3.  Event registrations
 4.  Recurring meetings
 5.  Facilities registrations
 
@@ -24,11 +25,10 @@ Core features include:
 
 <!-- toc -->
 
-- [Talawa API](#talawa-api)
-  - [Talawa Components](#talawa-components)
-  - [Documentation](#documentation)
-  - [Installation](#installation)
-  - [Image Upload](#image-upload)
+- [Talawa Components](#talawa-components)
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [Image Upload](#image-upload)
 
 <!-- tocstop -->
 

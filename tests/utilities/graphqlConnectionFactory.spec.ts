@@ -5,11 +5,11 @@ import {
   getFilterObject,
   getSortingObject,
   generateConnectionObject,
-} from "../../api/utilities/graphqlConnectionFactory";
-import { type CursorPaginationInput } from "../../api/types/generatedGraphQLTypes";
+} from "../../src/utilities/graphqlConnectionFactory";
+import { type CursorPaginationInput } from "../../src/types/generatedGraphQLTypes";
 import { Types } from "mongoose";
 import { nanoid } from "nanoid";
-import { MAXIMUM_FETCH_LIMIT } from "../../api/constants";
+import { MAXIMUM_FETCH_LIMIT } from "../../src/constants";
 
 describe("utilities -> graphqlConnectionFactory -> graphqlConnectionFactory", () => {
   it(`Returns a connection object with default/pre-defined fields which
@@ -168,7 +168,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> F
       fetchedObjects.slice(0, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -196,7 +196,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> F
       fetchedObjects.slice(0, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -225,7 +225,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> F
       fetchedObjects.slice(1, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -254,7 +254,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> F
       fetchedObjects.slice(1, 1 + getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -309,7 +309,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> B
       reversedFetchedObjects.slice(0, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -337,7 +337,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> B
       reversedFetchedObjects.slice(0, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -366,7 +366,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> B
       reversedFetchedObjects.slice(1, getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({
@@ -395,7 +395,7 @@ describe("utilities -> graphqlConnectionFactory -> generateConnectionObject -> B
       reversedFetchedObjects.slice(1, 1 + getLimit(args.limit)),
       (x) => ({
         _id: x._id,
-      })
+      }),
     );
 
     expect(payload).toMatchObject({

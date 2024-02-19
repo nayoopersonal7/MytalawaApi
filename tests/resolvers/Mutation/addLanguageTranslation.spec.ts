@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { addLanguageTranslation as addLanguageTranslationResolver } from "../../../api/resolvers/Mutation/addLanguageTranslation";
+import { addLanguageTranslation as addLanguageTranslationResolver } from "../../../src/resolvers/Mutation/addLanguageTranslation";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import type { MutationAddLanguageTranslationArgs } from "../../../api/types/generatedGraphQLTypes";
-import { Language } from "../../../api/models";
+import type { MutationAddLanguageTranslationArgs } from "../../../src/types/generatedGraphQLTypes";
+import { Language } from "../../../src/models";
 import { nanoid } from "nanoid";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 
@@ -59,9 +59,9 @@ describe("resolvers -> Mutation -> addLanguageTranslation", () => {
 
   it(`throws ConflictError if translation.lang_code === args.data.translation_lang_code
   for language with en === args.data.en_value`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => `Translated ${message}`
+      (message) => `Translated ${message}`,
     );
     try {
       const args: MutationAddLanguageTranslationArgs = testArgs[1];
@@ -93,7 +93,7 @@ describe("resolvers -> Mutation -> addLanguageTranslation", () => {
             value: testArgs[2].data.translation_value,
           }),
         ]),
-      })
+      }),
     );
   });
 });

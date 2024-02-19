@@ -9,13 +9,13 @@ import {
   vi,
 } from "vitest";
 import { connect, disconnect } from "../helpers/db";
-import { USER_NOT_AUTHORIZED_ADMIN } from "../../api/constants";
+import { USER_NOT_AUTHORIZED_ADMIN } from "../../src/constants";
 import type { TestOrganizationType, TestUserType } from "../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../helpers/userAndOrg";
 import mongoose from "mongoose";
-import type { InterfaceOrganization } from "../../api/models";
-import { Organization, User } from "../../api/models";
-import { ApplicationError } from "../../api/libraries/errors";
+import type { InterfaceOrganization } from "../../src/models";
+import { Organization, User } from "../../src/models";
+import { ApplicationError } from "../../src/libraries/errors";
 
 let testUser: TestUserType;
 let testOrganization: TestOrganizationType;
@@ -38,21 +38,21 @@ describe("utilities -> adminCheck", () => {
   });
 
   it("throws error if userIsOrganizationAdmin === false and isUserSuperAdmin === false", async () => {
-    const { requestContext } = await import("../../api/libraries");
+    const { requestContext } = await import("../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
 
     try {
-      const { adminCheck } = await import("../../api/utilities");
+      const { adminCheck } = await import("../../src/utilities");
       await adminCheck(
         testUser?._id,
-        testOrganization ?? ({} as InterfaceOrganization)
+        testOrganization ?? ({} as InterfaceOrganization),
       );
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
     }
     expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
@@ -69,16 +69,16 @@ describe("utilities -> adminCheck", () => {
       {
         new: true,
         upsert: true,
-      }
+      },
     );
 
-    const { adminCheck } = await import("../../api/utilities");
+    const { adminCheck } = await import("../../src/utilities");
 
     await expect(
       adminCheck(
         updatedUser?._id,
-        testOrganization ?? ({} as InterfaceOrganization)
-      )
+        testOrganization ?? ({} as InterfaceOrganization),
+      ),
     ).resolves.not.toThrowError();
   });
 
@@ -93,7 +93,7 @@ describe("utilities -> adminCheck", () => {
       {
         new: true,
         upsert: true,
-      }
+      },
     );
 
     const updatedOrganization = await Organization.findOneAndUpdate(
@@ -108,35 +108,35 @@ describe("utilities -> adminCheck", () => {
       {
         new: true,
         upsert: true,
-      }
+      },
     );
 
-    const { adminCheck } = await import("../../api/utilities");
+    const { adminCheck } = await import("../../src/utilities");
 
     await expect(
       adminCheck(
         updatedUser?._id,
-        updatedOrganization ?? ({} as InterfaceOrganization)
-      )
+        updatedOrganization ?? ({} as InterfaceOrganization),
+      ),
     ).resolves.not.toThrowError();
   });
   it("throws error if user is not found with the specific Id", async () => {
-    const { requestContext } = await import("../../api/libraries");
+    const { requestContext } = await import("../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => `Translated ${message}`);
 
     try {
-      const { adminCheck } = await import("../../api/utilities");
+      const { adminCheck } = await import("../../src/utilities");
       await adminCheck(
         new mongoose.Types.ObjectId(),
-        testOrganization ?? ({} as InterfaceOrganization)
+        testOrganization ?? ({} as InterfaceOrganization),
       );
     } catch (error: unknown) {
       if (!(error instanceof ApplicationError)) return;
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
     }
     expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);

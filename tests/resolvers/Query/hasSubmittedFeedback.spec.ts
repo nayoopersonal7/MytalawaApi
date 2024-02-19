@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
-import type { QueryHasSubmittedFeedbackArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryHasSubmittedFeedbackArgs } from "../../../src/types/generatedGraphQLTypes";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
 import {
@@ -9,10 +9,10 @@ import {
   USER_NOT_FOUND_ERROR,
   USER_NOT_CHECKED_IN,
   USER_NOT_REGISTERED_FOR_EVENT,
-} from "./../../../api/constants";
+} from "./../../../src/constants";
 import { type TestUserType, createTestUser } from "./../../helpers/userAndOrg";
 import { createTestEvent, type TestEventType } from "../../helpers/events";
-import { CheckIn, EventAttendee } from "../../../api/models";
+import { CheckIn, EventAttendee } from "../../../src/models";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let randomTestUser: TestUserType;
@@ -32,7 +32,7 @@ afterAll(async () => {
 
 describe("resolvers -> Query -> hasSubmittedFeedback", () => {
   it(`throws NotFoundError if no user exists with _id === args.userId `, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -47,19 +47,19 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws NotFoundError if no event exists with _id === args.eventId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -74,19 +74,19 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${EVENT_NOT_FOUND_ERROR.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(EVENT_NOT_FOUND_ERROR.MESSAGE);
     }
   });
 
   it(`throws Error if the user is not registered to attend the event`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -101,15 +101,15 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_REGISTERED_FOR_EVENT.MESSAGE}`
+        `Translated ${USER_NOT_REGISTERED_FOR_EVENT.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(
-        USER_NOT_REGISTERED_FOR_EVENT.MESSAGE
+        USER_NOT_REGISTERED_FOR_EVENT.MESSAGE,
       );
     }
   });
@@ -121,7 +121,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
     });
     eventAttendeeId = eventAttendee._id;
 
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
 
     const spy = vi
       .spyOn(requestContext, "translate")
@@ -136,12 +136,12 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
       const context = {};
 
       const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } =
-        await import("../../../api/resolvers/Query/hasSubmittedFeedback");
+        await import("../../../src/resolvers/Query/hasSubmittedFeedback");
 
       await hasSubmittedFeedbackResolver?.({}, args, context);
     } catch (error: any) {
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_CHECKED_IN.MESSAGE}`
+        `Translated ${USER_NOT_CHECKED_IN.MESSAGE}`,
       );
       expect(spy).toHaveBeenLastCalledWith(USER_NOT_CHECKED_IN.MESSAGE);
     }
@@ -165,7 +165,7 @@ describe("resolvers -> Query -> hasSubmittedFeedback", () => {
     const context = {};
 
     const { hasSubmittedFeedback: hasSubmittedFeedbackResolver } = await import(
-      "../../../api/resolvers/Query/hasSubmittedFeedback"
+      "../../../src/resolvers/Query/hasSubmittedFeedback"
     );
 
     const payload = await hasSubmittedFeedbackResolver?.({}, args, context);

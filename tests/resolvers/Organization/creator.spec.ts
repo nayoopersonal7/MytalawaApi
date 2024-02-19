@@ -2,9 +2,9 @@ import "dotenv/config";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
+import { User, Organization } from "../../../src/models";
 
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -37,12 +37,12 @@ afterAll(async () => {
 
 describe("resolvers -> Organization -> creatorId", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no user exists with _id === parent.creatorId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementation((message) => `Translated ${message}`);
@@ -59,13 +59,13 @@ describe("resolvers -> Organization -> creatorId", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       const parent = testOrganization?.toObject();
 
       const { creator: creatorResolver } = await import(
-        "../../../api/resolvers/Organization/creator"
+        "../../../src/resolvers/Organization/creator"
       );
       if (parent) {
         await creatorResolver?.(parent, {}, {});
@@ -73,7 +73,7 @@ describe("resolvers -> Organization -> creatorId", () => {
     } catch (error: any) {
       expect(spy).toHaveBeenCalledWith(USER_NOT_FOUND_ERROR.MESSAGE);
       expect(error.message).toEqual(
-        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`
+        `Translated ${USER_NOT_FOUND_ERROR.MESSAGE}`,
       );
     }
   });
@@ -90,13 +90,13 @@ describe("resolvers -> Organization -> creatorId", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const parent = testOrganization?.toObject();
 
     const { creator: creatorResolver } = await import(
-      "../../../api/resolvers/Organization/creator"
+      "../../../src/resolvers/Organization/creator"
     );
     if (parent) {
       const creatorPayload = await creatorResolver?.(parent, {}, {});

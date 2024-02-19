@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { describe, expect, it } from "vitest";
-import { encodedImageExtentionCheck } from "../../../api/utilities/encodedImageStorage/encodedImageExtensionCheck";
+import { encodedImageExtentionCheck } from "../../../src/utilities/encodedImageStorage/encodedImageExtensionCheck";
 
 describe("src -> utilities -> encodedImageStorage -> ", () => {
   it("should return true when image extension = image/png", () => {

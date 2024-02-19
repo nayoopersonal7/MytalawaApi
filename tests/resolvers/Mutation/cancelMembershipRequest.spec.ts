@@ -1,17 +1,17 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization, MembershipRequest } from "../../../api/models";
-import type { MutationCancelMembershipRequestArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization, MembershipRequest } from "../../../src/models";
+import type { MutationCancelMembershipRequestArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { cancelMembershipRequest as cancelMembershipRequestResolver } from "../../../api/resolvers/Mutation/cancelMembershipRequest";
+import { cancelMembershipRequest as cancelMembershipRequestResolver } from "../../../src/resolvers/Mutation/cancelMembershipRequest";
 import {
   MEMBERSHIP_REQUEST_NOT_FOUND_ERROR,
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestMembershipRequestType } from "../../helpers/membershipRequests";
 import { createTestMembershipRequestAsNew } from "../../helpers/membershipRequests";
@@ -32,9 +32,9 @@ beforeAll(async () => {
   testUser = resultsArray[0];
   testOrganization = resultsArray[1];
   testMembershipRequest = resultsArray[2];
-  const { requestContext } = await import("../../../api/libraries");
+  const { requestContext } = await import("../../../src/libraries");
   vi.spyOn(requestContext, "translate").mockImplementation(
-    (message) => message
+    (message) => message,
   );
 });
 
@@ -70,7 +70,7 @@ describe("resolvers -> Mutation -> cancelMembershipRequest", () => {
           $set: {
             organization: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationCancelMembershipRequestArgs = {
@@ -97,7 +97,7 @@ describe("resolvers -> Mutation -> cancelMembershipRequest", () => {
           $set: {
             organization: testOrganization?._id,
           },
-        }
+        },
       );
 
       const args: MutationCancelMembershipRequestArgs = {
@@ -125,7 +125,7 @@ describe("resolvers -> Mutation -> cancelMembershipRequest", () => {
           $set: {
             user: Types.ObjectId().toString(),
           },
-        }
+        },
       );
 
       const args: MutationCancelMembershipRequestArgs = {
@@ -151,7 +151,7 @@ describe("resolvers -> Mutation -> cancelMembershipRequest", () => {
         $set: {
           user: testUser?._id,
         },
-      }
+      },
     );
 
     const args: MutationCancelMembershipRequestArgs = {
@@ -166,7 +166,7 @@ describe("resolvers -> Mutation -> cancelMembershipRequest", () => {
       await cancelMembershipRequestResolver?.({}, args, context);
 
     expect(cancelMembershipRequestPayload).toEqual(
-      testMembershipRequest?.toObject()
+      testMembershipRequest?.toObject(),
     );
 
     const testUpdatedUser = await User.findOne({

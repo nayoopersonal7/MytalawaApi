@@ -2,13 +2,13 @@ import "dotenv/config";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import type { InterfaceComment } from "../../../api/models";
-import { Post, Comment } from "../../../api/models";
-import type { MutationLikeCommentArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { InterfaceComment } from "../../../src/models";
+import { Post, Comment } from "../../../src/models";
+import type { MutationLikeCommentArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { likeComment as likeCommentResolver } from "../../../api/resolvers/Mutation/likeComment";
-import { COMMENT_NOT_FOUND_ERROR } from "../../../api/constants";
+import { likeComment as likeCommentResolver } from "../../../src/resolvers/Mutation/likeComment";
+import { COMMENT_NOT_FOUND_ERROR } from "../../../src/constants";
 import {
   beforeAll,
   afterAll,
@@ -49,7 +49,7 @@ beforeAll(async () => {
       $inc: {
         commentCount: 1,
       },
-    }
+    },
   );
 });
 
@@ -59,12 +59,12 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> likeComment", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
 
   it(`throws NotFoundError if no comment exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -78,7 +78,7 @@ describe("resolvers -> Mutation -> likeComment", () => {
       };
 
       const { likeComment: likeCommentResolver } = await import(
-        "../../../api/resolvers/Mutation/likeComment"
+        "../../../src/resolvers/Mutation/likeComment"
       );
 
       await likeCommentResolver?.({}, args, context);

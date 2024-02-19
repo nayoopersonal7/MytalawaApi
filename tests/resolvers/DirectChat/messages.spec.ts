@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { messages as messagesResolver } from "../../../api/resolvers/DirectChat/messages";
+import { messages as messagesResolver } from "../../../src/resolvers/DirectChat/messages";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { DirectChatMessage } from "../../../api/models";
+import { DirectChatMessage } from "../../../src/models";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { TestDirectChatType } from "../../helpers/directChat";
 import { createTestDirectChatMessage } from "../../helpers/directChat";

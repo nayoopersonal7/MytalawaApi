@@ -15,8 +15,8 @@ import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 dotenv.config();
 
-import type { InterfaceImageHash } from "../../api/models";
-import { ImageHash } from "../../api/models";
+import type { InterfaceImageHash } from "../../src/models";
+import { ImageHash } from "../../src/models";
 
 const testImageToBeDeleted = `${nanoid()}-testNewImagePath`;
 const testOldImagePath = `${nanoid()}-testOldImagePath`;
@@ -51,22 +51,22 @@ describe("utilities -> deleteImage.ts", () => {
 
   it("should delete Image when numberOfUser <=1", async () => {
     vi.spyOn(fs, "unlink").mockImplementationOnce(
-      (_imagePath: any, callback: any) => callback(null)
+      (_imagePath: any, callback: any) => callback(null),
     );
     const reuploadUtilities = await import(
-      "../../api/utilities/reuploadDuplicateCheck"
+      "../../src/utilities/reuploadDuplicateCheck"
     );
 
     vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
       async () => {
         return false;
-      }
+      },
     );
-    const { logger } = await import("../../api/libraries");
+    const { logger } = await import("../../src/libraries");
 
     const logSpy = vi.spyOn(logger, "info");
 
-    const { deleteImage } = await import("../../api/utilities/deleteImage");
+    const { deleteImage } = await import("../../src/utilities/deleteImage");
 
     await deleteImage(testImageToBeDeleted, testOldImagePath);
 
@@ -74,10 +74,10 @@ describe("utilities -> deleteImage.ts", () => {
 
     expect(fs.unlink).toBeCalledWith(
       testImageToBeDeleted,
-      expect.any(Function)
+      expect.any(Function),
     );
     expect(logSpy).toBeCalledWith(
-      "Image is only used once and therefore can be deleted"
+      "Image is only used once and therefore can be deleted",
     );
     expect(logSpy).toBeCalledWith("File deleted!");
     expect(testHashObj?.toObject()).toEqual({
@@ -98,23 +98,23 @@ describe("utilities -> deleteImage.ts", () => {
       },
       {
         new: true,
-      }
+      },
     );
 
     const reuploadUtilities = await import(
-      "../../api/utilities/reuploadDuplicateCheck"
+      "../../src/utilities/reuploadDuplicateCheck"
     );
 
     vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
       async () => {
         return false;
-      }
+      },
     );
-    const { logger } = await import("../../api/libraries");
+    const { logger } = await import("../../src/libraries");
 
     const logSpy = vi.spyOn(logger, "info");
 
-    const { deleteImage } = await import("../../api/utilities/deleteImage");
+    const { deleteImage } = await import("../../src/utilities/deleteImage");
 
     await deleteImage(testImageToBeDeleted, testOldImagePath);
 
@@ -141,35 +141,35 @@ describe("utilities -> deleteImage.ts", () => {
         },
         {
           new: true,
-        }
+        },
       );
 
       const error = new Error("There was an error deleting the file.");
       vi.spyOn(fs, "unlink").mockImplementationOnce(
-        (_imagePath: any, callback: any) => callback(error)
+        (_imagePath: any, callback: any) => callback(error),
       );
 
       const reuploadUtilities = await import(
-        "../../api/utilities/reuploadDuplicateCheck"
+        "../../src/utilities/reuploadDuplicateCheck"
       );
 
       vi.spyOn(reuploadUtilities, "reuploadDuplicateCheck").mockImplementation(
         async () => {
           return false;
-        }
+        },
       );
 
-      const { logger } = await import("../../api/libraries");
+      const { logger } = await import("../../src/libraries");
 
       const logSpy = vi.spyOn(logger, "info");
 
-      const { deleteImage } = await import("../../api/utilities/deleteImage");
+      const { deleteImage } = await import("../../src/utilities/deleteImage");
 
       await deleteImage(testImageToBeDeleted, testOldImagePath);
 
       expect(fs.unlink).toBeCalledWith(
         testImageToBeDeleted,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(logSpy).not.toBeCalled();
     } catch (error: unknown) {

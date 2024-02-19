@@ -4,7 +4,7 @@ import { connect, disconnect } from "../../helpers/db";
 import mongoose from "mongoose";
 import type { TestGroupChatType } from "../../helpers/groupChat";
 import { createTestGroupChatMessage } from "../../helpers/groupChat";
-import { filterFunction } from "../../../api/resolvers/Subscription/messageSentToGroupChat";
+import { filterFunction } from "../../../src/resolvers/Subscription/messageSentToGroupChat";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testGroupChat: TestGroupChatType;
@@ -21,7 +21,7 @@ describe("src -> resolvers -> Subscription -> messageSentToGroupChat", () => {
   it("subscription filter function returns true", async () => {
     const { messageSentToGroupChat: messageSentToGroupChatPayload } =
       await import(
-        "../../../api/resolvers/Subscription/messageSentToGroupChat"
+        "../../../src/resolvers/Subscription/messageSentToGroupChat"
       );
 
     const _args = {};
@@ -49,7 +49,7 @@ describe("src -> resolvers -> Subscription -> messageSentToGroupChat", () => {
   it("subscription filter function returns false when group chat not found with the id", async () => {
     const { messageSentToGroupChat: messageSentToGroupChatPayload } =
       await import(
-        "../../../api/resolvers/Subscription/messageSentToGroupChat"
+        "../../../src/resolvers/Subscription/messageSentToGroupChat"
       );
 
     const _args = {};

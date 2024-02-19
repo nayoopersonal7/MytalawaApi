@@ -1,17 +1,17 @@
 import "dotenv/config";
-import { usersAssignedTo as usersAssignedToResolver } from "../../../api/resolvers/UserTag/usersAssignedTo";
+import { usersAssignedTo as usersAssignedToResolver } from "../../../src/resolvers/UserTag/usersAssignedTo";
 import type {
   UsersConnectionResult,
   UserTagUsersAssignedToArgs,
-} from "../../../api/types/generatedGraphQLTypes";
+} from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserTagType } from "../../helpers/tags";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTagsAndAssignToUser } from "../../helpers/tags";
-import { MAXIMUM_FETCH_LIMIT } from "../../../api/constants";
-import { TagUser } from "../../../api/models";
+import { MAXIMUM_FETCH_LIMIT } from "../../../src/constants";
+import { TagUser } from "../../../src/models";
 import { Types } from "mongoose";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
@@ -79,7 +79,7 @@ describe("resolvers -> Tag -> usersAssignedTo", () => {
     const payload = (await usersAssignedToResolver?.(
       parent,
       args,
-      {}
+      {},
     )) as UsersConnectionResult;
 
     expect(payload.errors.length).toEqual(0);
@@ -90,10 +90,10 @@ describe("resolvers -> Tag -> usersAssignedTo", () => {
     });
 
     expect(payload.data!.pageInfo.startCursor).toEqual(
-      userTagObject!._id.toString()
+      userTagObject!._id.toString(),
     );
     expect(payload.data!.pageInfo.endCursor).toEqual(
-      userTagObject!._id.toString()
+      userTagObject!._id.toString(),
     );
     expect(payload.data!.edges[0].node._id).toEqual(testUser && testUser._id);
   });

@@ -4,10 +4,10 @@ import { Types } from "mongoose";
 import { nanoid } from "nanoid";
 import { connect, disconnect } from "../../helpers/db";
 
-import { userLanguage as userLanguageResolver } from "../../../api/resolvers/Query/userLanguage";
-import { USER_NOT_FOUND_ERROR } from "../../../api/constants";
-import { User } from "../../../api/models";
-import type { QueryUserLanguageArgs } from "../../../api/types/generatedGraphQLTypes";
+import { userLanguage as userLanguageResolver } from "../../../src/resolvers/Query/userLanguage";
+import { USER_NOT_FOUND_ERROR } from "../../../src/constants";
+import { User } from "../../../src/models";
+import type { QueryUserLanguageArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 
 let MONGOOSE_INSTANCE: typeof mongoose;

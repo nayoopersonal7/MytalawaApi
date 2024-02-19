@@ -1,8 +1,8 @@
 import "dotenv/config";
-import type { MutationCreateDonationArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { MutationCreateDonationArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { createDonation as createDonationResolver } from "../../../api/resolvers/Mutation/createDonation";
+import { createDonation as createDonationResolver } from "../../../src/resolvers/Mutation/createDonation";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type {
   TestOrganizationType,
@@ -47,7 +47,7 @@ describe("resolvers -> Mutation -> createDonation", () => {
         orgId: testOrganization?._id,
         payPalId: "payPalId",
         userId: testUser?._id,
-      })
+      }),
     );
   });
 });

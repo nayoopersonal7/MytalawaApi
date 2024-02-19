@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { Donation } from "../../../api/models";
-import { getDonationByOrgIdConnection as getDonationByOrgIdConnectionResolver } from "../../../api/resolvers/Query/getDonationByOrgIdConnection";
+import { Donation } from "../../../src/models";
+import { getDonationByOrgIdConnection as getDonationByOrgIdConnectionResolver } from "../../../src/resolvers/Query/getDonationByOrgIdConnection";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import type { QueryGetDonationByOrgIdConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryGetDonationByOrgIdConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
 import type { TestDonationType } from "../../helpers/donation";
@@ -44,7 +44,7 @@ describe("resolvers -> Query -> getDonationByOrgIdConnection", () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -66,7 +66,7 @@ describe("resolvers -> Query -> getDonationByOrgIdConnection", () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -88,7 +88,7 @@ describe("resolvers -> Query -> getDonationByOrgIdConnection", () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -110,7 +110,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -132,7 +132,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -154,7 +154,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -176,7 +176,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -198,7 +198,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -220,7 +220,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -244,7 +244,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 
@@ -270,7 +270,7 @@ args.where === { id_not_in: testDonations[2]._id }`, async () => {
     }).lean();
 
     expect(getDonationByOrgIdConnectionPayload).toEqual(
-      donationsByOrganization
+      donationsByOrganization,
     );
   });
 });

@@ -1,23 +1,23 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { User, Organization } from "../../../api/models";
-import type { MutationUnblockUserArgs } from "../../../api/types/generatedGraphQLTypes";
+import { User, Organization } from "../../../src/models";
+import type { MutationUnblockUserArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { unblockUser as unblockUserResolver } from "../../../api/resolvers/Mutation/unblockUser";
+import { unblockUser as unblockUserResolver } from "../../../src/resolvers/Mutation/unblockUser";
 import {
   ORGANIZATION_NOT_FOUND_ERROR,
   USER_NOT_AUTHORIZED_ERROR,
   USER_NOT_FOUND_ERROR,
-} from "../../../api/constants";
+} from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
   TestOrganizationType,
   TestUserType,
 } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
-import { cacheOrganizations } from "../../../api/services/OrganizationCache/cacheOrganizations";
+import { cacheOrganizations } from "../../../src/services/OrganizationCache/cacheOrganizations";
 
 let MONGOOSE_INSTANCE: typeof mongoose;
 let testUser: TestUserType;
@@ -36,7 +36,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> unblockUser", () => {
   it(`throws NotFoundError if no organization exists with with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -51,7 +51,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
       };
 
       const { unblockUser: unblockUserResolver } = await import(
-        "../../../api/resolvers/Mutation/unblockUser"
+        "../../../src/resolvers/Mutation/unblockUser"
       );
 
       await unblockUserResolver?.({}, args, context);
@@ -62,7 +62,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
   });
 
   it(`throws NotFoundError if no user exists with _id === args.userId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -77,7 +77,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
       };
 
       const { unblockUser: unblockUserResolver } = await import(
-        "../../../api/resolvers/Mutation/unblockUser"
+        "../../../src/resolvers/Mutation/unblockUser"
       );
 
       await unblockUserResolver?.({}, args, context);
@@ -89,7 +89,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
 
   it(`throws UnauthorizedError if current user with _id === context.userId is not
   an admin of the organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -104,7 +104,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
       };
 
       const { unblockUser: unblockUserResolver } = await import(
-        "../../../api/resolvers/Mutation/unblockUser"
+        "../../../src/resolvers/Mutation/unblockUser"
       );
 
       await unblockUserResolver?.({}, args, context);
@@ -116,7 +116,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
 
   it(`throws UnauthorizedError if user with _id === args.userId does not exist
   in blockedUsers list of organization with _id === args.organizationId`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -129,7 +129,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
           $push: {
             admins: testUser?._id,
           },
-        }
+        },
       );
 
       await User.updateOne(
@@ -140,7 +140,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
           $push: {
             adminFor: testOrganization?._id,
           },
-        }
+        },
       );
 
       const args: MutationUnblockUserArgs = {
@@ -153,7 +153,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
       };
 
       const { unblockUser: unblockUserResolver } = await import(
-        "../../../api/resolvers/Mutation/unblockUser"
+        "../../../src/resolvers/Mutation/unblockUser"
       );
 
       await unblockUserResolver?.({}, args, context);
@@ -176,7 +176,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
       },
       {
         new: true,
-      }
+      },
     ).lean();
 
     if (updatedOrganization !== null) {
@@ -191,7 +191,7 @@ describe("resolvers -> Mutation -> unblockUser", () => {
         $push: {
           organizationsBlockedBy: testOrganization?._id,
         },
-      }
+      },
     );
 
     const args: MutationUnblockUserArgs = {

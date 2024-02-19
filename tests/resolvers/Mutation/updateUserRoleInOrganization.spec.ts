@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Organization, User } from "../../../api/models";
+import { Organization, User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 
 import bcrypt from "bcryptjs";
@@ -22,8 +22,8 @@ import {
   USER_NOT_AUTHORIZED_ADMIN,
   USER_NOT_FOUND_ERROR,
   USER_NOT_MEMBER_FOR_ORGANIZATION,
-} from "../../../api/constants";
-import type { MutationUpdateUserRoleInOrganizationArgs } from "../../../api/types/generatedGraphQLTypes";
+} from "../../../src/constants";
+import type { MutationUpdateUserRoleInOrganizationArgs } from "../../../src/types/generatedGraphQLTypes";
 import type { TestUserType } from "../../helpers/user";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
 
@@ -105,7 +105,7 @@ beforeAll(async () => {
         adminFor: [testOrganization?._id],
         joinedOrganizations: [testOrganization?._id],
       },
-    }
+    },
   );
   await User.updateOne(
     {
@@ -116,7 +116,7 @@ beforeAll(async () => {
         adminFor: [testOrganization?._id],
         joinedOrganizations: [testOrganization?._id],
       },
-    }
+    },
   );
   await User.updateOne(
     {
@@ -126,7 +126,7 @@ beforeAll(async () => {
       $set: {
         joinedOrganizations: [testOrganization?._id],
       },
-    }
+    },
   );
 });
 
@@ -136,13 +136,13 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
   afterEach(() => {
-    vi.doUnmock("../../../api/constants");
+    vi.doUnmock("../../../src/constants");
     vi.resetModules();
   });
   it(`Check when organization does not exists`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -157,7 +157,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -165,9 +165,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when user whose role to be changed does not exists`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -182,7 +182,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -190,9 +190,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when user whose role to be changed is not a member of the organization`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -207,7 +207,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -215,9 +215,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when logged in user does not exists`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -232,7 +232,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -240,9 +240,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when USER is trying to change role of an admin`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -257,7 +257,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -265,9 +265,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when ADMIN of another org is not allowed to change role`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -282,7 +282,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -290,9 +290,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when logged in ADMIN member user is not allowed to change the user type to SUPERADMIN`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -307,7 +307,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -315,9 +315,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when logged in ADMIN member user is trying to change the role of the itself`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -332,7 +332,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -340,9 +340,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when logged in ADMIN member user is trying to change the role of the org creator`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     try {
       const args: MutationUpdateUserRoleInOrganizationArgs = {
@@ -357,7 +357,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
       const {
         updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
       } = await import(
-        "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+        "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
       );
       await updateUserRoleInOrganizationResolver?.({}, args, context);
     } catch (error: any) {
@@ -365,9 +365,9 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }
   });
   it(`Check when SUPERUSER is changing the role of a USER member to ADMIN`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     const args: MutationUpdateUserRoleInOrganizationArgs = {
       organizationId: testOrganization?._id,
@@ -381,7 +381,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     const {
       updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
     } = await import(
-      "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+      "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
     );
     await updateUserRoleInOrganizationResolver?.({}, args, context);
     const updatedOrganization = await Organization.findOne({
@@ -392,18 +392,18 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }).lean();
 
     const updatedOrganizationCheck = updatedOrganization?.admins.some(
-      (member) => member.equals(testMemberUser?._id)
+      (member) => member.equals(testMemberUser?._id),
     );
     const updatedUserCheck = updatedUser?.adminFor.some((organization) =>
-      organization.equals(testOrganization?._id)
+      organization.equals(testOrganization?._id),
     );
     expect(updatedOrganizationCheck).toBe(true);
     expect(updatedUserCheck).toBe(true);
   });
   it(`Check when SUPERUSER is changing the role of a ADMIN member to USER`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     vi.spyOn(requestContext, "translate").mockImplementation(
-      (message) => message
+      (message) => message,
     );
     const args: MutationUpdateUserRoleInOrganizationArgs = {
       organizationId: testOrganization?._id,
@@ -417,7 +417,7 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     const {
       updateUserRoleInOrganization: updateUserRoleInOrganizationResolver,
     } = await import(
-      "../../../api/resolvers/Mutation/updateUserRoleInOrganization"
+      "../../../src/resolvers/Mutation/updateUserRoleInOrganization"
     );
     await updateUserRoleInOrganizationResolver?.({}, args, context);
     const updatedOrg = await Organization.findOne({
@@ -428,10 +428,10 @@ describe("resolvers -> Mutation -> updateUserRoleInOrganization", () => {
     }).lean();
 
     const updatedOrgCheck = updatedOrg?.admins.some((member) =>
-      member.equals(testAdminUser?._id)
+      member.equals(testAdminUser?._id),
     );
     const updatedUserCheck = updatedUser?.adminFor.some((organization) =>
-      organization.equals(testOrganization?._id)
+      organization.equals(testOrganization?._id),
     );
 
     expect(updatedOrgCheck).toBe(false);

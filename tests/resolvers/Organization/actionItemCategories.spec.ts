@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { actionItemCategories as actionItemCategoriesResolver } from "../../../api/resolvers/Organization/actionItemCategories";
+import { actionItemCategories as actionItemCategoriesResolver } from "../../../src/resolvers/Organization/actionItemCategories";
 import { connect, disconnect } from "../../helpers/db";
 import type mongoose from "mongoose";
-import { ActionItemCategory } from "../../../api/models";
+import { ActionItemCategory } from "../../../src/models";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestOrganizationType } from "../../helpers/userAndOrg";
 import { createTestCategories } from "../../helpers/actionItemCategory";
@@ -26,7 +26,7 @@ describe("resolvers -> Organization -> actionItemCategories", () => {
       const actionCategoriesPayload = await actionItemCategoriesResolver?.(
         parent,
         {},
-        {}
+        {},
       );
 
       const categories = await ActionItemCategory.find({

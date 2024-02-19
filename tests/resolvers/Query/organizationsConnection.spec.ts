@@ -1,11 +1,11 @@
 import "dotenv/config";
-import { organizationsConnection as organizationsConnectionResolver } from "../../../api/resolvers/Query/organizationsConnection";
-import type { InterfaceOrganization } from "../../../api/models";
-import { Organization, User } from "../../../api/models";
+import { organizationsConnection as organizationsConnectionResolver } from "../../../src/resolvers/Query/organizationsConnection";
+import type { InterfaceOrganization } from "../../../src/models";
+import { Organization, User } from "../../../src/models";
 import { connect, disconnect } from "../../helpers/db";
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
-import type { QueryOrganizationsConnectionArgs } from "../../../api/types/generatedGraphQLTypes";
+import type { QueryOrganizationsConnectionArgs } from "../../../src/types/generatedGraphQLTypes";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUser } from "../../helpers/userAndOrg";
@@ -74,7 +74,7 @@ beforeAll(async () => {
           testOrganizations[2]._id,
         ],
       },
-    }
+    },
   );
 });
 

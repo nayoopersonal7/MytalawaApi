@@ -1,12 +1,12 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
 import { Types } from "mongoose";
-import { Post } from "../../../api/models";
-import type { MutationUnlikePostArgs } from "../../../api/types/generatedGraphQLTypes";
+import { Post } from "../../../src/models";
+import type { MutationUnlikePostArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-import { unlikePost as unlikePostResolver } from "../../../api/resolvers/Mutation/unlikePost";
-import { POST_NOT_FOUND_ERROR } from "../../../api/constants";
+import { unlikePost as unlikePostResolver } from "../../../src/resolvers/Mutation/unlikePost";
+import { POST_NOT_FOUND_ERROR } from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type { TestUserType } from "../../helpers/userAndOrg";
 import { createTestUserAndOrganization } from "../../helpers/userAndOrg";
@@ -37,7 +37,7 @@ afterAll(async () => {
 
 describe("resolvers -> Mutation -> unlikePost", () => {
   it(`throws NotFoundError if no post exists with _id === args.id`, async () => {
-    const { requestContext } = await import("../../../api/libraries");
+    const { requestContext } = await import("../../../src/libraries");
     const spy = vi
       .spyOn(requestContext, "translate")
       .mockImplementationOnce((message) => message);
@@ -51,7 +51,7 @@ describe("resolvers -> Mutation -> unlikePost", () => {
       };
 
       const { unlikePost: unlikePostResolver } = await import(
-        "../../../api/resolvers/Mutation/unlikePost"
+        "../../../src/resolvers/Mutation/unlikePost"
       );
 
       await unlikePostResolver?.({}, args, context);
