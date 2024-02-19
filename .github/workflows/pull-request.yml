@@ -193,13 +193,13 @@ jobs:
       - name: Import Sample Data
         run: npm run import:sample-data  
 
-      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+      - name: Present and upload coverage to Codecov as My some codecov repo
         uses: codecov/codecov-action@v3
         with:
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
+          name: My some codecov repo
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
