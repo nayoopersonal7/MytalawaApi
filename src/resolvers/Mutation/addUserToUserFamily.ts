@@ -40,14 +40,14 @@ export const addUserToUserFamily: MutationResolvers["addUserToUserFamily"] =
       );
     }
 
-    //check wheather family exists
-    // if (!userFamily) {
-    //   throw new errors.NotFoundError(
-    //     requestContext.translate(USER_FAMILY_NOT_FOUND_ERROR.MESSAGE),
-    //     USER_FAMILY_NOT_FOUND_ERROR.CODE,
-    //     USER_FAMILY_NOT_FOUND_ERROR.PARAM,
-    //   );
-    // }
+    // check wheather family exists
+    if (!userFamily) {
+      throw new errors.NotFoundError(
+        requestContext.translate(USER_FAMILY_NOT_FOUND_ERROR.MESSAGE),
+        USER_FAMILY_NOT_FOUND_ERROR.CODE,
+        USER_FAMILY_NOT_FOUND_ERROR.PARAM,
+      );
+    }
 
     //check whether user is admin of the family
     await adminCheck(currentUser?._id, userFamily);
@@ -57,13 +57,13 @@ export const addUserToUserFamily: MutationResolvers["addUserToUserFamily"] =
     });
 
     // Checks whether user with _id === args.userId is already a member of Family.
-    // if (isUserMemberOfUserFamily) {
-    //   throw new errors.ConflictError(
-    //     requestContext.translate(USER_ALREADY_MEMBER_ERROR.MESSAGE),
-    //     USER_ALREADY_MEMBER_ERROR.CODE,
-    //     USER_ALREADY_MEMBER_ERROR.PARAM,
-    //   );
-    // }
+    if (isUserMemberOfUserFamily) {
+      throw new errors.ConflictError(
+        requestContext.translate(USER_ALREADY_MEMBER_ERROR.MESSAGE),
+        USER_ALREADY_MEMBER_ERROR.CODE,
+        USER_ALREADY_MEMBER_ERROR.PARAM,
+      );
+    }
 
     // Adds args.userId to users lists on family group and return the updated family.
     return await UserFamily.findOneAndUpdate(
