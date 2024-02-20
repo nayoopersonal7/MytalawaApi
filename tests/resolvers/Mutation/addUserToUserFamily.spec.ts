@@ -188,7 +188,7 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
       await addUserToUserFamily?.({}, args, context);
     } catch (error: unknown) {
       const typedError = error as Error;
-      expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
+      expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
       expect(typedError.message).toEqual(
         `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
       );
