@@ -9,6 +9,7 @@ import {
   USER_ALREADY_MEMBER_ERROR,
   USER_NOT_FOUND_ERROR,
   USER_FAMILY_NOT_FOUND_ERROR,
+  USER_NOT_AUTHORIZED_ADMIN
 } from "../../../src/constants";
 import { beforeAll, afterAll, describe, it, expect, vi } from "vitest";
 import type {
@@ -150,5 +151,47 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
     );
     expect(addUserToUserFamilyPayload?._id).toEqual(testUserFamily?._id);
     expect(addUserToUserFamilyPayload?.users).toEqual([testUser?._id]);
+  });
+
+  it(`throws UnauthorizedError if user with _id === context.userId is not an
+  admin of organization with _id === membershipRequest.organization for
+  membershipRequest with _id === args.membershipRequestId`, async () => {
+    const { requestContext } = await import("../../../src/libraries");
+
+    const spy = vi
+      .spyOn(requestContext, "translate")
+      .mockImplementationOnce((message) => `Translated ${message}`);
+
+    try {
+      await UserFamily.updateOne(
+        {
+          _id: testUserFamily?._id,
+        },
+        {
+          $set: {
+            users: [],
+          },
+        },
+      );
+  
+      const args: MutationAddUserToUserFamilyArgs = {
+        familyId: testUserFamily?.id,
+        userId: testUser?.id,
+      };
+  
+      const context = {
+        userId: testUser?.id,
+      };
+      const { addUserToUserFamily } =
+        await import("../../../src/resolvers/Mutation/addUserToUserFamily");
+
+      await addUserToUserFamily?.({}, args, context);
+    } catch (error: unknown) {
+      const typedError = error as Error;
+      expect(spy).toHaveBeenLastCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
+      expect(typedError.message).toEqual(
+        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
+      );
+    }
   });
 });
