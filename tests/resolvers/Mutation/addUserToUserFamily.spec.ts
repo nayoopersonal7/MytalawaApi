@@ -153,45 +153,29 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
     expect(addUserToUserFamilyPayload?.users).toEqual([testUser?._id]);
   });
 
-  it(`throws UnauthorizedError if user with _id === context.userId is not an
-  admin of organization with _id === membershipRequest.organization for
-  membershipRequest with _id === args.membershipRequestId`, async () => {
+  it(`throws an error if the user is not an admin of the family`, async () => {
     const { requestContext } = await import("../../../src/libraries");
-
     const spy = vi
       .spyOn(requestContext, "translate")
-      .mockImplementationOnce((message) => `Translated ${message}`);
-
+      .mockImplementation((message) => message);
     try {
-      // await UserFamily.updateOne(
-      //   {
-      //     _id: testUserFamily?._id,
-      //   },
-      //   {
-      //     $set: {
-      //       users: [],
-      //     },
-      //   },
-      // );
-  
       const args: MutationAddUserToUserFamilyArgs = {
-        familyId: testUserFamily?.id,
+        familyId: testUserFamily?._id,
         userId: testUser?.id,
       };
   
+      // Set up the context so that the user is not an admin of the family.
       const context = {
-        userId: testUser?.id,
+        userId: Types.ObjectId().toString(),
       };
-      const { addUserToUserFamily } =
-        await import("../../../src/resolvers/Mutation/addUserToUserFamily");
-
-      await addUserToUserFamily?.({}, args, context);
-    } catch (error: unknown) {
-      const typedError = error as Error;
-      expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
-      expect(typedError.message).toEqual(
-        `Translated ${USER_NOT_AUTHORIZED_ADMIN.MESSAGE}`,
+  
+      const { addUserToUserFamily } = await import(
+        "../../../src/resolvers/Mutation/addUserToUserFamily"
       );
+      await addUserToUserFamily?.({}, args, context);
+    } catch (error) {
+      expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
+      expect((error as Error).message).toEqual(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
     }
   });
 });
