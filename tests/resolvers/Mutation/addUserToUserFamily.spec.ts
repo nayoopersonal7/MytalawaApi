@@ -163,16 +163,16 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
       .mockImplementationOnce((message) => `Translated ${message}`);
 
     try {
-      await UserFamily.updateOne(
-        {
-          _id: testUserFamily?._id,
-        },
-        {
-          $set: {
-            users: [],
-          },
-        },
-      );
+      // await UserFamily.updateOne(
+      //   {
+      //     _id: testUserFamily?._id,
+      //   },
+      //   {
+      //     $set: {
+      //       users: [],
+      //     },
+      //   },
+      // );
   
       const args: MutationAddUserToUserFamilyArgs = {
         familyId: testUserFamily?.id,
