@@ -21,8 +21,8 @@ let MONGOOSE_INSTANCE: typeof mongoose;
 
 beforeAll(async () => {
   MONGOOSE_INSTANCE = await connect();
-  await createTestUserAndUserFamily();
-  // testUser = resultsArray[0];
+  const resultsArray = await createTestUserAndUserFamily();
+  testUser = resultsArray[0];
   // testUserFamily = resultsArray[1];
 });
 
