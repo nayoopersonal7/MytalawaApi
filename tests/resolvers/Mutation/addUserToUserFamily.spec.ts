@@ -166,7 +166,7 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
   
       // Set up the context so that the user is not an admin of the family.
       const context = {
-        userId: Types.ObjectId().toString(),
+        userId: testUser?.id,
       };
   
       const { addUserToUserFamily } = await import(
@@ -174,6 +174,7 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
       );
       await addUserToUserFamily?.({}, args, context);
     } catch (error) {
+      console.log('###############################################################', (error as Error).message)
       expect(spy).toBeCalledWith(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
       expect((error as Error).message).toEqual(USER_NOT_AUTHORIZED_ADMIN.MESSAGE);
     }
