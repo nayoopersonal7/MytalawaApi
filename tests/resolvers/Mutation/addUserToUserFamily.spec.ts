@@ -1,25 +1,21 @@
 import "dotenv/config";
 import type mongoose from "mongoose";
-// import { Types } from "mongoose";
+import { Types } from "mongoose";
 // import { UserFamily } from "../../../src/models/userFamily";
-// import type { MutationAddUserToUserFamilyArgs } from "../../../src/types/generatedGraphQLTypes";
+import type { MutationAddUserToUserFamilyArgs } from "../../../src/types/generatedGraphQLTypes";
 import { connect, disconnect } from "../../helpers/db";
 
-// import {
-//   USER_ALREADY_MEMBER_ERROR,
-//   USER_NOT_FOUND_ERROR,
-//   USER_FAMILY_NOT_FOUND_ERROR,
-//   USER_NOT_AUTHORIZED_ADMIN
-// } from "../../../src/constants";
-import { beforeAll, afterAll, describe, vi } from "vitest";
-// import type {
-//   TestUserType,
-//   TestUserFamilyType,
-// } from "../../helpers/userAndUserFamily";
+import {
+  USER_FAMILY_NOT_FOUND_ERROR,
+} from "../../../src/constants";
+import { beforeAll, afterAll, describe, vi, it, expect } from "vitest";
+import type {
+  TestUserType,
+} from "../../helpers/userAndUserFamily";
 
 import { createTestUserAndUserFamily } from "../../helpers/userAndUserFamily";
 
-// let testUser: TestUserType;
+let testUser: TestUserType;
 // let testUserFamily: TestUserFamilyType;
 let MONGOOSE_INSTANCE: typeof mongoose;
 
@@ -40,32 +36,32 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
     vi.resetModules();
   });
 
-  // it(`throws NotFoundError if no user Family exists with _id === args.familyId`, async () => {
-  //   const { requestContext } = await import("../../../src/libraries");
-  //   const spy = vi
-  //     .spyOn(requestContext, "translate")
-  //     .mockImplementation((message) => message);
-  //   try {
-  //     const args: MutationAddUserToUserFamilyArgs = {
-  //       familyId: Types.ObjectId().toString(),
-  //       userId: testUser?.id,
-  //     };
+  it(`throws NotFoundError if no user Family exists with _id === args.familyId`, async () => {
+    const { requestContext } = await import("../../../src/libraries");
+    const spy = vi
+      .spyOn(requestContext, "translate")
+      .mockImplementation((message) => message);
+    try {
+      const args: MutationAddUserToUserFamilyArgs = {
+        familyId: Types.ObjectId().toString(),
+        userId: testUser?.id,
+      };
 
-  //     const context = {
-  //       userId: testUser?.id,
-  //     };
+      const context = {
+        userId: testUser?.id,
+      };
 
-  //     const { addUserToUserFamily } = await import(
-  //       "../../../src/resolvers/Mutation/addUserToUserFamily"
-  //     );
-  //     await addUserToUserFamily?.({}, args, context);
-  //   } catch (error) {
-  //     expect(spy).toBeCalledWith(USER_FAMILY_NOT_FOUND_ERROR.MESSAGE);
-  //     expect((error as Error).message).toEqual(
-  //       `${USER_FAMILY_NOT_FOUND_ERROR.MESSAGE}`,
-  //     );
-  //   }
-  // });
+      const { addUserToUserFamily } = await import(
+        "../../../src/resolvers/Mutation/addUserToUserFamily"
+      );
+      await addUserToUserFamily?.({}, args, context);
+    } catch (error) {
+      expect(spy).toBeCalledWith(USER_FAMILY_NOT_FOUND_ERROR.MESSAGE);
+      expect((error as Error).message).toEqual(
+        `${USER_FAMILY_NOT_FOUND_ERROR.MESSAGE}`,
+      );
+    }
+  });
 
   // it(`throws NotFoundError if no user exists with _id === args.userId`, async () => {
   //   const { requestContext } = await import("../../../src/libraries");
