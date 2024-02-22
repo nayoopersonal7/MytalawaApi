@@ -100,7 +100,7 @@ describe("resolver -> mutation -> addUserToUserFamily", () => {
     try {
       const args: MutationAddUserToUserFamilyArgs = {
         familyId: testUserFamily?._id,
-        userId: testUser?._id,
+        userId: testUser?.id,
       };
 
       const context = {
